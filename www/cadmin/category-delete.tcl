@@ -24,11 +24,7 @@ set category_name [category::get_name $category_id $locale]
 array set tree [category_tree::get_data $tree_id $locale]
 set tree_name $tree(tree_name)
 
-set mapped_objects_p [db_string check_mapped_objects {
-    select decode(count(*),0,0,1) from dual
-    where exists (select 1 from category_object_map
-                  where category_id = :category_id)
-}]
+set mapped_objects_p [db_string check_mapped_objects ""]
     
 set form_vars [export_form_vars tree_id category_id locale object_id]
 set page_title "Delete category \"$category_name\""

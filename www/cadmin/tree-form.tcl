@@ -28,10 +28,7 @@ if {[info exists object_id]} {
 }
 lappend context_bar $page_title
 
-set languages [db_list_of_lists get_ad_locales {
-    select label as name, locale as value
-    from ad_locales
-}]
+set languages [db_list_of_lists get_ad_locales ""]
 
 ad_form -name tree_form -action tree-form -export { locale object_id } -form {
     {tree_id:key}

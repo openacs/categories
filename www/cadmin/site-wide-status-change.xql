@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="site_wide_status">      
+<fullquery name="toggle_site_wide_status">      
       <querytext>
       
     update category_trees

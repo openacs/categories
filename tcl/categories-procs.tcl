@@ -44,34 +44,11 @@ namespace eval category {
 	    set locale [ad_conn locale]
 	}
 	db_transaction {
-	    set category_id [db_exec_plsql insert_category {
-		begin
-		:1 := category.new (
-				    category_id   => :category_id,
-				    locale        => :locale,
-				    name          => :name,
-				    description   => :description,
-				    tree_id       => :tree_id,
-				    parent_id     => :parent_id,
-				    creation_user => :user_id,
-				    creation_ip   => :creation_ip
-				    );
-		end;
-	    }]
+	    set category_id [db_exec_plsql insert_category ""]
+
 	    set default_locale [ad_parameter DefaultLocale acs-lang "en_US"]
 	    if {$locale != $default_locale} {
-		db_exec_plsql insert_default_category {
-		    begin
-		    category.new_translation (
-					      category_id    => :category_id,
-					      locale         => :default_locale,
-					      name           => :name,
-					      description    => :description,
-					      modifying_user => :user_id,
-					      modifying_ip   => :creation_ip
-					      );
-		    end;
-		}
+		db_exec_plsql insert_default_category ""
 	    }
 	    category_tree::flush_cache $tree_id
 	    flush_translation_cache $category_id
@@ -107,37 +84,10 @@ namespace eval category {
 	    set locale [ad_conn locale]
 	}
 	db_transaction {
-	    if {![db_0or1row check_category_existence {
-		select 1
-		from category_translations
-		where category_id = :category_id
-		and locale = :locale
-	    }]} {
-		db_exec_plsql insert_category_translation {
-		    begin
-		    category.new_translation (
-					      category_id    => :category_id,
-					      locale         => :locale,
-					      name           => :name,
-					      description    => :description,
-					      modifying_user => :user_id,
-					      modifying_ip   => :modifying_ip
-					      );
-		    end;
-		}
+	    if {![db_0or1row check_category_existence ""]} {
+		db_exec_plsql insert_category_translation ""
 	    } else {
-		db_exec_plsql update_category_translation {
-		    begin
-		    category.edit (
-				   category_id    => :category_id,
-				   locale         => :locale,
-				   name           => :name,
-				   description    => :description,
-				   modifying_user => :user_id,
-				   modifying_ip   => :modifying_ip
-				   );
-		    end;
-		}
+		db_exec_plsql update_category_translation ""
 	    }
 	    flush_translation_cache $category_id
 	}
@@ -159,11 +109,7 @@ namespace eval category {
 	@see category_tree::flush_cache
 	@author Timo Hentschel (thentschel@sussdorff-roy.com)
     } {
-	db_exec_plsql delete_category {
-	    begin
-	    category.del ( :category_id );
-	    end;
-	}
+	db_exec_plsql delete_category ""
 	if {!$batch_mode_p} {
 	    flush_translation_cache $category_id
 	}
@@ -180,15 +126,7 @@ namespace eval category {
 	@option parent_id new parent category_id.
 	@author Timo Hentschel (thentschel@sussdorff-roy.com)
     } {
-	db_exec_plsql change_parent_category {
-	    begin
-	    category.change_parent (
-				    category_id  => :category_id,
-				    tree_id      => :tree_id,
-				    parent_id    => :parent_id
-				    );
-	    end;
-	}
+	db_exec_plsql change_parent_category ""
 	category_tree::flush_cache $tree_id
     }
 
@@ -202,11 +140,7 @@ namespace eval category {
 	@see category_tree::flush_cache
 	@author Timo Hentschel (thentschel@sussdorff-roy.com)
     } {
-	db_exec_plsql phase_in {
-	    begin
-	    category.phase_in(:category_id);
-	    end;
-	}
+	db_exec_plsql phase_in ""
     }
 
     ad_proc -public phase_out { category_id } {
@@ -221,11 +155,7 @@ namespace eval category {
 	@see category_tree::flush_cache
 	@author Timo Hentschel (thentschel@sussdorff-roy.com)
     } {
-	db_exec_plsql phase_out {
-	    begin
-	    category.phase_out(:category_id);
-	    end;
-	}
+	db_exec_plsql phase_out ""
     }
 
     ad_proc -public map_object {
@@ -243,18 +173,12 @@ namespace eval category {
 	db_transaction {
 	    # Remove any already mapped categories if we are updating
 	    if { $remove_old_p } {
-		db_dml remove_mapped_categories {
-		    delete from category_object_map
-		    where object_id = :object_id
-		}
+		db_dml remove_mapped_categories ""
 	    }
 
 	    foreach category_id $category_id_list {
 		if ![empty_string_p $category_id] {
-		    db_dml insert_mapped_categories {
-			insert into category_object_map (category_id, object_id)
-			values (:category_id, :object_id)
-		    }
+		    db_dml insert_mapped_categories ""
 		}
 	    }
 	}
@@ -267,11 +191,7 @@ namespace eval category {
 	@return tcl-list of category_ids
 	@author Timo Hentschel (thentschel@sussdorff-roy.com)
     } {
-	set result [db_list get_mapped_categories {
-	    select category_id
-	    from category_object_map
-	    where object_id = :object_id
-	}]
+	set result [db_list get_mapped_categories ""]
 
 	return $result
     }
@@ -282,11 +202,7 @@ namespace eval category {
     } {
 	catch {nsv_unset categories}
 	set category_id_old 0
-	db_foreach reset_translation_cache {
-	    select category_id, locale, name
-	    from category_translations
-	    order by category_id, locale
-	} {
+	db_foreach reset_translation_cache "" {
 	    if {$category_id != $category_id_old && $category_id_old != 0} {
 		nsv_set categories $category_id_old [array get cat_lang]
 		unset cat_lang
@@ -305,12 +221,7 @@ namespace eval category {
 	@param category_id category to be flushed.
 	@author Timo Hentschel (thentschel@sussdorff-roy.com)
     } {
-	db_foreach flush_translation_cache {
-	    select locale, name
-	    from category_translations
-	    where category_id = :category_id
-	    order by locale
-	} {
+	db_foreach flush_translation_cache "" {
 	    set cat_lang($locale) $name
 	}
 	if {[info exists cat_lang]} {
@@ -355,7 +266,7 @@ namespace eval category {
 	@param object_id object_id to get the name of.
 	@author Timo Hentschel (thentschel@sussdorff-roy.com)
     } {
-	set object_name [db_string object_name "select acs_object.name(:object_id) from dual"]
+	set object_name [db_string object_name ""]
 	return [list "/o/$object_id" $object_name]
     }
 
@@ -385,11 +296,7 @@ namespace eval category {
 	@param object_id category to be displayed.
 	@author Timo Hentschel (thentschel@sussdorff-roy.com)
     } {
-	db_1row get_tree_id_for_pageurl {
-	    select tree_id
-	    from categories
-	    where category_id = :object_id
-	}
+	db_1row get_tree_id_for_pageurl ""
 	return "categories-browse?tree_ids=$tree_id&category_ids=$object_id"
     }
 

@@ -35,16 +35,7 @@ if {[info exists object_id]} {
 lappend context_bar [list "tree-view?[export_url_vars tree_id locale object_id]" $tree_name] "Choose parent"
 
 
-set subtree_categories_list [db_list subtree {
-    select /*+INDEX(child categories_left_ix)*/
-           child.category_id
-    from categories parent, categories child
-    where parent.category_id = :category_id
-    and child.left_ind >= parent.left_ind
-    and child.left_ind <= parent.right_ind
-    and child.tree_id = parent.tree_id
-    order by child.left_ind
-}]
+set subtree_categories_list [db_list subtree ""]
 
 template::multirow create tree category_name category_id deprecated_p level left_indent url_p
 

@@ -3,7 +3,7 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="map.map_tree">      
+<fullquery name="category_tree::map.map_tree">      
       <querytext>
       FIX ME PLSQL
 FIX ME PLSQL
@@ -19,7 +19,7 @@ FIX ME PLSQL
 </fullquery>
 
  
-<fullquery name="unmap.unmap_tree">      
+<fullquery name="category_tree::unmap.unmap_tree">      
       <querytext>
       FIX ME PLSQL
 FIX ME PLSQL
@@ -34,7 +34,7 @@ FIX ME PLSQL
 </fullquery>
 
  
-<fullquery name="copy.copy_tree">      
+<fullquery name="category_tree::copy.copy_tree">      
       <querytext>
       FIX ME PLSQL
 FIX ME PLSQL
@@ -50,7 +50,7 @@ FIX ME PLSQL
 </fullquery>
 
  
-<fullquery name="add.insert_tree">      
+<fullquery name="category_tree::add.insert_tree">      
       <querytext>
       FIX ME PLSQL
 FIX ME PLSQL
@@ -71,7 +71,7 @@ FIX ME PLSQL
 </fullquery>
 
  
-<fullquery name="add.insert_default_tree">      
+<fullquery name="category_tree::add.insert_default_tree">      
       <querytext>
       FIX ME PLSQL
 FIX ME PLSQL
@@ -91,7 +91,7 @@ FIX ME PLSQL
 </fullquery>
 
  
-<fullquery name="update.insert_tree_translation">      
+<fullquery name="category_tree::update.insert_tree_translation">      
       <querytext>
       FIX ME PLSQL
 FIX ME PLSQL
@@ -111,7 +111,7 @@ FIX ME PLSQL
 </fullquery>
 
  
-<fullquery name="update.update_tree_translation">      
+<fullquery name="category_tree::update.update_tree_translation">      
       <querytext>
       FIX ME PLSQL
 FIX ME PLSQL
@@ -131,7 +131,7 @@ FIX ME PLSQL
 </fullquery>
 
  
-<fullquery name="delete.delete_tree">      
+<fullquery name="category_tree::delete.delete_tree">      
       <querytext>
       FIX ME PLSQL
 FIX ME PLSQL
@@ -144,7 +144,7 @@ FIX ME PLSQL
 </fullquery>
 
  
-<fullquery name="usage.category_tree_usage">      
+<fullquery name="category_tree::usage.category_tree_usage">      
       <querytext>
       
 	    select t.pretty_plural, n.object_id, n.object_name, p.package_id,

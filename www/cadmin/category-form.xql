@@ -11,7 +11,7 @@
 </fullquery>
 
  
-<fullquery name="get_category">      
+<fullquery name="check_translation_existance">      
       <querytext>
       
 	select name, description
@@ -23,7 +23,7 @@
 </fullquery>
 
  
-<fullquery name="get_default_category">      
+<fullquery name="get_default_translation">      
       <querytext>
       
 	    select name, description

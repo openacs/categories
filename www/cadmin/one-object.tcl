@@ -30,13 +30,7 @@ set url_vars [export_url_vars locale object_id]
 
 template::multirow create mapped_trees tree_name tree_id site_wide_p subtree_category_id subtree_category_name
 
-db_foreach get_mapped_trees {
-         select t.tree_id, t.site_wide_p, m.subtree_category_id
-           from category_trees t, category_tree_map m
-          where m.object_id = :object_id
-            and m.tree_id = t.tree_id
-       order by t.tree_id
-} {
+db_foreach get_mapped_trees "" {
     if {![empty_string_p $subtree_category_id]} {
 	set subtree_category_name [category::get_name $subtree_category_id $locale]
     } else {
@@ -50,15 +44,7 @@ db_foreach get_mapped_trees {
 
 template::multirow create unmapped_trees tree_id tree_name site_wide_p
 
-db_foreach get_unmapped_trees {
-    select tree_id, site_wide_p,
-          acs_permission.permission_p(tree_id, :user_id, 'category_tree_read') has_read_permission  
-     from category_trees t
-    where not exists (select 1 from category_tree_map m
-                       where m.object_id = :object_id
-                         and m.tree_id = t.tree_id)
-    order by t.tree_id
-} {
+db_foreach get_unmapped_trees "" {
     if { [string equal $has_read_permission t] || [string equal $site_wide_p t] } {
 	set tree_name [category_tree::get_name $tree_id $locale]
 	template::multirow append unmapped_trees $tree_id $tree_name $site_wide_p

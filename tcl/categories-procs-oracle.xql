@@ -3,7 +3,7 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="add.insert_category">      
+<fullquery name="category::add.insert_category">      
       <querytext>
       
 		begin
@@ -23,7 +23,7 @@
 </fullquery>
 
  
-<fullquery name="add.insert_default_category">      
+<fullquery name="category::add.insert_default_category">      
       <querytext>
       
 		    begin
@@ -41,7 +41,7 @@
 </fullquery>
 
  
-<fullquery name="update.insert_category_translation">      
+<fullquery name="category::update.insert_category_translation">      
       <querytext>
       
 		    begin
@@ -59,7 +59,7 @@
 </fullquery>
 
  
-<fullquery name="update.update_category_translation">      
+<fullquery name="category::update.update_category_translation">      
       <querytext>
       
 		    begin
@@ -77,7 +77,7 @@
 </fullquery>
 
  
-<fullquery name="delete.delete_category">      
+<fullquery name="category::delete.delete_category">      
       <querytext>
       
 	    begin
@@ -88,7 +88,7 @@
 </fullquery>
 
  
-<fullquery name="change_parent.change_parent_category">      
+<fullquery name="category::change_parent.change_parent_category">      
       <querytext>
       
 	    begin
@@ -103,7 +103,7 @@
 </fullquery>
 
  
-<fullquery name="phase_in.phase_in">      
+<fullquery name="category::phase_in.phase_in">      
       <querytext>
       
 	    begin
@@ -114,7 +114,7 @@
 </fullquery>
 
  
-<fullquery name="phase_out.phase_out">      
+<fullquery name="category::phase_out.phase_out">      
       <querytext>
       
 	    begin
@@ -125,7 +125,7 @@
 </fullquery>
 
  
-<fullquery name="get_object_context.object_name">      
+<fullquery name="category::get_object_context.object_name">      
       <querytext>
       select acs_object.name(:object_id) from dual
       </querytext>

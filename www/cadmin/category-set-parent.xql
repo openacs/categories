@@ -3,10 +3,7 @@
 
 <fullquery name="subtree">      
       <querytext>
-      FIX ME REMOVE OPTIMIZATION HINT
-
-    select /*+INDEX(child categories_left_ix)*/
-           child.category_id
+    select child.category_id
     from categories parent, categories child
     where parent.category_id = :category_id
     and child.left_ind >= parent.left_ind

@@ -17,19 +17,11 @@ set list_of_errors ""
 db_transaction {
     # use temporary table to use only bind vars in queries
     foreach category_id $category_ids {
-	db_dml insert_tmp_categories {
-	    insert into category_temp
-	    values (:category_id)
-	}
+	db_dml insert_tmp_categories ""
     }
 
     # delete first leaf categories, then parent categories
-    set category_list [db_list sort_categories_to_delete {
-	select c.category_id
-	from categories c, category_temp t
-	where c.category_id = t.category_id
-	order by right_ind-left_ind
-    }]
+    set category_list [db_list sort_categories_to_delete ""]
 
     foreach category_id $category_list {
 	category::delete -batch_mode $category_id

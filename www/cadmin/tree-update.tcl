@@ -32,12 +32,7 @@ if {![empty_string_p $submit_sort]} {
     db_transaction {
 
 	set count 0
-	db_foreach get_tree {
-	    select category_id, parent_id
-	    from categories
-	    where tree_id = :tree_id
-	    order by left_ind
-	} {
+	db_foreach get_tree "" {
 	    incr count 10
 	    if {[empty_string_p $parent_id]} {
 		# need this as an anchor for toplevel categories
@@ -81,21 +76,11 @@ if {![empty_string_p $submit_sort]} {
 
 	if {$count == $last_ind} {
 	    # we do this so that there is no conflict in the old left_inds and the new ones
-	    db_dml reset_category_index {
-		update categories
-		set left_ind = -left_ind,
-		right_ind = -right_ind
-		where tree_id = :tree_id
-	    }
+	    db_dml reset_category_index ""
 
 	    foreach category $done_list {
 		util_unlist $category category_id left_ind right_ind
-		db_dml update_category_index {
-		    update categories
-		    set left_ind = :left_ind,
-		    right_ind = :right_ind
-		    where category_id = :category_id
-		}
+		db_dml update_category_index ""
 	    }
 	}
 	category_tree::flush_cache $tree_id
@@ -152,20 +137,10 @@ if {![empty_string_p $submit_sort]} {
     db_transaction {
 	# use temporary table to use only bind vars in queries
 	foreach category_id $category_ids {
-	    db_dml insert_tmp_categories {
-		insert into category_temp
-		values (:category_id)
-	    }
+	    db_dml insert_tmp_categories ""
 	}
 	
-	db_foreach get_used_categories {
-	    select c.category_id,
-	    (select decode(count(*),0,0,1) from dual
-	     where exists (select 1 from category_object_map
-			   where category_id = c.category_id)) as used_p
-	    from categories c, category_temp t
-	    where c.category_id = t.category_id
-	} {
+	db_foreach get_used_categories "" {
 	    set category_name [category::get_name $category_id $locale]
 	    template::multirow append categories $category_id $category_name $used_p
 	}

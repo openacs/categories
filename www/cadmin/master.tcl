@@ -19,10 +19,7 @@ if {![exists_and_not_null locale]} {
     set locale [ad_parameter DefaultLocale acs-lang "en_US"]
 }
 
-db_multirow languages get_locales {
-    select label, locale
-    from ad_locales
-}
+db_multirow languages get_locales ""
 
 set current_page [ad_conn url]
 set form_vars [export_ns_set_vars form [list locale xx] [ad_conn form]]

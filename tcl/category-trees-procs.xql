@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="get_data.get_tree_data">      
+<fullquery name="category_tree::get_data.get_tree_data">      
       <querytext>
       
 	    select site_wide_p
@@ -12,7 +12,7 @@
 </fullquery>
 
  
-<fullquery name="update.check_tree_existence">      
+<fullquery name="category_tree::update.check_tree_existence">      
       <querytext>
       
 		select 1
@@ -24,7 +24,7 @@
 </fullquery>
 
  
-<fullquery name="get_mapped_trees.get_mapped_trees">      
+<fullquery name="category_tree::get_mapped_trees.get_mapped_trees">      
       <querytext>
       
 	    select tree_id, subtree_category_id
@@ -35,7 +35,7 @@
 </fullquery>
 
  
-<fullquery name="reset_cache.reset_cache">      
+<fullquery name="category_tree::reset_cache.reset_cache">      
       <querytext>
       
 	    select tree_id, category_id, left_ind, right_ind,
@@ -47,7 +47,7 @@
 </fullquery>
 
  
-<fullquery name="flush_cache.flush_cache">      
+<fullquery name="category_tree::flush_cache.flush_cache">      
       <querytext>
       
 	    select category_id, left_ind, right_ind,
@@ -60,7 +60,7 @@
 </fullquery>
 
  
-<fullquery name="reset_translation_cache.reset_translation_cache">      
+<fullquery name="category_tree::reset_translation_cache.reset_translation_cache">      
       <querytext>
       
 	    select tree_id, locale, name, description
@@ -71,7 +71,7 @@
 </fullquery>
 
  
-<fullquery name="flush_translation_cache.flush_translation_cache">      
+<fullquery name="category_tree::flush_translation_cache.flush_translation_cache">      
       <querytext>
       
 	    select locale, name, description

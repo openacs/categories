@@ -48,13 +48,7 @@ set url_vars [export_url_vars tree_id locale object_id]
 
 template::multirow create used_categories category_id name
 
-db_foreach get_category_in_use {
-    select category_id
-    from categories c
-    where c.tree_id = :tree_id
-    and exists (select 1 from category_object_map
-                 where category_id = c.category_id)
-} {
+db_foreach get_category_in_use "" {
     set category_name [category::get_name $category_id $locale]
     template::multirow append used_categories $category_id $category_name
 }

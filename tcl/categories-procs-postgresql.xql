@@ -3,7 +3,7 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="add.insert_category">      
+<fullquery name="category::add.insert_category">      
       <querytext>
       FIX ME PLSQL
 FIX ME PLSQL
@@ -25,7 +25,7 @@ FIX ME PLSQL
 </fullquery>
 
  
-<fullquery name="add.insert_default_category">      
+<fullquery name="category::add.insert_default_category">      
       <querytext>
       FIX ME PLSQL
 FIX ME PLSQL
@@ -45,7 +45,7 @@ FIX ME PLSQL
 </fullquery>
 
  
-<fullquery name="update.insert_category_translation">      
+<fullquery name="category::update.insert_category_translation">      
       <querytext>
       FIX ME PLSQL
 FIX ME PLSQL
@@ -65,7 +65,7 @@ FIX ME PLSQL
 </fullquery>
 
  
-<fullquery name="update.update_category_translation">      
+<fullquery name="category::update.update_category_translation">      
       <querytext>
       FIX ME PLSQL
 FIX ME PLSQL
@@ -85,7 +85,7 @@ FIX ME PLSQL
 </fullquery>
 
  
-<fullquery name="delete.delete_category">      
+<fullquery name="category::delete.delete_category">      
       <querytext>
       FIX ME PLSQL
 FIX ME PLSQL
@@ -98,7 +98,7 @@ FIX ME PLSQL
 </fullquery>
 
  
-<fullquery name="change_parent.change_parent_category">      
+<fullquery name="category::change_parent.change_parent_category">      
       <querytext>
       FIX ME PLSQL
 FIX ME PLSQL
@@ -115,7 +115,7 @@ FIX ME PLSQL
 </fullquery>
 
  
-<fullquery name="phase_in.phase_in">      
+<fullquery name="category::phase_in.phase_in">      
       <querytext>
       FIX ME PLSQL
 FIX ME PLSQL
@@ -128,7 +128,7 @@ FIX ME PLSQL
 </fullquery>
 
  
-<fullquery name="phase_out.phase_out">      
+<fullquery name="category::phase_out.phase_out">      
       <querytext>
       FIX ME PLSQL
 FIX ME PLSQL
@@ -141,7 +141,7 @@ FIX ME PLSQL
 </fullquery>
 
  
-<fullquery name="get_object_context.object_name">      
+<fullquery name="category::get_object_context.object_name">      
       <querytext>
       select acs_object__name(:object_id) 
       </querytext>

@@ -34,10 +34,7 @@ if {[info exists object_id]} {
 }
 lappend context_bar [list "tree-view?[export_url_vars tree_id locale object_id]" $tree_name] $page_title
 
-set languages [db_list_of_lists get_ad_locales {
-    select label as name, locale as value
-    from ad_locales
-}]
+set languages [db_list_of_lists get_ad_locales ""]
 
 ad_form -name category_form -action category-form -export { tree_id parent_id locale object_id } -form {
     {category_id:key}
@@ -48,19 +45,9 @@ ad_form -name category_form -action category-form -export { tree_id parent_id lo
     set name ""
     set description ""
 } -edit_request {
-    if {![db_0or1row get_category {
-	select name, description
-	from category_translations
-	where category_id = :category_id
-	and locale = :locale
-    }]} {
+    if {![db_0or1row check_translation_existance ""]} {
 	set default_locale [ad_parameter DefaultLocale acs-lang "en_US"]
-	db_1row get_default_category {
-	    select name, description
-	    from category_translations
-	    where category_id = :category_id
-	    and locale = :default_locale
-	}
+	db_1row get_default_translation ""
     }
 } -on_submit {
     set description [util_close_html_tags $description 4000]

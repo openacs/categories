@@ -37,13 +37,13 @@ set context_bar [list "Browse categories"]
 set url_vars [export_url_vars tree_ids:multiple category_ids:multiple subtree_p letter]
 set form_vars [export_form_vars tree_ids:multiple orderby subtree_p letter]
 
-set tree_ids [db_list check_permissions_on_trees [subst {
-    select tree_id
-    from category_trees
-    where (site_wide_p = 't'
-    or acs_permission.permission_p(tree_id, :user_id, 'category_tree_read') = 't')
-    and tree_id in ([join $tree_ids ,])
-}]]
+db_transaction {
+    # use temporary table to use only bind vars in queries
+    foreach tree_id $tree_ids {
+	db_dml insert_tmp_category_trees ""
+    }
+    set tree_ids [db_list check_permissions_on_trees ""]
+}
 
 template::multirow create trees tree_id tree_name category_id category_name indent selected_p
 template::util::list_to_lookup $category_ids category_selected
@@ -87,67 +87,25 @@ set dimension_bar [ad_dimensional $dimensional_def categories-browse $form]
 # generate sql for selecting object names beginning with selected letter
 switch -exact $letter {
     other {
-	set letter_sql "and (upper(n.object_name) < 'A' or upper(n.object_name) > 'Z')"
+	set letter_sql [db_map other_letter]
     }
     all {
 	set letter_sql ""
     }
     default {
 	set bind_letter "$letter%"
-	set letter_sql "and upper(n.object_name) like :bind_letter"
+	set letter_sql [db_map regular_letter]
     }
 }
 
 set category_ids_length [llength $category_ids]
 if {$subtree_p == "t"} {
     # generate sql for exact categorizations plus subcategories
-    set subtree_sql {
-	select v.object_id
-	from (select distinct m.object_id, c.category_id
-	      from category_object_map m, categories c, category_temp t
-	      where c.category_id = t.category_id
-	      and m.category_id in (select c_sub.category_id
-				    from categories c_sub
-				    where c_sub.tree_id = c.tree_id
-				    and c_sub.left_ind >= c.left_ind
-				    and c_sub.left_ind < c.right_ind)) v
-	group by v.object_id having count(*) = :category_ids_length
-    }
+    set subtree_sql [db_map include_subtree]
 } else {
     # generate sql for exact categorization
-    set subtree_sql {
-	select m.object_id
-	from category_object_map m, category_temp t
-	where acs_permission.permission_p(m.object_id, :user_id, 'read') = 't'
-	and m.category_id = t.category_id
-	group by m.object_id having count(*) = :category_ids_length
-    }
+    set subtree_sql [db_map exact_categorization]
 }
-
-# query to get the number of pages, number of objects etc used by the paginator
-set count_query [subst {
-    select n.object_id
-    from acs_named_objects n, ($subtree_sql) s
-    where n.object_id = s.object_id
-    $letter_sql
-}]
-
-# paginated query to get the actual objects
-set paginated_query [subst {
-    select r.*
-    from (select n.object_id, n.object_name as object_name, o.creation_date,
-	         t.pretty_name as package_type, n.package_id, p.instance_name,
-                 row_number() over ($order_by_clause) as row_number
-	  from acs_objects o, acs_named_objects n, apm_packages p, apm_package_types t,
-               ($subtree_sql) s
-	  where n.object_id = s.object_id
-	  and o.object_id = n.object_id
-	  and p.package_id = n.package_id
-	  and t.package_key = p.package_key
-	  $letter_sql
-	  $order_by_clause) r
-    where r.row_number between :first_row and :last_row
-}]
 
 set p_name "browse_categories"
 request create
@@ -156,19 +114,17 @@ request set_param page -datatype integer -value 1
 db_transaction {
     # use temporary table to use only bind vars in queries
     foreach category_id $category_ids {
-	db_dml insert_tmp_categories {
-	    insert into category_temp
-	    values (:category_id)
-	}
+	db_dml insert_tmp_categories ""
     }
 
     # execute query to count objects and pages
-    paginator create get_categorized_object_count $p_name $count_query -pagesize 20 -groupsize 10 -contextual -timeout 0
+    paginator create get_categorized_object_count $p_name "" -pagesize 20 -groupsize 10 -contextual -timeout 0
+
     set first_row [paginator get_row $p_name $page]
     set last_row [paginator get_row_last $p_name $page]
 
     # execute query to get the objects on current page
-    set items [ad_table -Torderby $orderby get_categorized_objects $paginated_query $table_def]
+    set items [ad_table -Torderby $orderby get_categorized_objects "" $table_def]
 }
 
 paginator get_display_info $p_name info $page

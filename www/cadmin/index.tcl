@@ -29,12 +29,7 @@ template::multirow create trees_with_write_permission tree_id tree_name site_wid
 template::multirow create trees_with_read_permission tree_id tree_name site_wide_p short_name
 
 
-db_foreach trees {
-         select tree_id, site_wide_p,
-                acs_permission.permission_p(tree_id, :user_id, 'category_tree_write') has_write_p,
-                acs_permission.permission_p(tree_id, :user_id, 'category_tree_read') has_read_p
-           from category_trees t
-} {
+db_foreach trees "" {
     if { [string equal $has_write_p "t"] } {
 	set tree_name [category_tree::get_name $tree_id $locale]
 	template::multirow append trees_with_write_permission $tree_id $tree_name $site_wide_p
@@ -43,6 +38,5 @@ db_foreach trees {
 	template::multirow append trees_with_read_permission $tree_id $tree_name $site_wide_p
     }
 }
-
 
 ad_return_template
