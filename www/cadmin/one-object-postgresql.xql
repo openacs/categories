@@ -7,7 +7,7 @@
       <querytext>
       
     select tree_id, site_wide_p,
-          acs_permission__permission_p(tree_id, :user_id, 'category_tree_read') has_read_permission  
+          acs_permission__permission_p(tree_id, :user_id, 'category_tree_read') as has_read_permission  
      from category_trees t
     where not exists (select 1 from category_tree_map m
                        where m.object_id = :object_id

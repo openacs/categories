@@ -31,6 +31,7 @@ db_transaction {
 } on_error {
     append list_of_errors "<li> Node [category::get_name $category_id $locale] contains leaf (child) categories. If you really want to delete those leaf categories, plesae delete them first"	
 }
+db_dml delete_tmp_category_trees ""
     
 if { [llength $list_of_errors] >0 } {
     ad_return_complaint "Error Deleting Nodes" $list_of_errors

@@ -46,6 +46,7 @@ db_transaction {
     }
     set tree_ids [db_list check_permissions_on_trees ""]
 }
+db_dml delete_tmp_category_trees ""
 
 template::multirow create trees tree_id tree_name category_id category_name indent selected_p
 template::util::list_to_lookup $category_ids category_selected
@@ -146,6 +147,7 @@ db_transaction {
     # execute query to get the objects on current page
     set items [ad_table -Torderby $orderby get_categorized_objects "" $table_def]
 }
+db_dml delete_tmp_category_trees ""
 
 paginator get_display_info $p_name info $page
 set group [paginator get_group $p_name $page]

@@ -17,6 +17,7 @@ namespace eval category {
 	-name:required
 	{-locale ""}
 	{-description ""}
+	{-deprecated_p "f"}
 	{-user_id ""}
 	{-creation_ip ""}
     } {
@@ -27,6 +28,7 @@ namespace eval category {
 	@option locale locale of the language. [ad_conn locale] used by default.
 	@option name category name.
 	@option description description of the category.
+	@option deprecated_p is category deprecated?
 	@option tree_id tree_id of the category the category should be added.
 	@option parent_id id of the parent category. "" if top level category.
 	@option user_id user that adds the category. [ad_conn user_id] used by default.

@@ -5,10 +5,10 @@
 
 <fullquery name="get_trees">      
       <querytext>
-      
+  
     select tree_id, site_wide_p,
-           acs_permission__permission_p(tree_id, :user_id, 'category_tree_read') has_read_p
-    from category_trees t
+           acs_permission__permission_p(tree_id, :user_id, 'category_tree_read') as has_read_p
+    from category_trees
 
       </querytext>
 </fullquery>

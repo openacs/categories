@@ -9,6 +9,12 @@
     </querytext>
   </fullquery>
 
+  <fullquery name="delete_tmp_category_trees">
+    <querytext>
+      delete from category_temp
+    </querytext>
+  </fullquery>
+
   <fullquery name="check_permissions_on_trees">
     <querytext>
       select t.tree_id

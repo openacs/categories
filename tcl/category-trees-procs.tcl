@@ -76,6 +76,7 @@ namespace eval category_tree {
 	{-tree_id ""}
 	-name:required
 	{-description ""}
+	{-site_wide_p "f"}
 	{-locale ""}
 	{-user_id ""}
 	{-creation_ip ""}
@@ -122,6 +123,7 @@ namespace eval category_tree {
 	-tree_id:required
 	-name:required
 	{-description ""}
+	{-site_wide_p "f"}
 	{-locale ""}
 	{-user_id ""}
 	{-modifying_ip ""}
