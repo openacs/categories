@@ -19,12 +19,12 @@ ad_page_contract {
 set user_id [ad_maybe_redirect_for_registration]
 permission::require_permission -object_id $tree_id -privilege category_tree_write
 
-set page_title "Choose a tree to copy"
 set tree_name [category_tree::get_name $tree_id $locale]
 set target_tree_id $tree_id
+set page_title "Copy a tree into \"$tree_name\""
 
 set context_bar [category::context_bar $tree_id $locale [value_if_exists object_id]]
-lappend context_bar "Copy a tree"
+lappend context_bar "Copy tree"
 
 template::multirow create trees tree_id tree_name site_wide_p view_url copy_url
 
@@ -33,7 +33,7 @@ db_foreach trees_select "" {
 	set source_tree_name [category_tree::get_name $source_tree_id $locale]
 
 	template::multirow append trees $source_tree_id $source_tree_name $site_wide_p \
-	[export_vars -no_empty -base tree-view-simple { source_tree_id target_tree_id locale object_id }] \
+	[export_vars -no_empty -base tree-copy-view { source_tree_id target_tree_id locale object_id }] \
 	[export_vars -no_empty -base tree-copy-2 { source_tree_id target_tree_id locale object_id }]
     }
 }
@@ -56,7 +56,7 @@ template::list::create \
 	copy {
 	    label "Action"
 	    display_template {
-		<a href="@trees.copy_url@">Copy this tree</a>
+		<a href="@trees.copy_url@">Copy tree</a>
 	    }
 	}
     }

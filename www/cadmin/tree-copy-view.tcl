@@ -1,6 +1,6 @@
 ad_page_contract {
 
-    Display a simple view of a category tree.
+    Displays a simple view of the source category tree for copy.
 
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
@@ -27,10 +27,10 @@ if {$target_tree(site_wide_p) == "f"} {
 }
 
 set tree_name [category_tree::get_name $tree_id $locale]
-set page_title "Simplified tree view"
+set page_title "Category Tree \"$tree_name\""
 
 set context_bar [category::context_bar $tree_id $locale [value_if_exists object_id]]
-lappend context_bar [list [export_vars -no_empty -base tree-copy { {tree_id $target_tree_id} locale object_id }] "Copy a tree"] "View \"$tree_name\""
+lappend context_bar [list [export_vars -no_empty -base tree-copy { {tree_id $target_tree_id} locale object_id }] "Copy tree"] "View \"$tree_name\""
 
 template::multirow create tree category_name deprecated_p level left_indent
 
