@@ -284,7 +284,7 @@ end;
 /
 show errors
 
-create trigger upd_synonym_on_upd_transl_trg
+create or replace trigger upd_synonym_on_upd_transl_trg
 before update on category_translations for each row
 declare
 	v_synonym_id	integer;
