@@ -62,6 +62,25 @@ namespace eval category_tree {
 	db_exec_plsql unmap_tree ""
     }
 
+    ad_proc -public edit_mapping {
+	-tree_id:required
+	-object_id:required
+	{-assign_single_p f}
+	{-require_category_p f}
+    } {
+	Edit the parameters of a mapped category tree.
+
+	@option tree_id mapped category tree.
+	@option object_id object the category tree is mapped to.
+	@option assign_single_p shows if the user will be allowed to assign multiple
+	        categories to objects or only a single one in this subtree.
+	@option require_category_p shows if the user will have to assign at least one
+	        category to objects.
+	@author Timo Hentschel (timo@timohentschel.de)
+    } {
+	db_dml edit_mapping ""
+    }
+
     ad_proc -public copy {
 	-source_tree:required
 	-dest_tree:required

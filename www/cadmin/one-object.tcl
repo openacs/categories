@@ -26,7 +26,7 @@ set object_name [lindex $context_bar 1]
 set page_title "Category Management"
 set context_bar [list $context_bar $page_title]
 
-template::multirow create mapped_trees tree_name tree_id site_wide_p assign_single_p require_category_p unmap_url
+template::multirow create mapped_trees tree_name tree_id site_wide_p assign_single_p require_category_p unmap_url edit_url
 
 db_foreach get_mapped_trees "" {
     set tree_name [category_tree::get_name $tree_id $locale]
@@ -35,7 +35,8 @@ db_foreach get_mapped_trees "" {
     }
     template::multirow append mapped_trees $tree_name $tree_id $site_wide_p \
 	$assign_single_p $require_category_p \
-	[export_vars -no_empty -base tree-unmap { tree_id locale object_id }]
+	[export_vars -no_empty -base tree-unmap { tree_id locale object_id }] \
+	[export_vars -no_empty -base tree-map { tree_id locale object_id {edit_p 1}}]
 }
 
 
@@ -66,10 +67,11 @@ template::list::create \
 		 <if @mapped_trees.require_category_p@ eq t>required) </if><else>optional) </else>
 	    }
 	}
-	unmap {
+	action {
 	    label "Action"
 	    display_template {
-		<a href="@mapped_trees.unmap_url@">Unmap</a>
+		<a href="@mapped_trees.unmap_url@">Unmap</a> &nbsp; &nbsp;
+		<a href="@mapped_trees.edit_url@">Edit parameters</a>
 	    }
 	}
     }
@@ -87,7 +89,7 @@ template::list::create \
 		<if @unmapped_trees.site_wide_p@ eq t> (Site-Wide Tree) </if>
 	    }
 	}
-	map {
+	action {
 	    label "Action"
 	    display_template {
 		<a href="@unmapped_trees.map_url@">Map tree</a> &nbsp; &nbsp;

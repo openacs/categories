@@ -12,6 +12,19 @@
 </fullquery>
 
  
+<fullquery name="category_tree::edit_mapping.edit_mapping">
+      <querytext>
+      
+	    update category_tree_map
+	    set assign_single_p = :assign_single_p,
+	        require_category_p = :require_category_p
+	    where tree_id = :tree_id
+	    and object_id = :object_id
+	
+      </querytext>
+</fullquery>
+
+ 
 <fullquery name="category_tree::update.check_tree_existence">      
       <querytext>
       
