@@ -19,6 +19,9 @@ if {![exists_and_not_null locale]} {
     set locale [ad_parameter DefaultLocale acs-lang "en_US"]
 }
 
+# TODO: Refactor to use lang::system::get_locale_options and ad_form
+# so we don't hit the DB on every request
+
 db_multirow languages get_locales ""
 
 set current_page [ad_conn url]

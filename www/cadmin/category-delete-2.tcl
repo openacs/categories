@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id:
 } {
     tree_id:integer
-    category_id:integer
+    category_id:integer,multiple
     {locale ""}
     object_id:integer,optional
 }
@@ -14,7 +14,9 @@ ad_page_contract {
 permission::require_permission -object_id $tree_id -privilege category_tree_write
 
 db_transaction {
-    category::delete $category_id
+    foreach id $category_id {
+	category::delete $id
+    }
     category_tree::flush_cache $tree_id
 } on_error {
     ad_return_complaint 1 "Error Deleting Node<p>This node contains leaf (child) nodes. If you really want to delete those leaf nodes, plesae delete them first. Thank you."

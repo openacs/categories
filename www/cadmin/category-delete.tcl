@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id:
 } {
     tree_id:integer
-    category_id:integer
+    category_id:integer,multiple
     {locale ""}
     object_id:integer,optional
 } -properties {
@@ -20,20 +20,26 @@ ad_page_contract {
 set user_id [ad_maybe_redirect_for_registration]
 permission::require_permission -object_id $tree_id -privilege category_tree_write
 
-set category_name [category::get_name $category_id $locale]
+multirow create categories category_id name objects_p
+
+foreach id $category_id {
+    multirow append categories \
+	$id \
+	[category::get_name $id $locale] \
+	[db_string check_mapped_objects {}]
+}
+
 array set tree [category_tree::get_data $tree_id $locale]
 set tree_name $tree(tree_name)
 
-set mapped_objects_p [db_string check_mapped_objects ""]
-    
-set form_vars [export_form_vars tree_id category_id locale object_id]
-set page_title "Delete category \"$category_name\""
+set form_vars [export_vars -form { tree_id category_id:multiple locale object_id }]
+set page_title "Delete categories"
 
 if {[info exists object_id]} {
     set context_bar [list [category::get_object_context $object_id] [list "one-object?[export_url_vars locale object_id]" "Category Management"]]
 } else {
     set context_bar [list [list ".?[export_url_vars locale]" "Category Management"]]
 }
-lappend context_bar [list "tree-view?[export_url_vars tree_id locale object_id]" $tree_name] "Delete \"$category_name\""
+lappend context_bar [list "tree-view?[export_url_vars tree_id locale object_id]" $tree_name] "Delete categories"
 
 ad_return_template 

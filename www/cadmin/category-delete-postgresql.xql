@@ -8,7 +8,7 @@
       
     select case when count(*) = 0 then 0 else 1 end 
     where exists (select 1 from category_object_map
-                  where category_id = :category_id)
+                  where category_id = :id)
 
       </querytext>
 </fullquery>

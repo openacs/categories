@@ -3,10 +3,18 @@
 <property name="context_bar">@context_bar;noquote@</property>
 <property name="locale">@locale;noquote@</property>
 
-<if @mapped_objects_p@ eq 1>
-This category is still mapped to some objects.
-</if>
-Are you sure you want to delete category "@category_name@"?
+<p>
+  Are you sure you want to delete these categories:
+</p>
+
+<ul>
+  <multiple name="categories">
+    <li>
+      @categories.name@
+      <if @categories.objects_p@ true>(Still mapped to objects)</if>
+    </li>
+  </multiple>
+</ul>
 
 <center>
 <form action="category-delete-2">
