@@ -92,6 +92,12 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
 	set tree_name [ad_quotehtml $tree_name]
 	set one_tree [list]
 
+        if { $require_category_p == "t" } { 
+            set required_mark "<span class=\"form-required-mark\">*</span>"
+        } else {
+            set required_mark {}
+        }
+
 	foreach category [category_tree::get_tree -subtree_id $subtree_id $tree_id] {
 	    util_unlist $category category_id category_name deprecated_p level
 	    set category_name [ad_quotehtml $category_name]
@@ -102,7 +108,7 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
 	}
 
         if { [llength $mapped_trees] > 1 } {
-            append output "<div class=\"categorySelect\"><div class=\"categoryTreeName\">$tree_name</div>"
+            append output "<div class=\"categorySelect\"><div class=\"categoryTreeName\">$tree_name$required_mark</div>"
 	}
 
 	if {$assign_single_p == "t" || $all_single_p} {
