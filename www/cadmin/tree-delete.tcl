@@ -2,7 +2,7 @@ ad_page_contract {
 
     This page checks whether the category tree can be deleted and asks for confirmation.
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
     tree_id:integer,notnull
@@ -29,11 +29,11 @@ set tree_description $tree(description)
 
 set page_title "Delete Category Tree \"$tree_name\""
 if {[info exists object_id]} {
-    set context_bar [list [category::get_object_context $object_id] [list "one-object?[export_url_vars locale object_id]" "Category Management"]]
+    set context_bar [list [category::get_object_context $object_id] [list [export_vars -base one-object {locale object_id}] "Category Management"]]
 } else {
-    set context_bar [list [list ".?[export_url_vars locale]" "Category Management"]]
+    set context_bar [list [list ".?[export_vars {locale}]" "Category Management"]]
 }
-lappend context_bar [list "tree-view?[export_url_vars tree_id locale object_id]" $tree_name] Delete
+lappend context_bar [list [export_vars -base tree-view {tree_id locale object_id}] $tree_name] Delete
 
 set instance_list [category_tree::usage $tree_id]
 
@@ -44,7 +44,7 @@ if {[llength $instance_list] > 0} {
 }
 
 set form_vars [export_form_vars tree_id locale object_id]
-set url_vars [export_url_vars tree_id locale object_id]
+set url_vars [export_vars {tree_id locale object_id}]
 
 template::multirow create used_categories category_id name
 

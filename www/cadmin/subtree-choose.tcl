@@ -3,7 +3,7 @@ ad_page_contract {
     This page displays a category tree.
     Next to each category there will be a map subtree link. 
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
     tree_id:integer
@@ -26,9 +26,9 @@ if {$tree_data(site_wide_p) == "f"} {
 }
 
 set page_title "Choose a subtree to map"
-set url_vars [export_url_vars locale object_id]
+set url_vars [export_vars {locale object_id}]
 
-set context_bar [list [category::get_object_context $object_id] [list "one-object?[export_url_vars locale object_id]" "Category Management"] "Map subtree"]
+set context_bar [list [category::get_object_context $object_id] [list [export_vars -base one-object {locale object_id}] "Category Management"] "Map subtree"]
 
 template::multirow create tree category_id category_name level left_indent
 

@@ -8,7 +8,9 @@
 	    select category_tree__map(
 			      :object_id,
 			      :tree_id,
-			      :subtree_category_id)
+			      :subtree_category_id,
+			      :assign_single_p,
+			      :require_category_p)
       </querytext>
 </fullquery>
 

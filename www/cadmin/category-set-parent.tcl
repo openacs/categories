@@ -2,7 +2,7 @@ ad_page_contract {
     
     Changes the parent category of a category.
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
     tree_id:integer
@@ -24,15 +24,15 @@ permission::require_permission -object_id $tree_id -privilege category_tree_writ
 array set one_tree [category_tree::get_data $tree_id $locale]
 set tree_name $one_tree(tree_name)
 
-set url_vars [export_url_vars tree_id category_id locale object_id]
+set url_vars [export_vars {tree_id category_id locale object_id}]
 set page_title "Choose a parent node"
 
 if {[info exists object_id]} {
-    set context_bar [list [category::get_object_context $object_id] [list "one-object?[export_url_vars locale object_id]" "Category Management"]]
+    set context_bar [list [category::get_object_context $object_id] [list [export_vars -base one-object {locale object_id}] "Category Management"]]
 } else {
-    set context_bar [list [list ".?[export_url_vars locale]" "Category Management"]]
+    set context_bar [list [list ".?[export_vars {locale}]" "Category Management"]]
 }
-lappend context_bar [list "tree-view?[export_url_vars tree_id locale object_id]" $tree_name] "Choose parent"
+lappend context_bar [list [export_vars -base tree-view {tree_id locale object_id}] $tree_name] "Choose parent"
 
 
 set subtree_categories_list [db_list subtree ""]

@@ -4,7 +4,7 @@ ad_page_contract {
     need to manage which categories that can be mapped
     to contained objects. 
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
     object_id:integer,notnull
@@ -26,7 +26,7 @@ set context_bar [category::get_object_context $object_id]
 set object_name [lindex $context_bar 1]
 set page_title "Category Management"
 set context_bar [list $context_bar $page_title]
-set url_vars [export_url_vars locale object_id]
+set url_vars [export_vars {locale object_id}]
 
 template::multirow create mapped_trees tree_name tree_id site_wide_p subtree_category_id subtree_category_name
 

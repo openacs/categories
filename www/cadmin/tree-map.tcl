@@ -1,13 +1,20 @@
 ad_page_contract {
     
-    This script assigns one category tree to an object.
+    Asks whether users will be allowed to assign multiple
+    categories of this subtree to objects and if users
+    have to categorize an object in this subtree.
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    Then assings this subtree to the passed object (usually a package_id).
+
+    @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
     tree_id:integer,notnull
+    {category_id:integer,optional ""}
     {locale ""}
     object_id:integer,notnull
+    {assign_single_p:optional f}
+    {require_category_p:optional f}
 }
 
 set user_id [ad_maybe_redirect_for_registration]
@@ -18,8 +25,24 @@ if {$tree(site_wide_p) == "f"} {
     permission::require_permission -object_id $tree_id -privilege category_tree_read
 }
 
-category_tree::map -tree_id $tree_id -object_id $object_id
+set context_bar [list [category::get_object_context $object_id] [list [export_vars -base one-object {locale object_id}]" "Category Management"]]
 
-set return_url "one-object?[export_url_vars locale object_id]"
+if {[empty_string_p $category_id]} {
+    lappend context_bar "Map tree"
+    set page_title "Confirm mapping tree \"$tree(tree_name)\""
+} else {
+    lappend context_bar "Map subtree"
+    set page_title "Confirm mapping subtree \"$tree(tree_name) :: [category::get_name $category_id $locale]\""
+}
 
-ad_returnredirect $return_url
+ad_form -name tree_map_form -action tree-map -export { tree_id category_id locale object_id } -form {
+    {assign_single_p:text(radio) {label "Let users assign multiple categories?"} {value f} {options {{"Yes" f} {"No" t}}}}
+    {require_category_p:text(radio) {label "Require users to assign at least one category?"} {value f} {options {{"Yes" t} {"No" f}}}}
+} -on_submit {
+    category_tree::map -tree_id $tree_id -subtree_category_id $category_id -object_id $object_id -assign_single_p $assign_single_p -require_category_p $require_category_p
+} -after_submit {
+    ad_returnredirect [export_vars -base one-object {locale object_id}]
+    ad_script_abort
+}
+
+ad_return_template

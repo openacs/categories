@@ -1,7 +1,7 @@
 ad_library {
     Procs for the site-wide categorization package.
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
 
     @creation-date 16 April 2003
     @cvs-id $Id:
@@ -34,7 +34,7 @@ ad_proc -public category::add {
     @option user_id user that adds the category. [ad_conn user_id] used by default.
     @option creation_ip ip-address of the user that adds the category. [ad_conn peeraddr] used by default.
     @return category_id
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
 } {
     if {[empty_string_p $user_id]} {
         set user_id [ad_conn user_id]
@@ -74,7 +74,7 @@ ad_proc -public category::update {
     @option description description of the category.
     @option user_id user that updates the category. [ad_conn user_id] used by default.
     @option modifying_ip ip-address of the user that updates the category. [ad_conn peeraddr] used by default.
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
 } {
     if {[empty_string_p $user_id]} {
         set user_id [ad_conn user_id]
@@ -109,7 +109,7 @@ ad_proc -public category::delete {
     @param category_id category_id of the category to be deleted.
     @see category::reset_translation_cache
     @see category_tree::flush_cache
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
 } {
     db_exec_plsql delete_category ""
     if {!$batch_mode_p} {
@@ -126,7 +126,7 @@ ad_proc -public category::change_parent {
     @option category_id category_id whose parent should change.
     @option tree_id tree_id of the category tree.
     @option parent_id new parent category_id.
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
 } {
     db_exec_plsql change_parent_category ""
     category_tree::flush_cache $tree_id
@@ -140,7 +140,7 @@ ad_proc -public category::phase_in { category_id } {
     @param category_id category_id of the category to be phased in
     @see category::phase_out
     @see category_tree::flush_cache
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
 } {
     db_exec_plsql phase_in ""
 }
@@ -155,7 +155,7 @@ ad_proc -public category::phase_out { category_id } {
     @param category_id category_id of the category to be phased out
     @see category::phase_in
     @see category_tree::flush_cache
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
 } {
     db_exec_plsql phase_out ""
 }
@@ -170,7 +170,7 @@ ad_proc -public category::map_object {
     @option remove_old Modifier to be used when categorizing existing objects. Will make sure to delete all old categorizations.
     @option object_id object to be categorized.
     @param category_id_list tcl-list of category_ids to be mapped to the object.
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
 } {
     db_transaction {
         # Remove any already mapped categories if we are updating
@@ -179,9 +179,9 @@ ad_proc -public category::map_object {
         }
 
         foreach category_id $category_id_list {
-    	if ![empty_string_p $category_id] {
-    	    db_dml insert_mapped_categories ""
-    	}
+	    if {![empty_string_p $category_id]} {
+		db_dml insert_mapped_categories ""
+	    }
         }
     }
 }
@@ -191,7 +191,7 @@ ad_proc -public category::get_mapped_categories { object_id } {
 
     @param object_id object of which we want to know the mapped categories.
     @return tcl-list of category_ids
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
 } {
     set result [db_list get_mapped_categories ""]
 
@@ -200,7 +200,7 @@ ad_proc -public category::get_mapped_categories { object_id } {
 
 ad_proc -public category::reset_translation_cache { } {
     Reloads all category translations in the cache.
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
 } {
     catch {nsv_unset categories}
     set category_id_old 0
@@ -221,7 +221,7 @@ ad_proc -public category::flush_translation_cache { category_id } {
     Flushes category translation cache of one category.
 
     @param category_id category to be flushed.
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
 } {
     db_foreach flush_translation_cache "" {
         set cat_lang($locale) $name
@@ -246,7 +246,7 @@ ad_proc -public category::get_name {
 
     @return list of names corresponding to the list of category_id's supplied.
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
 } {
     if {[empty_string_p $locale]} {
         set locale [ad_conn locale]
@@ -279,7 +279,7 @@ ad_proc -public category::get_names {
 
     @return list of names corresponding to the list of category_id's supplied.
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
 } {
     set result [list]
     foreach category_id $category_ids {
@@ -292,7 +292,7 @@ ad_proc -public category::get_object_context { object_id } {
     Returns the object name and url to be used in a context bar.
 
     @param object_id object_id to get the name of.
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
 } {
     set object_name [db_string object_name ""]
     return [list "/o/$object_id" $object_name]
@@ -303,7 +303,7 @@ ad_proc category::repeat_string { string iteration_number } {
 
     @param string string to be repeated.
     @param iteration_number number of times the string should be repeated.
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
 } {
     if { $iteration_number <= 0} {
         return ""
@@ -322,7 +322,7 @@ ad_proc category::pageurl { object_id } {
     To be used by the AcsObject.PageUrl service contract.
 
     @param object_id category to be displayed.
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
 } {
     db_1row get_tree_id_for_pageurl ""
     return "categories-browse?tree_ids=$tree_id&category_ids=$object_id"
@@ -332,7 +332,7 @@ ad_proc -private category::after_install {} {
     Callback to be called after package installation.
     Adds the service contract implementations.
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
 } {
     acs_sc::impl::new -contract_name AcsObject -name category_idhandler -pretty_name "Category tree handler" -owner categories
     acs_sc::impl::alias::new -contract_name AcsObject -impl_name category_idhandler -operation PageUrl -alias category::pageurl
@@ -347,7 +347,7 @@ ad_proc -private category::before_uninstall {} {
     Callback to be called before package uninstallation.
     Removes the service contract implementations.
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
 } {
     # shouldn't we first delete the bindings?
     acs_sc::impl::delete -contract_name AcsObject -impl_name category_idhandler

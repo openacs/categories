@@ -1,7 +1,7 @@
 ad_library {
     Procs for the site-wide categorization package.
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
 
     @creation-date 16 April 2003
     @cvs-id $Id:
@@ -18,7 +18,7 @@ namespace eval category_tree {
 	@param tree_id category tree to get the data of.
 	@param locale language in which to get the name and description.
 	@return array: tree_name description site_wide_p
-	@author Timo Hentschel (thentschel@sussdorff-roy.com)
+	@author Timo Hentschel (timo@timohentschel.de)
     } {
 	db_1row get_tree_data "" -column_array tree
 
@@ -30,14 +30,20 @@ namespace eval category_tree {
 	-tree_id:required
 	-object_id:required
 	{-subtree_category_id ""}
+	{-assign_single_p f}
+	{-require_category_p f}
     } {
 	Map a category tree to a package (or other object).
 
 	@option tree_id category tree to be mapped.
 	@option object_id object to map the category tree to.
 	@option subtree_category_id category_id of the subtree to be mapped.
-	                            If not provided, the whole category tree will be mapped.
-	@author Timo Hentschel (thentschel@sussdorff-roy.com)
+	        If not provided, the whole category tree will be mapped.
+	@option assign_single_p shows if the user will be allowed to assign multiple
+	        categories to objects or only a single one in this subtree.
+	@option require_category_p shows if the user will have to assign at least one
+	        category to objects.
+	@author Timo Hentschel (timo@timohentschel.de)
     } {
 	db_exec_plsql map_tree ""
     }
@@ -51,7 +57,7 @@ namespace eval category_tree {
 
 	@option tree_id category tree to be unmapped.
 	@option object_id object to unmap the category tree from.
-	@author Timo Hentschel (thentschel@sussdorff-roy.com)
+	@author Timo Hentschel (timo@timohentschel.de)
     } {
 	db_exec_plsql unmap_tree ""
     }
@@ -64,7 +70,7 @@ namespace eval category_tree {
 
 	@option source_tree tree_id of the category tree to copy.
 	@option dest_tree tree_id of the category tree to copy into.
-	@author Timo Hentschel (thentschel@sussdorff-roy.com)
+	@author Timo Hentschel (timo@timohentschel.de)
     } {
 	set creation_user [ad_conn user_id]
 	set creation_ip [ad_conn peeraddr]
@@ -95,7 +101,7 @@ namespace eval category_tree {
 	@option creation_ip ip-address of the user that adds the category tree. [ad_conn peeraddr] used by default.
 	@option context_id context_id of the category tree. [ad_conn package_id] used by default.
 	@return tree_id
-	@author Timo Hentschel (thentschel@sussdorff-roy.com)
+	@author Timo Hentschel (timo@timohentschel.de)
     } {
 	if {[empty_string_p $user_id]} {
 	    set user_id [ad_conn user_id]
@@ -138,7 +144,7 @@ namespace eval category_tree {
 	@option description description of the category tree.
 	@option user_id user that adds the category tree. [ad_conn user_id] used by default.
 	@option modifying_ip ip-address of the user that updated the category tree. [ad_conn peeraddr] used by default.
-	@author Timo Hentschel (thentschel@sussdorff-roy.com)
+	@author Timo Hentschel (timo@timohentschel.de)
     } {
 	if {[empty_string_p $user_id]} {
 	    set user_id [ad_conn user_id]
@@ -163,7 +169,7 @@ namespace eval category_tree {
 	Deletes a category tree.
 
 	@param tree_id category tree to be deleted.
-	@author Timo Hentschel (thentschel@sussdorff-roy.com)
+	@author Timo Hentschel (timo@timohentschel.de)
     } {
 	db_exec_plsql delete_tree ""
 	flush_cache $tree_id
@@ -175,13 +181,13 @@ namespace eval category_tree {
 	Get the category trees mapped to an object.
 
 	@param object_id object to get the mapped category trees.
-	@return tcl list of lists: tree_id tree_name subtree_category_id
-	@author Timo Hentschel (thentschel@sussdorff-roy.com)
+	@return tcl list of lists: tree_id tree_name subtree_category_id assign_single_p
+	@author Timo Hentschel (timo@timohentschel.de)
     } {
 	set result [list]
 
 	db_foreach get_mapped_trees "" {
-	    lappend result [list $tree_id [get_name $tree_id] $subtree_category_id]
+	    lappend result [list $tree_id [get_name $tree_id] $subtree_category_id $assign_single_p]
 	}
 
 	return $result
@@ -200,7 +206,7 @@ namespace eval category_tree {
 	@param tree_id category tree to get the categories of.
 	@param locale language in which to get the categories. [ad_conn locale] used by default.
 	@return tcl list of lists: category_id category_name deprecated_p level
-	@author Timo Hentschel (thentschel@sussdorff-roy.com)
+	@author Timo Hentschel (timo@timohentschel.de)
     } {
 	if {[catch {set tree [nsv_get category_trees $tree_id]}]} {
 	    return
@@ -239,7 +245,7 @@ namespace eval category_tree {
 
 	@param tree_id category tree to get the using packages for.
 	@return tcl list of lists: package_pretty_plural object_id object_name package_id instance_name read_p
-	@author Timo Hentschel (thentschel@sussdorff-roy.com)	
+	@author Timo Hentschel (timo@timohentschel.de)	
     } {
 	set user_id [ad_conn user_id]
 
@@ -248,7 +254,7 @@ namespace eval category_tree {
 
     ad_proc -public reset_cache { } {
 	Reloads all category tree hierarchies in the cache.
-	@author Timo Hentschel (thentschel@sussdorff-roy.com)
+	@author Timo Hentschel (timo@timohentschel.de)
     } {
 	catch {nsv_unset category_trees}
 	set tree_id_old 0
@@ -289,7 +295,7 @@ namespace eval category_tree {
 	Flushes category tree hierarchy cache of one category tree.
 
 	@param tree_id category tree to be flushed.
-	@author Timo Hentschel (thentschel@sussdorff-roy.com)
+	@author Timo Hentschel (timo@timohentschel.de)
     } {
 	set cur_level 1
 	set stack [list]
@@ -320,7 +326,7 @@ namespace eval category_tree {
 
     ad_proc -public reset_translation_cache { } {
 	Reloads all category tree translations in the cache.
-	@author Timo Hentschel (thentschel@sussdorff-roy.com)
+	@author Timo Hentschel (timo@timohentschel.de)
     } {
 	catch {nsv_unset category_tree_translations}
 	set tree_id_old 0
@@ -341,7 +347,7 @@ namespace eval category_tree {
 	Flushes category tree translation cache of one category tree.
 
 	@param tree_id category tree to be flushed.
-	@author Timo Hentschel (thentschel@sussdorff-roy.com)
+	@author Timo Hentschel (timo@timohentschel.de)
     } {
 	db_foreach flush_translation_cache "" {
 	    set tree_lang($locale) [list $name $description]
@@ -363,7 +369,7 @@ namespace eval category_tree {
 	@param tree_id category tree to get the name and description of.
 	@param locale language in which to get the name and description. [ad_conn locale] used by default.
 	@return tcl-list: name description
-	@author Timo Hentschel (thentschel@sussdorff-roy.com)
+	@author Timo Hentschel (timo@timohentschel.de)
     } {
 	if {[empty_string_p $locale]} {
 	    set locale [ad_conn locale]
@@ -392,7 +398,7 @@ namespace eval category_tree {
 
 	@param tree_id category tree to get the name of.
 	@param locale language in which to get the name. [ad_conn locale] used by default.
-	@author Timo Hentschel (thentschel@sussdorff-roy.com)
+	@author Timo Hentschel (timo@timohentschel.de)
     } {
 	return [lindex [get_translation $tree_id] 0]
     }
@@ -402,7 +408,7 @@ namespace eval category_tree {
 	To be used by the AcsObject.PageUrl service contract.
 
 	@param object_id category tree to be displayed.
-	@author Timo Hentschel (thentschel@sussdorff-roy.com)
+	@author Timo Hentschel (timo@timohentschel.de)
     } {
 	return "categories-browse?tree_ids=$object_id"
     }

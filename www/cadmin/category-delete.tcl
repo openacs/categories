@@ -2,7 +2,7 @@ ad_page_contract {
 
     Deletes a category
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
     tree_id:integer
@@ -36,10 +36,10 @@ set form_vars [export_vars -form { tree_id category_id:multiple locale object_id
 set page_title "Delete categories"
 
 if {[info exists object_id]} {
-    set context_bar [list [category::get_object_context $object_id] [list "one-object?[export_url_vars locale object_id]" "Category Management"]]
+    set context_bar [list [category::get_object_context $object_id] [list [export_vars -base one-object {locale object_id}] "Category Management"]]
 } else {
-    set context_bar [list [list ".?[export_url_vars locale]" "Category Management"]]
+    set context_bar [list [list ".?[export_vars {locale}]" "Category Management"]]
 }
-lappend context_bar [list "tree-view?[export_url_vars tree_id locale object_id]" $tree_name] "Delete categories"
+lappend context_bar [list [export_vars -base tree-view {tree_id locale object_id}] $tree_name] "Delete categories"
 
 ad_return_template 

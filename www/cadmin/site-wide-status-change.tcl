@@ -1,7 +1,7 @@
 ad_page_contract {
     Toggle the site-wide status of a category tree.
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
     tree_id:integer
@@ -16,4 +16,4 @@ permission::require_permission -object_id $package_id -privilege category_admin
 
 db_dml toggle_site_wide_status ""
 
-ad_returnredirect "permission-manage?[export_url_vars tree_id locale object_id]"
+ad_returnredirect [export_vars -base permission-manage {tree_id locale object_id}]

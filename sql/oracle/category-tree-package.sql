@@ -55,7 +55,10 @@ as
     PROCEDURE map (
 	object_id		in acs_objects.object_id%TYPE,
 	tree_id			in category_trees.tree_id%TYPE,
-	subtree_category_id	in categories.category_id%TYPE		default null);
+	subtree_category_id	in categories.category_id%TYPE		default null,
+	assign_single_p		in category_tree_map.assign_single_p%TYPE	default 'f',
+	require_category_p	in category_tree_map.require_category_p%TYPE	default 'f'
+    );
 
     PROCEDURE unmap (
 	object_id in acs_objects.object_id%TYPE,
@@ -267,7 +270,9 @@ as
     PROCEDURE map (
 	object_id		in acs_objects.object_id%TYPE,
 	tree_id			in category_trees.tree_id%TYPE,
-	subtree_category_id	in categories.category_id%TYPE		default null
+	subtree_category_id	in categories.category_id%TYPE		default null,
+	assign_single_p		in category_tree_map.assign_single_p%TYPE	default 'f',
+	require_category_p	in category_tree_map.require_category_p%TYPE	default 'f'
     ) is
 	v_map_count integer;
     BEGIN
@@ -279,8 +284,9 @@ as
 
 	if v_map_count = 0 then
 	   insert into category_tree_map
-	   (tree_id, subtree_category_id, object_id)
-	   values (map.tree_id, map.subtree_category_id, map.object_id);
+	   (tree_id, subtree_category_id, object_id, assign_single_p, require_category_p)
+	   values (map.tree_id, map.subtree_category_id, map.object_id,
+	           map.assign_single_p, map.require_category_p);
 	end if;
 
     END map;

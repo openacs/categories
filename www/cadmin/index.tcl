@@ -3,7 +3,7 @@ ad_page_contract {
     The index page of the category trees administration
     presenting a list of trees the person has a permission to see/modify
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
     {locale ""}
@@ -18,7 +18,7 @@ ad_page_contract {
 
 set page_title "Category Management"
 set context_bar [list $page_title]
-set url_vars [export_url_vars locale]
+set url_vars [export_vars {locale}]
 
 set user_id [ad_maybe_redirect_for_registration]
 set package_id [ad_conn package_id]

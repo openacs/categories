@@ -1,5 +1,5 @@
 ad_proc -public template::widget::category { element_reference tag_attributes } {
-    # author: Timo Hentschel (thentschel@sussdorff-roy.com)
+    # author: Timo Hentschel (timo@timohentschel.de)
 
     upvar $element_reference element
 
@@ -7,14 +7,14 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
 	array set attributes $element(html)
     }
     array set attributes $tag_attributes
+    array set ms_attributes $tag_attributes
+    set ms_attributes(multiple) {}
     
-    if { ![info exists attributes(single)] } {
-        set attributes(multiple) {}
-    }
+    set all_single_p [info exists attributes(single)]
 
     # Determine the size automatically for a multiselect
-    if { [info exists attributes(multiple)] && ![info exists attributes(size)] } {
-	set attributes(size) 5
+    if { ![info exists ms_attributes(size)] } {
+	set ms_attributes(size) 5
     }
 
     # Get parameters for the category widget
@@ -54,11 +54,11 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
     if { [empty_string_p $tree_id] } {
         set mapped_trees [category_tree::get_mapped_trees $package_id]
     } else {
-        set mapped_trees [list [list $tree_id [category_tree::get_name $tree_id] $subtree_id]]
+        set mapped_trees [list [list $tree_id [category_tree::get_name $tree_id] $subtree_id f]]
     }
 
     foreach tree $mapped_trees {
-	util_unlist $tree tree_id tree_name subtree_id
+	util_unlist $tree tree_id tree_name subtree_id assign_single_p
 	set tree_name [ad_quotehtml $tree_name]
 	set one_tree [list]
 	foreach category [category_tree::get_tree -subtree_id $subtree_id $tree_id] {
@@ -72,9 +72,14 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
         if { [llength $mapped_trees] > 1 } {
             append output " $tree_name\: "
         }
-        append output "[template::widget::menu $element(name) $one_tree $mapped_categories attributes $element(mode)]"
+	if {$assign_single_p == "t" || $all_single_p} {
+	    # single-select widget
+	    append output "[template::widget::menu $element(name) $one_tree $mapped_categories attributes $element(mode)]"
+	} else {
+	    # multiselect widget (if user didn't override with single option}
+	    append output "[template::widget::menu $element(name) $one_tree $mapped_categories ms_attributes $element(mode)]"
+	}
     }
 
     return $output
 }
-

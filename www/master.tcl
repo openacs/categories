@@ -1,5 +1,5 @@
 #
-# author: Timo Hentschel (thentschel@sussdorff-roy.com)
+# author: Timo Hentschel (timo@timohentschel.de)
 #
 
 # There seems to be no way to elegantly set default values here

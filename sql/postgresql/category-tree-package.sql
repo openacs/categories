@@ -238,13 +238,17 @@ end;
 create or replace function category_tree__map (
     integer,   -- object_id
     integer,   -- tree_id
-    integer   -- subtree_category_id
+    integer,   -- subtree_category_id
+    char,      -- assign_single_p
+    char       -- require_category_p
 )
 returns integer as '
 declare
     p_object_id              alias for $1;
     p_tree_id                alias for $2;
     p_subtree_category_id    alias for $3;
+    p_assign_single_p        alias for $4;
+    p_require_category_p     alias for $5;
 
     v_map_count              integer;
 begin
@@ -256,8 +260,10 @@ begin
 
 	if v_map_count = 0 then
 	   insert into category_tree_map
-	   (tree_id, subtree_category_id, object_id)
-	   values (p_tree_id, p_subtree_category_id, p_object_id);
+	   (tree_id, subtree_category_id, object_id,
+	    assign_single_p, require_category_p)
+	   values (p_tree_id, p_subtree_category_id, p_object_id,
+	           p_assign_single_p, p_require_category_p);
 	end if;
         return 0;
 end;

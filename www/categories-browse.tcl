@@ -4,7 +4,7 @@ ad_page_contract {
     Shows a list of all objects mapped to selected categories
     using ad_table, ad_dimensional and paginator.
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
     tree_ids:integer,multiple

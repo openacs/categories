@@ -133,6 +133,8 @@ create table category_tree_map (
 	tree_id			integer constraint cat_tree_map_tree_id_fk references category_trees on delete cascade,
 	object_id		integer constraint cat_tree_map_object_id_fk references acs_objects on delete cascade,
 	subtree_category_id	integer default null constraint cat_tree_map_subtree_id_fk references categories,
+	assign_single_p		char(1) default 'f' constraint cat_tree_map_single_p_ck check (assign_single_p in ('t','f')),
+	require_category_p	char(1) default 'f' constraint cat_tree_map_categ_p_ck check (require_category_p in ('t','f')),
 	primary key (object_id, tree_id)
 ) organization index;
 
@@ -152,6 +154,13 @@ comment on column category_tree_map.object_id is '
 comment on column category_tree_map.subtree_category_id is '
   If a subtree is mapped, then this is the ID of the category on top
   of the subtree, null otherwise.
+';
+comment on column category_tree_map.assign_single_p is '
+  Are the users allowed to assign multiple or only a single category
+  to objects?
+';
+comment on column category_tree_map.require_category_p is '
+  Do the users have to assign at least one category to objects?
 ';
 
 create table category_object_map (

@@ -2,7 +2,7 @@ ad_page_contract {
 
     This page checks whether the category tree can be deleted and deletes it.
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
     tree_id:integer,notnull
@@ -23,7 +23,7 @@ if {[llength $instance_list] > 0} {
 category_tree::delete $tree_id
 
 if {![info exists object_id]} {
-    ad_returnredirect ".?[export_url_vars locale]"
+    ad_returnredirect ".?[export_vars {locale}]"
 } else {
-    ad_returnredirect "one-object?[export_url_vars locale object_id]"
+    ad_returnredirect [export_vars -base one-object {locale object_id}]
 }

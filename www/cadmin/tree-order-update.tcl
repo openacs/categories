@@ -1,7 +1,7 @@
 ad_page_contract {
     Update sort order
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
     @author Lars Pind (lars@collaboraid.biz)
     @cvs-id $Id:
 } {
@@ -76,5 +76,5 @@ if {$count != $last_ind} {
     ad_return_complaint 1 "Error during update: $done_list"
     return
 }
-ad_returnredirect "tree-view?[export_url_vars tree_id locale object_id]"
 
+ad_returnredirect [export_vars -base tree-view {tree_id locale object_id}]

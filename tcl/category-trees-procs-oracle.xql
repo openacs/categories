@@ -10,7 +10,9 @@
 	    category_tree.map(
 			      object_id           => :object_id,
 			      subtree_category_id => :subtree_category_id,
-			      tree_id             => :tree_id);
+			      tree_id             => :tree_id,
+			      assign_single_p     => :assign_single_p,
+			      require_category_p  => :require_category_p);
 	    end;
 	
       </querytext>

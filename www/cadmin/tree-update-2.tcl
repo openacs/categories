@@ -1,7 +1,7 @@
 ad_page_contract {
     Bulk delete of categories.
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
     category_ids:integer,multiple
@@ -38,4 +38,4 @@ if { [llength $list_of_errors] > 0 } {
     return
 }
 
-ad_returnredirect "tree-view?[export_url_vars tree_id locale object_id]"
+ad_returnredirect [export_vars -base tree-view {tree_id locale object_id}]

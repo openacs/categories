@@ -2,7 +2,7 @@ ad_page_contract {
 
     Unmapping a category tree from an object.
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
     tree_id:integer,notnull
@@ -20,4 +20,4 @@ if {$tree(site_wide_p) == "f"} {
 
 category_tree::unmap -tree_id $tree_id -object_id $object_id
 
-ad_returnredirect "one-object?[export_url_vars locale object_id]"
+ad_returnredirect [export_vars -base one-object {locale object_id}]

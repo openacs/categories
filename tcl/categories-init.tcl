@@ -1,7 +1,7 @@
 ad_library {
     Procs for the site-wide categorization package.
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
 
     @creation-date 16 April 2003
     @cvs-id $Id:

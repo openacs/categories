@@ -2,7 +2,7 @@ ad_page_contract {
 
     Display a category tree
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
     tree_id:integer,notnull
@@ -28,7 +28,7 @@ if {$tree(site_wide_p) == "f"} {
     permission::require_permission -object_id $tree_id -privilege category_tree_read
 }
 
-set url_vars [export_url_vars tree_id locale object_id]
+set url_vars [export_vars {tree_id locale object_id}]
 set form_vars [export_form_vars tree_id locale object_id]
 
 set tree_name $tree(tree_name)
@@ -36,9 +36,9 @@ set tree_description $tree(description)
 
 set page_title "Category Tree \"$tree_name\""
 if {[info exists object_id]} {
-    set context_bar [list [category::get_object_context $object_id] [list "one-object?[export_url_vars locale object_id]" "Category Management"] $tree_name]
+    set context_bar [list [category::get_object_context $object_id] [list [export_vars -base one-object {locale object_id}] "Category Management"] $tree_name]
 } else {
-    set context_bar [list [list ".?[export_url_vars locale]" "Category Management"] $tree_name]
+    set context_bar [list [list ".?[export_vars {locale}]" "Category Management"] $tree_name]
 }
 
 set can_write_p [permission::permission_p -object_id $tree_id -privilege category_tree_write]

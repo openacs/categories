@@ -2,7 +2,7 @@ ad_page_contract {
     Bulk operation on a category tree:
     sort, phase in, phase out, delete
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
     tree_id:integer
@@ -90,7 +90,7 @@ if {![empty_string_p $submit_sort]} {
 	ad_return_complaint 1 "Error during update: $done_list"
 	return
     }
-    ad_returnredirect "tree-view?[export_url_vars tree_id locale object_id]"
+    ad_returnredirect [export_vars -base tree-view {tree_id locale object_id}]
     return
 
 } elseif {![empty_string_p $submit_phase_in]} {
@@ -102,7 +102,7 @@ if {![empty_string_p $submit_sort]} {
 	category_tree::flush_cache $tree_id
     }
 
-    ad_returnredirect "tree-view?[export_url_vars tree_id locale object_id]"
+    ad_returnredirect [export_vars -base tree-view {tree_id locale object_id}]
     return
    
 } elseif {![empty_string_p $submit_phase_out]} {
@@ -114,7 +114,7 @@ if {![empty_string_p $submit_sort]} {
 	category_tree::flush_cache $tree_id
     }
 
-    ad_returnredirect "tree-view?[export_url_vars tree_id locale object_id]"
+    ad_returnredirect [export_vars -base tree-view {tree_id locale object_id}]
     return
 
 } elseif {![empty_string_p $submit_delete]} {
@@ -124,11 +124,11 @@ if {![empty_string_p $submit_sort]} {
     set tree_name $tree(tree_name)
 
     if {[info exists object_id]} {
-	set context_bar [list [category::get_object_context $object_id] [list "one-object?[export_url_vars locale object_id]" "Category Management"]]
+	set context_bar [list [category::get_object_context $object_id] [list [export_vars -base one-object {locale object_id}] "Category Management"]]
     } else {
-	set context_bar [list [list ".?[export_url_vars locale]" "Category Management"]]
+	set context_bar [list [list ".?[export_vars {locale}]" "Category Management"]]
     }
-    lappend context_bar [list "tree-view?[export_url_vars tree_id locale object_id]" $tree_name] "Delete categories"
+    lappend context_bar [list [export_vars -base tree-view {tree_id locale object_id}] $tree_name] "Delete categories"
 
     set form_vars_cancel [export_form_vars tree_id locale object_id]
     set form_vars_delete [export_form_vars category_ids:multiple tree_id locale object_id]
@@ -149,7 +149,7 @@ if {![empty_string_p $submit_sort]} {
 } else {
 
     ns_log Warning "Unhandled user input in packages/categories/www/tree-update.tcl"
-    ad_returnredirect "tree-view?[export_url_vars tree_id locale object_id pass]"
+    ad_returnredirect [export_vars -base tree-view {tree_id locale object_id}]
     return
 
 }

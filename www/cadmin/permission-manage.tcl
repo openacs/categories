@@ -1,7 +1,7 @@
 ad_page_contract {
     Let the user toggle the site-wide status of a category tree.
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
     tree_id:integer
@@ -23,13 +23,13 @@ set tree_name $tree(tree_name)
 set page_title "Permission Management for $tree_name"
 
 if {[info exists object_id]} {
-    set context_bar [list [category::get_object_context $object_id] [list "one-object?[export_url_vars locale object_id]" "Category Management"]]
+    set context_bar [list [category::get_object_context $object_id] [list [export_vars -base one-object {locale object_id}] "Category Management"]]
 } else {
-    set context_bar [list [list ".?[export_url_vars locale]" "Category Management"]]
+    set context_bar [list [list ".?[export_vars {locale}]" "Category Management"]]
 }
-lappend context_bar [list "tree-view?[export_url_vars tree_id locale object_id]" $tree_name] "Manage Permissions"
+lappend context_bar [list [export_vars -base tree-view {tree_id locale object_id}] $tree_name] "Manage Permissions"
 
-set url_vars [export_url_vars tree_id object_id locale]
+set url_vars [export_vars {tree_id object_id locale}]
 set package_id [ad_conn package_id]
 set admin_p [permission::permission_p -object_id $package_id -privilege category_admin]
 set sw_tree_p [ad_decode $tree(site_wide_p) f 0 1]

@@ -2,7 +2,7 @@ ad_page_contract {
 
     Deletes a category from a category tree
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
     tree_id:integer
@@ -23,4 +23,4 @@ db_transaction {
     return
 }
 
-ad_returnredirect "tree-view?[export_url_vars tree_id locale object_id]"
+ad_returnredirect [export_vars -base tree-view {tree_id locale object_id}]

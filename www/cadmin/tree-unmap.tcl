@@ -2,7 +2,7 @@ ad_page_contract {
 
     Unmapping a category tree from an object.
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
     tree_id:integer,notnull
@@ -35,6 +35,6 @@ set object_context [category::get_object_context $object_id]
 set object_name [lindex $object_context 1]
 set tree_name $tree(tree_name)
 
-set context_bar [list $object_context [list "one-object?[export_url_vars locale object_id]" "Category Management"] "Unmap \"$tree_name\""]
+set context_bar [list $object_context [list [export_vars -base one-object {locale object_id}] "Category Management"] "Unmap \"$tree_name\""]
 
 ad_return_template

@@ -42,7 +42,7 @@ drop function category_tree__del (integer);
 drop function category_tree__edit (integer,varchar,varchar,varchar,
         char,timestamp with time zone,integer,varchar);
 drop function category_tree__copy (integer,integer,integer,varchar);
-drop function category_tree__map (integer,integer,integer);
+drop function category_tree__map (integer,integer,integer,char);
 drop function category_tree__unmap (integer,integer);
 drop function category_tree__check_nested_ind (integer);
 -- drop function category_tree__index_children (integer,integer);

@@ -2,7 +2,7 @@ ad_page_contract {
 
     The index page to browse category trees.
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
 } -properties {

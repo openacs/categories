@@ -1,7 +1,7 @@
 ad_page_contract {
     Phases a category in/out.
 
-    @author Timo Hentschel (thentschel@sussdorff-roy.com)
+    @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
     tree_id:integer
