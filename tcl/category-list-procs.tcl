@@ -12,35 +12,6 @@ ad_library {
 
 namespace eval category::list {}
 
-# Scenario: you prepare a multirow which is then displated via template::list::create
-#
-# Usage: instead of using db_foreach or db_multirow you now use
-#        category::list::db_foreach or category::list::db_multirow
-#        these procs will do exactly the same as the original procs, but
-#        they will also join the table category_object_map to get the
-#        tcl list of all categories per object. for this you need to
-#        specify the sql column of the object_id with the option -join_column
-#        the procs will add another variable/multirow column "categories"
-#        with the tcl-list of category_ids per row - you can change that name
-#        with the -categories_varname option.
-#
-#        After you got the multirow, use
-#        category::list::extend_multirow -name <<multirowname>> -container_object_id $package_id
-#        (or an object other than package_id that the trees are mapped to).
-#        This proc will generate one extra multirow column per mapped tree that
-#        will hold a pretty list of the categories. The pretty list can be changed
-#        with various options (delimiter, links etc).
-#        If you want to have only one extra multirow column holding a pretty list
-#        of the mapped trees and categories, then you should use the -one_category_list
-#        option.
-#
-#        To automatically generate the appropriate input to be used in the elements
-#        section of template::list::create, use 
-#        category::list::elements -name <<multirowname>>
-#        followed by extra spec to be used per element. Again, to display only one
-#        column use the -one_category_list option.
-
-
 ad_proc -public category::list::get_pretty_list {
     {-category_delimiter ", "}
     {-category_link ""}
@@ -354,6 +325,40 @@ ad_proc -public category::list::elements {
     {spec ""}
 } {
     Adds list-elements to display mapped categories. To be used in list::create.
+
+    <p>
+ <b>Scenario:</b><br>you prepare a multirow which is then displated via template::list::create
+ <p>
+ <b>Usage:</b><br>
+        instead of using db_foreach or db_multirow you now use
+        category::list::db_foreach or category::list::db_multirow
+        these procs will do exactly the same as the original procs, but
+        they will also join the table category_object_map to get the
+        tcl list of all categories per object. for this you need to
+        specify the sql column of the object_id with the option -join_column
+        the procs will add another variable/multirow column "categories"
+        with the tcl-list of category_ids per row - you can change that name
+        with the -categories_varname option.
+<p>
+        After you got the multirow, use
+<pre>
+    category::list::extend_multirow -name &lt;&lt;multirowname&gt;&gt; -container_object_id $package_id
+</pre>
+        (or an object other than package_id that the trees are mapped to).
+        This proc will generate one extra multirow column per mapped tree that
+        will hold a pretty list of the categories. The pretty list can be changed
+        with various options (delimiter, links etc).
+        If you want to have only one extra multirow column holding a pretty list
+        of the mapped trees and categories, then you should use the -one_category_list
+        option.
+<p>
+        To automatically generate the appropriate input to be used in the elements
+        section of template::list::create, use 
+<pre>
+    category::list::elements -name &lt;&lt;multirowname&gt;&gt;
+</pre>
+        followed by extra spec to be used per element. Again, to display only one
+        column use the -one_category_list option.
 
     @param categories_varname beginning of the names of the multirow columns holding
                               the category-names.
