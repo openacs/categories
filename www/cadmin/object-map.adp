@@ -13,5 +13,6 @@
 
 <listtemplate name="unmapped_trees"></listtemplate>
 
-<p>
-<a href="@create_url@" class="action">Create and map a new category tree</a>
+<ul class="action-links">
+  <li><a href="@create_url@">Create and map a new category tree</a></li>
+</ul>
