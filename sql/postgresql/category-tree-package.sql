@@ -12,7 +12,7 @@ create or replace function category_tree__new (
     varchar, -- tree_name
     varchar, -- description
     char,    -- site_wide_p
-    timestamp, -- creation_date
+    timestamp with time zone, -- creation_date
     integer, -- creation_user
     varchar, -- creation_ip
     integer  -- context_id
@@ -75,7 +75,7 @@ create or replace function category_tree__new_translation (
     varchar,   -- locale
     varchar,   -- tree_name
     varchar,   -- description
-    timestamp, -- modifying_date
+    timestamp with time zone, -- modifying_date
     integer,   -- modifying_user
     varchar    -- modifying_ip
 )
@@ -138,7 +138,7 @@ create or replace function category_tree__edit (
     varchar,   -- tree_name
     varchar,   -- description
     char,      -- site_wide_p
-    timestamp, -- modifying_date
+    timestamp with time zone, -- modifying_date
     integer,   -- modifying_user
     varchar    -- modifying_ip
 )

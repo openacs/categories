@@ -13,7 +13,7 @@ create or replace function category__new (
     varchar,   -- description
     integer,   -- parent_id
     char,      -- deprecated_p
-    timestamp, -- creation_date
+    timestamp with time zone, -- creation_date
     integer,   -- creation_user
     varchar    -- creation_ip
 )
@@ -93,7 +93,7 @@ create or replace function category__new_translation (
     varchar,   -- locale
     varchar,   -- name
     varchar,   -- description
-    timestamp, -- modifying_date
+    timestamp with time zone, -- modifying_date
     integer,   -- modifying_user
     varchar    -- modifying_ip
 )
@@ -204,7 +204,7 @@ create or replace function category__edit (
     varchar,   -- locale
     varchar,   -- name
     varchar,   -- description
-    timestamp, -- modifying_date
+    timestamp with time zone, -- modifying_date
     integer,   -- modifying_user
     varchar    -- modifying_ip
 )

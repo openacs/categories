@@ -35,26 +35,26 @@ begin;
 end;
 
 drop function category_tree__new (integer,varchar,varchar,varchar,
-        char,timestamp,integer,varchar,integer);
+        char,timestamp with time zone,integer,varchar,integer);
 drop function category_tree__new_translation (integer,varchar,varchar,
-        varchar,timestamp,integer,varchar);
+        varchar,timestamp with time zone,integer,varchar);
 drop function category_tree__del (integer);
 drop function category_tree__edit (integer,varchar,varchar,varchar,
-        char,timestamp,integer,varchar);
+        char,timestamp with time zone,integer,varchar);
 drop function category_tree__copy (integer,integer,integer,varchar);
 drop function category_tree__map (integer,integer,integer);
 drop function category_tree__unmap (integer,integer);
 drop function category_tree__check_nested_ind (integer);
 -- drop function category_tree__index_children (integer,integer);
 drop function category__new (integer,integer,varchar,varchar,varchar,
-        integer,char,timestamp,integer,varchar);
+        integer,char,timestamp with time zone,integer,varchar);
 drop function category__new_translation (integer,varchar,varchar,varchar,
-        timestamp,integer,varchar);
+        timestamp with time zone,integer,varchar);
 drop function category__phase_out (integer);
 drop function category__phase_in (integer);
 drop function category__del (integer);
 drop function category__edit (integer,varchar,varchar,varchar,
-        timestamp,integer,varchar);
+        timestamp with time zone,integer,varchar);
 drop function category__change_parent (integer,integer,integer);
 drop function category__name (integer);
 
