@@ -66,6 +66,8 @@ namespace eval category_tree {
 	@option dest_tree tree_id of the category tree to copy into.
 	@author Timo Hentschel (thentschel@sussdorff-roy.com)
     } {
+	set creation_user [ad_conn user_id]
+	set creation_ip [ad_conn peeraddr]
 	db_exec_plsql copy_tree ""
 	flush_cache $dest_tree
 	flush_translation_cache $dest_tree

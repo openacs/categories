@@ -21,7 +21,7 @@
  
 <fullquery name="category_tree::copy.copy_tree">      
       <querytext>
-	    select category_tree__copy(:source_tree,:dest_tree)
+	    select category_tree__copy(:source_tree, :dest_tree, :creation_user, :creation_ip)
       </querytext>
 </fullquery>
 
