@@ -31,7 +31,7 @@ set tree_description $tree(description)
 
 set page_title "Category Tree \"$tree_name\""
 if {[info exists object_id]} {
-    set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base one-object {locale object_id}] "Category Management"] $tree_name]
+    set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base object-map {locale object_id}] "Category Management"] $tree_name]
 } else {
     set context_bar [list [list ".?[export_vars -no_empty {locale}]" "Category Management"] $tree_name]
 }

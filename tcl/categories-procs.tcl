@@ -326,7 +326,7 @@ ad_proc -private category::context_bar { tree_id locale object_id } {
     @author Timo Hentschel (timo@timohentschel.de)
 } {
     if {![empty_string_p $object_id]} {
-	set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base one-object {locale object_id}] "Category Management"]]
+	set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base object-map {locale object_id}] "Category Management"]]
     } else {
 	set context_bar [list [list ".?[export_vars -no_empty {locale}]" "Category Management"]]
     }

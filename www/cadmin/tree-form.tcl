@@ -21,7 +21,7 @@ if { ![ad_form_new_p -key tree_id] } {
 }
 
 if { [info exists object_id] } {
-    set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base one-object {locale object_id}] "Category Management"]]
+    set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base object-map {locale object_id}] "Category Management"]]
 } else {
     set context_bar [list [list ".?[export_vars -no_empty {locale}]" "Category Management"]]
 }
