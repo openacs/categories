@@ -37,7 +37,7 @@ db_foreach get_mapped_trees "" {
 	$assign_single_p $require_category_p \
 	[export_vars -no_empty -base tree-view { tree_id locale object_id }] \
 	[export_vars -no_empty -base tree-unmap { tree_id locale object_id }] \
-	[export_vars -no_empty -base tree-map { tree_id locale object_id {edit_p 1}}]
+	[export_vars -no_empty -base tree-map-2 { tree_id locale object_id {edit_p 1}}]
 }
 
 template::multirow sort mapped_trees -dictionary tree_name
@@ -50,8 +50,8 @@ db_foreach get_unmapped_trees "" {
 
 	template::multirow append unmapped_trees $tree_id $tree_name $site_wide_p \
 	[export_vars -no_empty -base tree-view { tree_id locale object_id }] \
-	[export_vars -no_empty -base tree-map { tree_id locale object_id }] \
-	[export_vars -no_empty -base subtree-choose { tree_id locale object_id }]
+	[export_vars -no_empty -base tree-map-2 { tree_id locale object_id }] \
+	[export_vars -no_empty -base tree-map { tree_id locale object_id }]
     }
 }
 
@@ -98,7 +98,7 @@ template::list::create \
 	    label "Action"
 	    display_template {
 		<a href="@unmapped_trees.map_url@">Map tree</a> &nbsp; &nbsp;
-		<a href="@unmapped_trees.subtree_url@">Choose subtree to map</a>
+		<a href="@unmapped_trees.subtree_url@">Map a subtree</a>
 	    }
 	}
     }
