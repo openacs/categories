@@ -38,8 +38,11 @@
       <querytext>
       
 			insert into category_object_map (category_id, object_id)
-			values (:category_id, :object_id)
-		    
+			select :category_id, :object_id
+                        where not exists (select 1
+                                          from category_object_map
+                                          where category_id = :category_id
+                                            and object_id = :object_id);
       </querytext>
 </fullquery>
 
