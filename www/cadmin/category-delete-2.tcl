@@ -14,12 +14,12 @@ ad_page_contract {
 permission::require_permission -object_id $tree_id -privilege category_tree_write
 
 db_transaction {
-    foreach id $category_id {
-	category::delete $id
+    foreach category_id [db_list order_categories_for_delete "" {
+	category::delete $category_id
     }
     category_tree::flush_cache $tree_id
 } on_error {
-    ad_return_complaint 1 "Error Deleting Node<p>This node contains leaf (child) nodes. If you really want to delete those leaf nodes, plesae delete them first. Thank you."
+    ad_return_complaint 1 "Error deleting category.<p>A category still contains subcategories. If you really want to delete those subcategories, please delete them first. Thank you."
     return
 }
 
