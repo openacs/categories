@@ -9,6 +9,7 @@ ad_page_contract {
     tree_id:integer,notnull
     {locale ""}
     object_id:integer,optional
+    orderby:optional
 } -properties {
     page_title:onevalue
     context_bar:onevalue
@@ -51,6 +52,11 @@ template::list::create \
 	    label direction
 	    multirow_cols {direction tree_name category_name}
 	}
+    } -filters {
+	category_id {}
+	tree_id {}
+	locale {}
+	object_id {}
     } -actions [list \
 		  "Add link" [export_vars -no_empty -base category-link-add { category_id tree_id locale object_id }] "Add new category link"] \
     -bulk_actions {
