@@ -26,7 +26,7 @@ set object_name [lindex $context_bar 1]
 set page_title "Category Management"
 set context_bar [list $context_bar $page_title]
 
-template::multirow create mapped_trees tree_name tree_id site_wide_p assign_single_p require_category_p unmap_url edit_url
+template::multirow create mapped_trees tree_name tree_id site_wide_p assign_single_p require_category_p view_url unmap_url edit_url
 
 db_foreach get_mapped_trees "" {
     set tree_name [category_tree::get_name $tree_id $locale]
@@ -35,22 +35,27 @@ db_foreach get_mapped_trees "" {
     }
     template::multirow append mapped_trees $tree_name $tree_id $site_wide_p \
 	$assign_single_p $require_category_p \
+	[export_vars -no_empty -base tree-view { tree_id locale object_id }] \
 	[export_vars -no_empty -base tree-unmap { tree_id locale object_id }] \
 	[export_vars -no_empty -base tree-map { tree_id locale object_id {edit_p 1}}]
 }
 
+template::multirow sort mapped_trees -dictionary tree_name
 
-template::multirow create unmapped_trees tree_id tree_name site_wide_p map_url subtree_url
+template::multirow create unmapped_trees tree_id tree_name site_wide_p view_url map_url subtree_url
 
 db_foreach get_unmapped_trees "" {
     if { [string equal $has_read_permission t] || [string equal $site_wide_p t] } {
 	set tree_name [category_tree::get_name $tree_id $locale]
 
 	template::multirow append unmapped_trees $tree_id $tree_name $site_wide_p \
+	[export_vars -no_empty -base tree-view { tree_id locale object_id }] \
 	[export_vars -no_empty -base tree-map { tree_id locale object_id }] \
 	[export_vars -no_empty -base subtree-choose { tree_id locale object_id }]
     }
 }
+
+template::multirow sort unmapped_trees -dictionary tree_name
 
 template::list::create \
     -name mapped_trees \
@@ -58,7 +63,7 @@ template::list::create \
     -elements {
 	tree_name {
 	    label "Name"
-	    link_url_eval {[export_vars -no_empty -base tree-view { tree_id locale object_id }]}
+	    link_url_col view_url
 	}
         flags {
 	    display_template {
@@ -82,7 +87,7 @@ template::list::create \
     -elements {
 	tree_name {
 	    label "Name"
-	    link_url_eval {[export_vars -no_empty -base tree-view { tree_id locale object_id }]}
+	    link_url_col view_url
 	}
 	site_wide_p {
 	    display_template {
