@@ -20,7 +20,8 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
     upvar $element_reference element
 
     if { [info exists element(html)] } {
-	array set attributes $element(html)
+      	array set attributes $element(html)
+      	array set ms_attributes $element(html)
     }
     array set attributes $tag_attributes
     array set ms_attributes $tag_attributes
