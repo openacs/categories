@@ -15,4 +15,6 @@
 
 <p>
 
-<a href="@create_url@" class="action">Create a new tree</a>
+<ul class="action-links">
+  <li><a href="@create_url@">Create a new tree</a></li>
+</ul>
