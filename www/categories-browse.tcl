@@ -58,7 +58,7 @@ foreach tree_id $tree_ids {
 	util_unlist $category category_id category_name deprecated_p level
 	set indent ""
 	if {$level>1} {
-	    set indent "[category::repeat_string "&nbsp;" [expr 2*$level -4]].."
+	    set indent "[category::indent_html [expr 2*$level -4]].."
 	}
 	template::multirow append trees $tree_id $tree_name $category_id $category_name $indent [info exists category_selected($category_id)]
     }

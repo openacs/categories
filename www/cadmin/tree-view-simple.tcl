@@ -43,7 +43,7 @@ template::multirow create tree category_name deprecated_p level left_indent
 foreach category [category_tree::get_tree -all $tree_id $locale] {
     util_unlist $category category_id category_name deprecated_p level
 
-    template::multirow append tree $category_name $deprecated_p $level [category::repeat_string "&nbsp;" [expr ($level-1)*5]]
+    template::multirow append tree $category_name $deprecated_p $level [category::indent_html [expr ($level-1)*5]]
 }
 
 template::list::create \

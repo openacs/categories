@@ -95,7 +95,7 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
 	    util_unlist $category category_id category_name deprecated_p level
 	    set category_name [ad_quotehtml $category_name]
 	    if { $level>1 } {
-		set category_name "[category::repeat_string "&nbsp;" [expr 2*$level -4]]..$category_name"
+		set category_name "[category::indent_html [expr 2*$level -4]]..$category_name"
 	    }
 	    lappend one_tree [list $category_name $category_id]
 	}
