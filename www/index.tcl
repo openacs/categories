@@ -29,6 +29,8 @@ db_foreach get_trees "" {
     }
 }
 
+template::multirow sort trees -dictionary tree_name
+
 template::list::create \
     -name trees \
     -key tree_ids \

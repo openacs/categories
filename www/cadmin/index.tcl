@@ -44,11 +44,13 @@ multirow extend trees_with_read_permission view_url
 multirow foreach trees_with_read_permission {
     set view_url [export_vars -no_empty -base tree-view { tree_id locale }]
 }
+multirow sort trees_with_read_permission -dictionary tree_name
 
 multirow extend trees_with_write_permission view_url
 multirow foreach trees_with_write_permission {
     set view_url [export_vars -no_empty -base tree-view { tree_id locale }]
 }
+multirow sort trees_with_write_permission -dictionary tree_name
 
 
 set elements {

@@ -43,6 +43,8 @@ db_foreach trees_select "" {
     }
 }
 
+template::multirow sort trees -dictionary tree_name
+
 template::list::create \
     -name trees \
     -no_data "None" \
