@@ -21,14 +21,17 @@ ad_page_contract {
 set user_id [ad_maybe_redirect_for_registration]
 permission::require_permission -object_id $tree_id -privilege category_tree_write
 
-multirow create categories category_id category_name objects_p
+multirow create categories category_id category_name objects_p view_url
 
 foreach id $category_id {
     multirow append categories \
 	$id \
 	[category::get_name $id $locale] \
-	[db_string check_mapped_objects {}]
+	[db_string check_mapped_objects {}] \
+	[export_vars -no_empty -base category-usage { {category_id $id} tree_id locale object_id }]
 }
+
+multirow sort categories -dictionary category_name
 
 array set tree [category_tree::get_data $tree_id $locale]
 set tree_name $tree(tree_name)
@@ -50,6 +53,10 @@ template::list::create \
     -elements {
 	category_name {
 	    label "Name"
+	    display_template {
+		<if @categories.objects_p@ true><a href="@categories.view_url@">@categories.category_name@</a></if>
+		<else>@categories.category_name@</else>
+	    }
 	}
 	objects_p {
 	    display_template {

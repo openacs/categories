@@ -46,12 +46,15 @@ if {[llength $instance_list] > 0} {
 set delete_url [export_vars -no_empty -base tree-delete-2 {tree_id locale object_id}]
 set cancel_url [export_vars -no_empty -base tree-view {tree_id locale object_id}]
 
-template::multirow create used_categories category_id category_name
+template::multirow create used_categories category_id category_name view_url
 
 db_foreach get_category_in_use "" {
     set category_name [category::get_name $category_id $locale]
-    template::multirow append used_categories $category_id $category_name
+    template::multirow append used_categories $category_id $category_name \
+	[export_vars -no_empty -base category-usage { category_id tree_id locale object_id }]
 }
+
+template::multirow sort used_categories -dictionary category_name
 
 template::list::create \
     -name used_categories \
@@ -59,6 +62,7 @@ template::list::create \
     -elements {
 	category_name {
 	    label "Name"
+	    link_url_col view_url
 	}
     }
 
