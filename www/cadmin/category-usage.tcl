@@ -34,14 +34,14 @@ if {$tree(site_wide_p) == "f"} {
 set tree_name $tree(tree_name)
 set category_name [category::get_name $category_id $locale]
 set page_title "Objects using category \"$category_name\" of tree \"$tree_name\""
-set url_vars [export_vars {category_id tree_id locale object_id}]
+set url_vars [export_vars -no_empty {category_id tree_id locale object_id}]
 
 if {[info exists object_id]} {
-    set context_bar [list [category::get_object_context $object_id] [list [export_vars -base one-object {locale object_id}] "Category Management"]]
+    set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base one-object {locale object_id}] "Category Management"]]
 } else {
-    set context_bar [list [list ".?[export_vars {locale}]" "Category Management"]]
+    set context_bar [list [list ".?[export_vars -no_empty {locale}]" "Category Management"]]
 }
-lappend context_bar [list [export_vars -base tree-view {tree_id locale object_id}] $tree_name] "\"$category_name\" Usage"
+lappend context_bar [list [export_vars -no_empty -base tree-view {tree_id locale object_id}] $tree_name] "\"$category_name\" Usage"
 
 set table_def {
     {object_name "Object Name" {upper(n.object_name) $order} {<td><a href="/o/$object_id">$object_name</a></td>}}

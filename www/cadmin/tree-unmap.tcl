@@ -28,13 +28,13 @@ if {$tree(site_wide_p) == "f"} {
 
 set page_title "Unmap tree"
 
-set delete_url [export_vars -base tree-unmap-2 { tree_id locale object_id }]
-set cancel_url [export_vars -base one-object { locale object_id }]
+set delete_url [export_vars -no_empty -base tree-unmap-2 { tree_id locale object_id }]
+set cancel_url [export_vars -no_empty -base one-object { locale object_id }]
 
 set object_context [category::get_object_context $object_id]
 set object_name [lindex $object_context 1]
 set tree_name $tree(tree_name)
 
-set context_bar [list $object_context [list [export_vars -base one-object {locale object_id}] "Category Management"] "Unmap \"$tree_name\""]
+set context_bar [list $object_context [list [export_vars -no_empty -base one-object {locale object_id}] "Category Management"] "Unmap \"$tree_name\""]
 
 ad_return_template

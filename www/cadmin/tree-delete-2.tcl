@@ -23,7 +23,7 @@ if {[llength $instance_list] > 0} {
 category_tree::delete $tree_id
 
 if {![info exists object_id]} {
-    ad_returnredirect ".?[export_vars {locale}]"
+    ad_returnredirect ".?[export_vars -no_empty {locale}]"
 } else {
-    ad_returnredirect [export_vars -base one-object {locale object_id}]
+    ad_returnredirect [export_vars -no_empty -base one-object {locale object_id}]
 }

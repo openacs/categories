@@ -30,11 +30,11 @@ set tree_description $tree(description)
 set page_title "Modules using Category Tree \"$tree_name\""
 
 if {[info exists object_id]} {
-    set context_bar [list [category::get_object_context $object_id] [list [export_vars -base one-object {locale object_id}] "Category Management"]]
+    set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base one-object {locale object_id}] "Category Management"]]
 } else {
-    set context_bar [list [list ".?[export_vars {locale}]" "Category Management"]]
+    set context_bar [list [list ".?[export_vars -no_empty {locale}]" "Category Management"]]
 }
-lappend context_bar [list [export_vars -base tree-view {tree_id locale object_id}] $tree_name] Usage
+lappend context_bar [list [export_vars -no_empty -base tree-view {tree_id locale object_id}] $tree_name] Usage
 
 
 template::multirow create modules package object_id object_name package_id instance_name read_p

@@ -24,4 +24,4 @@ db_transaction {
     return
 }
 
-ad_returnredirect [export_vars -base category-links-view {category_id tree_id locale object_id}]
+ad_returnredirect [export_vars -no_empty -base category-links-view {category_id tree_id locale object_id}]

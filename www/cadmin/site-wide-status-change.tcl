@@ -16,4 +16,4 @@ permission::require_permission -object_id $package_id -privilege category_admin
 
 db_dml toggle_site_wide_status ""
 
-ad_returnredirect [export_vars -base permission-manage {tree_id locale object_id}]
+ad_returnredirect [export_vars -no_empty -base permission-manage {tree_id locale object_id}]

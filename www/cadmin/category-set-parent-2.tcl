@@ -16,4 +16,4 @@ permission::require_permission -object_id $tree_id -privilege category_tree_writ
 
 category::change_parent -tree_id $tree_id -category_id $category_id -parent_id $parent_id
 
-ad_returnredirect [export_vars -base tree-view {tree_id locale object_id}]
+ad_returnredirect [export_vars -no_empty -base tree-view {tree_id locale object_id}]

@@ -28,11 +28,11 @@ array set tree [category_tree::get_data $tree_id $locale]
 set tree_name $tree(tree_name)
 
 if {[info exists object_id]} {
-    set context_bar [list [category::get_object_context $object_id] [list [export_vars -base one-object {locale object_id}]" "Category Management"]]
+    set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base one-object {locale object_id}]" "Category Management"]]
 } else {
-    set context_bar [list [list ".?[export_vars {locale}]" "Category Management"]]
+    set context_bar [list [list ".?[export_vars -no_empty {locale}]" "Category Management"]]
 }
-lappend context_bar [list [export_vars -base tree-view {tree_id locale object_id}]" $tree_name] $page_title
+lappend context_bar [list [export_vars -no_empty -base tree-view {tree_id locale object_id}]" $tree_name] $page_title
 
 set languages [db_list_of_lists get_ad_locales ""]
 
@@ -56,7 +56,7 @@ ad_form -name category_form -action category-form -export { tree_id parent_id lo
 } -edit_data {
     category::update -category_id $category_id -locale $language -name $name -description $description
 } -after_submit {
-    ad_returnredirect [export_vars -base tree-view {tree_id locale object_id}]
+    ad_returnredirect [export_vars -no_empty -base tree-view {tree_id locale object_id}]
     ad_script_abort
 }
 

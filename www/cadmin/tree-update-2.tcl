@@ -38,4 +38,4 @@ if { [llength $list_of_errors] > 0 } {
     return
 }
 
-ad_returnredirect [export_vars -base tree-view {tree_id locale object_id}]
+ad_returnredirect [export_vars -no_empty -base tree-view {tree_id locale object_id}]

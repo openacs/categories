@@ -31,7 +31,7 @@ set page_title "Delete links with category \"$tree(tree_name) :: $category_name\
 if {[info exists object_id]} {
     set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base one-object {locale object_id}] "Category Management"]]
 } else {
-    set context_bar [list [list ".?[export_vars {locale}]" "Category Management"]]
+    set context_bar [list [list ".?[export_vars -no_empty {locale}]" "Category Management"]]
 }
 lappend context_bar [list [export_vars -no_empty -base tree-view {tree_id locale object_id}] $tree_name] [list [export_vars -no_empty -base category-links-view {category_id tree_id locale object_id}] "Links to $category_name"] "Delete Links"
 

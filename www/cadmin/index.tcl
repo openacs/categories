@@ -11,14 +11,12 @@ ad_page_contract {
     page_title:onevalue
     context_bar:onevalue
     locale:onevalue
-    url_vars:onevalue
     trees_with_write_permission:multirow
     trees_with_read_permission:multirow
 }
 
 set page_title "Category Management"
 set context_bar [list $page_title]
-set url_vars [export_vars {locale}]
 
 set user_id [ad_maybe_redirect_for_registration]
 set package_id [ad_conn package_id]
