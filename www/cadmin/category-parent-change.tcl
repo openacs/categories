@@ -32,10 +32,10 @@ template::multirow append tree "Root Level" 0 f 0 "" \
     [export_vars -no_empty -base category-parent-change-2 {tree_id category_id locale object_id}]
 
 foreach category [category_tree::get_tree -all $tree_id $locale] {
-    util_unlist $category category_id category_name deprecated_p level
+    util_unlist $category parent_id category_name deprecated_p level
 
-    if { [lsearch $subtree_categories_list $category_id]==-1 } {
-	set parent_url [export_vars -no_empty -base category-parent-change-2 { {parent_id $category_id} tree_id category_id locale object_id }]
+    if { [lsearch $subtree_categories_list $parent_id]==-1 } {
+	set parent_url [export_vars -no_empty -base category-parent-change-2 { parent_id tree_id category_id locale object_id }]
     } else {
 	set parent_url ""
     }
