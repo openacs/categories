@@ -274,13 +274,15 @@ declare
 	v_synonym_id	integer;
 begin
 	-- create synonym
-	v_synonym_id := category_synonym.new (NEW.name, NEW.locale, NEW.category_id, null);
+	v_synonym_id := category_synonym.new (:new.name, :new.locale, :new.category_id, null);
 
 	-- mark synonym as not editable for users
 	update category_synonyms
 	set synonym_p = 'f'
 	where synonym_id = v_synonym_id;
 end;
+/
+show errors
 
 create trigger upd_synonym_on_upd_transl_trg
 before update on category_translations for each row
@@ -290,11 +292,13 @@ begin
 	-- get synonym_id of updated category translation
 	select	synonym_id into v_synonym_id
 	from	category_synonyms
-	where	category_id = OLD.category_id
-	and	name = OLD.name
-	and	locale = OLD.locale
+	where	category_id = :old.category_id
+	and	name = :old.name
+	and	locale = :old.locale
 	and	synonym_p = 'f';
 
 	-- update synonym
-	category_synonym.edit (v_synonym_id, NEW.name, NEW.locale);
+	v_synonym_id := category_synonym.edit (v_synonym_id, :new.name, :new.locale);
 end;
+/
+show errors
