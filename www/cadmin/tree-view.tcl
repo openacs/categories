@@ -15,8 +15,6 @@ ad_page_contract {
     context_bar:onevalue
     locale:onevalue
     one_tree:multirow
-    form_vars:onevalue
-    url_vars:onevalue
     can_grant_p:onevalue
     can_write_p:onevalue
 }
@@ -28,17 +26,14 @@ if {$tree(site_wide_p) == "f"} {
     permission::require_permission -object_id $tree_id -privilege category_tree_read
 }
 
-set url_vars [export_vars {tree_id locale object_id}]
-set form_vars [export_form_vars tree_id locale object_id]
-
 set tree_name $tree(tree_name)
 set tree_description $tree(description)
 
 set page_title "Category Tree \"$tree_name\""
 if {[info exists object_id]} {
-    set context_bar [list [category::get_object_context $object_id] [list [export_vars -base one-object {locale object_id}] "Category Management"] $tree_name]
+    set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base one-object {locale object_id}] "Category Management"] $tree_name]
 } else {
-    set context_bar [list [list ".?[export_vars {locale}]" "Category Management"] $tree_name]
+    set context_bar [list [list ".?[export_vars -no_empty {locale}]" "Category Management"] $tree_name]
 }
 
 set can_write_p [permission::permission_p -object_id $tree_id -privilege category_tree_write]
@@ -61,18 +56,19 @@ foreach category [category_tree::get_tree -all $tree_id $locale] {
 # List builder
 #----------------------------------------------------------------------
 
-multirow extend one_tree edit_url delete_url usage_url set_parent_url add_child_url phase_in_url phase_out_url
+multirow extend one_tree usage_url add_url edit_url delete_url set_parent_url phase_in_url phase_out_url links_view_url
 multirow foreach one_tree {
-    set usage_url [export_vars -base category-usage { category_id tree_id locale object_id }]
+    set usage_url [export_vars -no_empty -base category-usage { category_id tree_id locale object_id }]
     if { $can_write_p } {
-	set edit_url [export_vars -base category-form { category_id tree_id locale object_id }]
-	set delete_url [export_vars -base category-delete { category_id tree_id locale object_id }]
-	set set_parent_url [export_vars -base category-set-parent { category_id tree_id locale object_id }]
-	set add_child_url [export_vars -base category-form { { parent_id $category_id } tree_id locale object_id }]
+	set add_url [export_vars -no_empty -base category-form { { parent_id $category_id } tree_id locale object_id }]
+	set edit_url [export_vars -no_empty -base category-form { category_id tree_id locale object_id }]
+	set delete_url [export_vars -no_empty -base category-delete { category_id tree_id locale object_id }]
+	set set_parent_url [export_vars -no_empty -base category-set-parent { category_id tree_id locale object_id }]
+	set links_view_url [export_vars -no_empty -base category-links-view { category_id tree_id locale object_id }]
 	if { [template::util::is_true $deprecated_p] } {
-	    set phase_in_url [export_vars -base category-phase-out { category_id { phase_out_p 0 } tree_id locale object_id }]
+	    set phase_in_url [export_vars -no_empty -base category-phase-out { category_id { phase_out_p 0 } tree_id locale object_id }]
 	} else {
-	    set phase_out_url [export_vars -base category-phase-out { category_id { phase_out_p 1 } tree_id locale object_id }]
+	    set phase_out_url [export_vars -no_empty -base category-phase-out { category_id { phase_out_p 1 } tree_id locale object_id }]
 	}
     }
 }
@@ -103,7 +99,7 @@ if { $can_write_p } {
 	display_template {
 	    <img src="/resources/acs-subsite/Add16.gif" height="16" width="16" alt="Add" border="0">
 	}
-	link_url_col add_child_url
+	link_url_col add_url
 	link_html { title "Add subcategory" }
     }
     lappend elements sort_key {
@@ -115,7 +111,8 @@ if { $can_write_p } {
     lappend elements actions {
 	label "Actions"
 	display_template {
-	    <if @one_tree.set_parent_url@ not nil><a href="@one_tree.set_parent_url@">Choose a new parent</a></if>
+	    <a href="@one_tree.set_parent_url@">Change parent</a> &nbsp; &nbsp;
+	    <a href="@one_tree.links_view_url@">View links</a>
 	}
     }
 
@@ -139,13 +136,13 @@ if { $can_write_p } {
 	"Update ordering" "tree-order-update" "Update ordering from values in list"
     }
     set actions [list \
-		     "Add root category" [export_vars -base category-form { tree_id locale object_id }] "Add category at the root level" \
-		     "Copy tree" [export_vars -base tree-copy { tree_id locale object_id }] "Copy categories from other tree" \
-		     "Delete tree" [export_vars -base tree-delete { tree_id locale object_id }] "Delete this category tree" \
-		     "Applications" [export_vars -base tree-usage { tree_id locale object_id }] "Applications using this tree"]
+		     "Add root category" [export_vars -no_empty -base category-form { tree_id locale object_id }] "Add category at the root level" \
+		     "Copy tree" [export_vars -no_empty -base tree-copy { tree_id locale object_id }] "Copy categories from other tree" \
+		     "Delete tree" [export_vars -no_empty -base tree-delete { tree_id locale object_id }] "Delete this category tree" \
+		     "Applications" [export_vars -no_empty -base tree-usage { tree_id locale object_id }] "Applications using this tree"]
 
     if { $can_grant_p } {
-	lappend actions "Permissions" [export_vars -base permission-manage { tree_id locale object_id }] "Manage permissions for tree"
+	lappend actions "Permissions" [export_vars -no_empty -base permission-manage { tree_id locale object_id }] "Manage permissions for tree"
     }
 
 }
