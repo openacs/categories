@@ -1,0 +1,113 @@
+<?xml version='1.0' ?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+]>
+<sect1 id="requirements">
+  <title>Requirements</title>
+  <authorblurb>
+    <para>by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink></para>
+  </authorblurb>
+
+  <sect2 id="requirements-introduction">
+    <title>Introduction</title>
+    <para>Automated Testing provides a framework for executing tests of all varieties and for storing and viewing the results.</para>
+  </sect2>
+
+  <sect2 id="gatekeeper-functional-requirements">
+      <title>Functional Requirements</title>
+
+      <informaltable>
+        <tgroup cols="4">
+          <thead>
+            <row>
+              <entry><emphasis role="strong">Req #</emphasis></entry>
+              <entry><emphasis role="strong">Status in 5.0</emphasis></entry>
+              <entry><emphasis role="strong">Priority for 5.1 (A=required, B=optional)</emphasis></entry>
+              <entry><emphasis role="strong">Description</emphasis></entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>1</entry>
+              <entry>Done</entry>
+              <entry>Done</entry>
+              <entry>Store trees of category labels</entry>
+            </row>
+            <row>
+              <entry>1.1</entry>
+              <entry></entry>
+              <entry>A</entry>
+              <entry>Category is package-aware.  (Data in one package is not visible from another package.)</entry>
+            </row>
+            <row>
+              <entry>2</entry>
+              <entry>Done</entry>
+              <entry>Done</entry>
+              <entry>GUI to manage categories.</entry>
+            </row>
+            <row>
+              <entry>3</entry>
+              <entry>Done</entry>
+              <entry>Done</entry>
+              <entry>An OpenACS Object can be associated with zero, one, or more categories.</entry>
+            </row>
+            <row>
+              <entry>3.1</entry>
+              <entry>?</entry>
+              <entry>A</entry>
+              <entry>GUI to edit object categorization.  .  This is provided in the current package via form-page.tcl.</entry>
+            </row>
+            <row>
+              <entry>3.2</entry>
+              <entry>?</entry>
+              <entry>A</entry>
+              <entry>GUI to see object categorization.</entry>
+
+            </row>
+            <row>
+              <entry>4</entry>
+              <entry></entry>
+              <entry>A</entry>
+              <entry>List-builder can sort and filter by category.  This entails extensions to list-builder ...</entry>
+            </row>
+            <row>
+              <entry>5</entry>
+              <entry>partial</entry>
+              <entry>A</entry>
+              <entry>Display objects by category.  Show all objects in a category.  The current implementation depends on changes to the kernel data model.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+	</sect2>
+	<sect2>
+	    <title>References</title>
+	    	<itemizedlist>
+	    	    	<listitem>
+	    	<para><ulink url="http://openacs.org/forums/message-view?message_id=153265">Forum Posting</ulink></para></listitem>
+	    	</itemizedlist>
+</sect2>      
+    <sect2 id="revisions-history">
+      <title>Revision History</title>
+      <informaltable>
+        <tgroup cols="4">
+          <thead>
+            <row>
+              <entry><emphasis role="strong">Document Revision #</emphasis></entry>
+              <entry><emphasis role="strong">Action Taken, Notes</emphasis></entry>
+              <entry><emphasis role="strong">When?</emphasis></entry>
+              <entry><emphasis role="strong">By Whom?</emphasis></entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>1</entry>
+              <entry>Creation</entry>
+              <entry>18 Jan 2004</entry>
+              <entry>Joel Aufrecht</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+  </sect1>
