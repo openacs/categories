@@ -219,19 +219,19 @@ declare
     p_modifying_ip      alias for $7;
 begin
 	-- change category name
-	update category_translations
-	set name = p_name,
-            description = p_description
-      where category_id = p_category_id
-        and locale = p_locale;
+    update category_translations
+    set name = p_name,
+       description = p_description
+    where category_id = p_category_id
+          and locale = p_locale;
 
-	update acs_objects
-        set last_modified = p_modifying_date,
+    update acs_objects
+    set last_modified = p_modifying_date,
 	    modifying_user = p_modifying_user,
 	    modifying_ip = p_modifying_ip
-      where object_id = p_category_id;
+    where object_id = p_category_id;
 
-      return 0;
+    return 0;
 end;
 ' language 'plpgsql';
 
