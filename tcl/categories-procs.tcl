@@ -215,6 +215,20 @@ ad_proc -public category::get_mapped_categories {
     return $result
 }
 
+ad_proc -public category::get_id { 
+    name
+    {locale en_US}
+} {
+    Gets the id of a category given a name.
+
+    @param name the name of the category to retrieve
+    @param locale the locale in which the name is supplied
+    @return the category id or empty string it no category was found
+    @author Lee Denison (lee@xarg.co.uk)
+} {
+    return [db_string get_category_id {} -default ""]
+}
+
 ad_proc -public category::reset_translation_cache { } {
     Reloads all category translations in the cache.
     @author Timo Hentschel (timo@timohentschel.de)

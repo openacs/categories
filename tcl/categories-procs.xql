@@ -1,6 +1,17 @@
 <?xml version="1.0"?>
 <queryset>
 
+<fullquery name="category::get_id.get_category_id">      
+      <querytext>
+      
+		select category_id
+		from category_translations
+		where name = :name
+		and locale = :locale
+	    
+      </querytext>
+</fullquery>
+
 <fullquery name="category::update.check_category_existence">      
       <querytext>
       
