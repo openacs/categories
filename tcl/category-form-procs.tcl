@@ -14,6 +14,7 @@ ad_proc -public category::ad_form::add_widgets {
     {-categorized_object_id}
     {-form_name:required}
     {-element_name "category_id"}
+    {-help_text {}}
 } {
     For each category tree associated with this container_object_id (usually
     package_id) put a category widget into the ad_form.  On form submission the
@@ -40,7 +41,10 @@ ad_proc -public category::ad_form::add_widgets {
                        {category_subtree_id $subtree_id} \
                        {category_object_id {[value_if_exists categorized_object_id]}} \
 		       {category_assign_single_p $assign_single_p} \
-		       {category_require_category_p $require_category_p}]]
+		       {category_require_category_p $require_category_p} \
+                       {help_text $help_text} \
+                      ]]
+        
     }
 }
 

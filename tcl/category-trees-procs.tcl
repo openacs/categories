@@ -433,3 +433,63 @@ namespace eval category_tree {
 	return "categories-browse?tree_ids=$object_id"
     }
 }
+
+
+ad_proc -public category_tree::get_multirow {
+    {-tree_id {}}
+    {-container_id {}}
+    {-category_counts {}}
+    -datasource 
+} {
+    get a multirow datasource for a given tree or for all trees mapped to a 
+    given container. datasource is: 
+
+    tree_id tree_name category_id category_name level pad deprecated_p count 
+
+    where mapped_p indicates the category_id was found in the list mapped_ids.
+
+    @parameter tree_id tree_id or container_id must be provided.
+    @parameter container_id returns all mapped trees for the given container_id
+    @parameter category_counts list of category_id and counts {catid count cat count ... }
+    @parameter datasource the name of the datasource to create.
+
+    @author Jeff Davis davis@xarg.net
+
+} {
+
+    if { [empty_string_p $tree_id] } {
+        if { [empty_string_p $container_id] } { 
+            error "must provide either tree_id or container_id"
+        }
+        set mapped_trees [category_tree::get_mapped_trees $container_id]
+    } else {
+        set mapped_trees [list [list $tree_id [category_tree::get_name $tree_id] $subtree_id $assign_single_p $require_category_p]]
+    }
+    if { ![empty_string_p $mapped_trees] 
+         && [llength $category_counts] > 1} { 
+        array set counts $category_counts
+    } else { 
+        array set counts [list]
+    }
+
+    template::multirow create $datasource tree_id tree_name category_id category_name level pad deprecated_p count
+    foreach mapped_tree $mapped_trees {
+	foreach {tree_id tree_name subtree_id assign_single_p require_category_p} $mapped_tree { break }
+	foreach category [category_tree::get_tree -subtree_id $subtree_id $tree_id] {
+            foreach {category_id category_name deprecated_p level} $category { break }
+	    if { $level>1 } {
+	 	set pad "[string repeat "&nbsp;" [expr {2 * $level - 4}]].."
+ 	    } else { 
+                set pad {}
+            }
+            if {[info exists counts($category_id)]} { 
+                set count $counts($category_id)
+            } else { 
+                set count 0
+            }
+            template::multirow append $datasource $tree_id $tree_name $category_id $category_name $level $pad $deprecated_p $count
+	}
+    }
+
+    return [template::multirow size $datasource]
+}
