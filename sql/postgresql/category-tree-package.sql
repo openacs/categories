@@ -229,7 +229,7 @@ begin
 	and t.category_id = cs.category_id);
 
 	-- for debugging reasons
-	perform check_nested_ind(p_dest_tree);
+	perform category_tree__check_nested_ind(p_dest_tree);
 
        return 0;
 end;
@@ -323,7 +323,7 @@ begin
 
         select count(*) into v_parent
 	from categories parent, categories child
-		where parent.tree_id = check_nested_ind.tree_id
+		where parent.tree_id = p_tree_id
 		and child.tree_id = parent.tree_id
 		and (parent.left_ind >= child.left_ind or parent.right_ind <= child.right_ind)
 		and child.parent_id = parent.category_id;
@@ -331,6 +331,8 @@ begin
 	if v_parent > 0 then 
            raise EXCEPTION ''-20003: child index must be between parent index!'';
         end if;
+
+        return 0;
 end;
 ' language 'plpgsql';
 

@@ -244,7 +244,7 @@ returns integer as '
 declare
     p_category_id       alias for $1;
     p_tree_id           alias for $2;
-    p_parent            alias for $3;
+    p_parent_id         alias for $3;
 
     v_old_left_ind      integer;
     v_old_right_ind     integer;
