@@ -43,7 +43,7 @@
               <entry>2</entry>
               <entry>Done</entry>
               <entry>Done</entry>
-              <entry>GUI to manage categories.</entry>
+              <entry>There is a GUI for administrators to manage category trees (create, delete, move leaves, edit leaves).</entry>
             </row>
             <row>
               <entry>3</entry>
@@ -53,22 +53,47 @@
             </row>
             <row>
               <entry>3.1</entry>
-              <entry>?</entry>
+              <entry>partial</entry>
               <entry>A</entry>
-              <entry>GUI to edit object categorization.  .  This is provided in the current package via form-page.tcl.</entry>
+              <entry>There is a GUI to control which categories are associated with an object.</entry>
             </row>
             <row>
+              <entry>3.1.1</entry>
+              <entry>Done</entry>
+              <entry>Done</entry>
+              <entry>This is provided in the current package via form-page.tcl.</entry>
+            </row>
+            <row>
+              <entry>3.1.1</entry>
+              <entry></entry>
+              <entry>Done</entry>
+              <entry>Specific category trees can be added as additional fields in form builder.  (Supports single select and multiple select.)</entry>
+            </row>
+            <row>
+              <entry>3.1.2</entry>
+              <entry></entry>
+              <entry>B</entry>
+              <entry>A page for linking any category to an object exists, and is can be associated with an object edit or view page.</entry>
+            </row>
+
+            <row>
               <entry>3.2</entry>
-              <entry>?</entry>
+              <entry>partial</entry>
               <entry>A</entry>
               <entry>GUI to see object categorization.</entry>
+            </row>
 
+            <row>
+              <entry>3.2.1</entry>
+              <entry></entry>
+              <entry>A</entry>
+              <entry>All of the categories which an object belongs to can be displayed via an includelet on an object view page.</entry>
             </row>
             <row>
               <entry>4</entry>
               <entry></entry>
               <entry>A</entry>
-              <entry>List-builder can sort and filter by category.  This entails extensions to list-builder ...</entry>
+              <entry>List-builder can sort and filter by category.</entry>
             </row>
             <row>
               <entry>5</entry>
