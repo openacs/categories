@@ -20,7 +20,7 @@ set locale [ad_conn locale]
 
 set admin_p [permission::permission_p -object_id $package_id -privilege category_admin]
 
-template::multirow create trees tree_id tree_name site_wide_p short_name
+template::multirow create trees tree_ids tree_name site_wide_p short_name
 
 db_foreach get_trees "" {
     if { [string equal $has_read_p "t"] || [string equal $site_wide_p "t"] } {
@@ -28,5 +28,17 @@ db_foreach get_trees "" {
 	template::multirow append trees $tree_id $tree_name $site_wide_p
     }
 }
+
+template::list::create \
+    -name trees \
+    -key tree_ids \
+    -no_data "None" \
+    -bulk_actions {
+	"Browse" "categories-browse" "Browse through selected category trees"
+    } -elements {
+	tree_name {
+	    label "Name"
+	}
+    }
 
 ad_return_template

@@ -8,21 +8,6 @@
   </div>
 </if>
 
-<h3> Select Trees for browsing: </h3>
+<h3> Select Trees for browsing </h3>
 
-<if @trees:rowcount@ gt "0">
-  <form action="categories-browse">
-    <table>
-      <multiple name="trees">
-        <tr>
-         <td><input type="checkbox" name="tree_ids" value="@trees.tree_id@" id="tree_id_@trees.tree_id@">&nbsp;</td>
-         <td><label for="tree_id_@trees.tree_id@">@trees.tree_name@</label></td>
-        </tr>
-      </multiple>
-      <tr><td></td><td><input type=submit name=button value="Browse"></td></tr>
-    </table>
-  </form>
-</if>
-<else>
-  <ul><li><i>No Trees added yet.</i></li></ul>
-</else>
+<listtemplate name="trees"></listtemplate>
