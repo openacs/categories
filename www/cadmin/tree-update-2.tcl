@@ -33,8 +33,8 @@ db_transaction {
 }
 db_dml delete_tmp_category_trees ""
     
-if { [llength $list_of_errors] >0 } {
-    ad_return_complaint "Error Deleting Nodes" $list_of_errors
+if { [llength $list_of_errors] > 0 } {
+    ad_return_complaint [llength $list_of_errors] "Error Deleting Nodes: $list_of_errors"
     return
 }
 
