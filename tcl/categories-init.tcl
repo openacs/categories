@@ -10,3 +10,5 @@ ad_library {
 category::reset_translation_cache
 category_tree::reset_translation_cache
 category_tree::reset_cache
+
+ad_schedule_proc -thread t -schedule_proc ns_schedule_daily [list 0 16] category_synonym::search_sweeper

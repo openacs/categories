@@ -5,6 +5,14 @@
 -- @creation-date 2003-04-16
 --
 
+drop table category_search_results;
+drop table category_search_index;
+drop table category_search;
+drop table category_synonym_index;
+drop table category_synonyms;
+drop sequence category_search_id_seq;
+drop sequence category_synonyms_id_seq;
+
 drop table category_links;
 drop sequence category_links_id_seq;
 
@@ -36,6 +44,16 @@ begin;
    select acs_object_type__drop_type('category', 't');
    select acs_object_type__drop_type('category_tree', 't');
 end;
+
+drop function category_synonym__convert_string (varchar);
+drop function category_synonym__get_similarity (integer, integer, bigint);
+drop function category_synonym__search (varchar, varchar);
+drop function category_synonym__reindex (integer, varchar, varchar);
+drop function category_synonym__new (varchar, varchar, integer, integer);
+drop function category_synonym__del (integer);
+drop function category_synonym__edit (integer, varchar, varchar);
+drop function category_synonym__edit_cat_trans_trg () cascade;
+drop function category_synonym__new_cat_trans_trg () cascade;
 
 drop function category_link__new (integer,integer);
 drop function category_link__del (integer);

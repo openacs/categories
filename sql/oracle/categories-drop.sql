@@ -5,6 +5,16 @@
 -- @creation-date 2003-04-16
 --
 
+drop table category_search_results;
+drop table category_search_index;
+drop table category_search;
+drop table category_synonym_index;
+drop table category_synonyms;
+drop sequence category_search_id_seq;
+drop sequence category_synonyms_id_seq;
+drop trigger ins_synonym_on_ins_transl_trg;
+drop trigger upd_synonym_on_upd_transl_trg;
+
 drop table category_links;
 drop sequence category_links_id_seq;
 
@@ -56,6 +66,7 @@ delete from acs_privileges
           'category_tree_grant_permissions','category_admin');
 /
 
+drop package category_synonym;
 drop package category_link;
 drop package category_tree;
 drop package category;

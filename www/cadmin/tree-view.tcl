@@ -56,7 +56,7 @@ foreach category [category_tree::get_tree -all $tree_id $locale] {
 # List builder
 #----------------------------------------------------------------------
 
-multirow extend one_tree usage_url add_url edit_url delete_url parent_url phase_in_url phase_out_url links_view_url
+multirow extend one_tree usage_url add_url edit_url delete_url parent_url phase_in_url phase_out_url links_view_url synonyms_view_url
 multirow foreach one_tree {
     set usage_url [export_vars -no_empty -base category-usage { category_id tree_id locale object_id }]
     if { $can_write_p } {
@@ -65,6 +65,7 @@ multirow foreach one_tree {
 	set delete_url [export_vars -no_empty -base category-delete { category_id tree_id locale object_id }]
 	set parent_url [export_vars -no_empty -base category-parent-change { category_id tree_id locale object_id }]
 	set links_view_url [export_vars -no_empty -base category-links-view { category_id tree_id locale object_id }]
+	set synonyms_view_url [export_vars -no_empty -base synonyms-view { category_id tree_id locale object_id }]
 	if { [template::util::is_true $deprecated_p] } {
 	    set phase_in_url [export_vars -no_empty -base category-phase-in { category_id tree_id locale object_id }]
 	} else {
@@ -82,6 +83,7 @@ if { $can_write_p } {
 	    <img src="/resources/acs-subsite/Edit16.gif" height="16" width="16" alt="Edit" border="0">
 	}
 	link_url_col edit_url
+	link_html {title "Edit this category"}
     }
 }
 
@@ -112,7 +114,8 @@ if { $can_write_p } {
 	label "Actions"
 	display_template {
 	    <a href="@one_tree.parent_url@">Change parent</a> &nbsp; &nbsp;
-	    <a href="@one_tree.links_view_url@">View links</a>
+	    <a href="@one_tree.links_view_url@">View links</a> &nbsp; &nbsp;
+	    <a href="@one_tree.synonyms_view_url@">View synonyms</a>
 	}
     }
 
