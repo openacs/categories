@@ -1,9 +1,12 @@
 --
 -- The Categories Package
 --
--- @author Timo Hentschel (thentschel@sussdorff-roy.com)
+-- @author Timo Hentschel (timo@timohentschel.de)
 -- @creation-date 2003-04-16
 --
+
+drop table category_links;
+drop sequence category_links_id_seq;
 
 drop table category_temp;
 
@@ -33,6 +36,9 @@ begin;
    select acs_object_type__drop_type('category', 't');
    select acs_object_type__drop_type('category_tree', 't');
 end;
+
+drop function category_link__new (integer,integer);
+drop function category_link__del (integer);
 
 drop function category_tree__new (integer,varchar,varchar,varchar,
         char,timestamp with time zone,integer,varchar,integer);

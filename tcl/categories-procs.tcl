@@ -183,6 +183,9 @@ ad_proc -public category::map_object {
 		db_dml insert_mapped_categories ""
 	    }
         }
+
+	# Adds categorizations to linked categories
+	db_dml insert_linked_categories ""
     }
 }
 

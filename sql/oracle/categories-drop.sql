@@ -1,9 +1,12 @@
 --
 -- The Categories Package
 --
--- @author Timo Hentschel (thentschel@sussdorff-roy.com)
+-- @author Timo Hentschel (timo@timohentschel.de)
 -- @creation-date 2003-04-16
 --
+
+drop table category_links;
+drop sequence category_links_id_seq;
 
 drop table category_temp;
 
@@ -53,5 +56,6 @@ delete from acs_privileges
           'category_tree_grant_permissions','category_admin');
 /
 
+drop package category_link;
 drop package category_tree;
 drop package category;
