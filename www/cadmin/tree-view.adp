@@ -6,7 +6,7 @@
 <p>
 <table>
   <tr><th>Tree Name</th><td>@tree_name@</td></tr>
-  <tr><th>Description</th><td> @tree_description@</td></tr>
+  <tr><th>Description</th><td> @tree_description;noquote@</td></tr>
 </table>
 </p>
 
@@ -14,20 +14,14 @@
 
 <if @can_grant_p@ eq 1>
     <li><a href="permission-manage?@url_vars;noquote@">Manage permissions</a>
-    <p>
 </if> 
 
 <if @can_write_p@ eq 1 >
-  <li><a href="tree-form?@url_vars;noquote@">Edit tree name and description</a>
-  <p>
-  <li><a href="category-form?@url_vars;noquote@">Add node at top level</a>
-  <p>
-  <li><a href="tree-copy?@url_vars;noquote@">Copy an existing tree</a>
-  <p>
-  <li><a href="tree-delete?@url_vars;noquote@">Delete this tree</a>
-  <p>
-  <li><a href="tree-usage?@url_vars;noquote@">Show modules using this tree</a>
-  <p>
+  <li><a href="tree-form?@url_vars;noquote@">Edit tree name and description</a></li>
+  <li><a href="category-form?@url_vars;noquote@">Add node at top level</a></li>
+  <li><a href="tree-copy?@url_vars;noquote@">Copy an existing tree</a></li>
+  <li><a href="tree-delete?@url_vars;noquote@">Delete this tree</a></li>
+  <li><a href="tree-usage?@url_vars;noquote@">Show modules using this tree</a></li>
 </if>
 
 </ul>
@@ -53,7 +47,7 @@
                [ <font size=-1>
                    <a href="category-set-parent?@url_vars;noquote@&category_id=@one_tree.category_id@">Choose a new parent</a> 
                  | <a href="category-form?@url_vars;noquote@&parent_id=@one_tree.category_id@">Add child</a> 
-                  
+
                  | <a href="category-form?@url_vars;noquote@&category_id=@one_tree.category_id@"> Edit </a> 
                  | <a href="category-delete?category_id=@one_tree.category_id@&@url_vars;noquote@"> Delete </a>  
                  | <if @one_tree.deprecated_p@ eq f><a href="category-phase-out?phase_out_p=1&category_id=@one_tree.category_id@&@url_vars;noquote@"> Phase out </a> </if>
