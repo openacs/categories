@@ -47,7 +47,7 @@ foreach category [category_tree::get_tree -all $tree_id $locale] {
     util_unlist $category category_id category_name deprecated_p level
     incr sort_key 10
 
-    template::multirow append one_tree $category_name $sort_key $category_id $deprecated_p $level [category::repeat_string "&nbsp;" [expr ($level-1)*5]]
+    template::multirow append one_tree $category_name $sort_key $category_id $deprecated_p $level [string repeat "&nbsp;" [expr ($level-1)*5]]
 }
 
 

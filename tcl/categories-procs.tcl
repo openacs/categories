@@ -301,11 +301,13 @@ ad_proc -public category::get_object_context { object_id } {
     return [list "/o/$object_id" $object_name]
 }
 
-ad_proc category::indent_html { indent_width } {
+ad_proc -deprecated category::indent_html { indent_width } {
     Creates a series of &nbsp; to indent subcatories in html output.
 
     @param indent_width width of the html indent.
     @author Timo Hentschel (timo@timohentschel.de)
+
+    use string repeat "&nbsp;" $i
 } {
     set indent_string ""
     for { set i 0 } { $i < $indent_width } { incr i } {

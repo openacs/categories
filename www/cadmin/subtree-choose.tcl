@@ -34,7 +34,7 @@ foreach category [category_tree::get_tree -all $tree_id $locale] {
     util_unlist $category category_id category_name deprecated_p level
 
     template::multirow append tree $category_id $category_name $level \
-	[category::indent_html [expr ($level-1)*5]] \
+	[string repeat "&nbsp;" [expr ($level-1)*5]] \
 	[export_vars -no_empty -base tree-map { category_id tree_id locale object_id }]
 }
 

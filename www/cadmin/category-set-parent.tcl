@@ -47,7 +47,7 @@ foreach category [category_tree::get_tree -all $tree_id $locale] {
     } else {
 	set parent_url ""
     }
-    template::multirow append tree $category_name $category_id $deprecated_p $level [category::indent_html [expr ($level-1)*5]] $parent_url
+    template::multirow append tree $category_name $category_id $deprecated_p $level [string repeat "&nbsp;" [expr ($level-1)*5]] $parent_url
 }
 
 template::list::create \
