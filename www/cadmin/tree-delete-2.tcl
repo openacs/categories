@@ -16,7 +16,7 @@ permission::require_permission -object_id $tree_id -privilege category_tree_writ
 set instance_list [category_tree::usage $tree_id]
 
 if {[llength $instance_list] > 0} {
-    ad_return_complaint 1 "This category tree is still in use."
+    ad_return_complaint 1 {{This category tree is still in use.}}
     return
 }
 

@@ -20,7 +20,7 @@ db_transaction {
 	category_link::delete $link_id
     }
 } on_error {
-    ad_return_complaint 1 "Error deleting category link."
+    ad_return_complaint 1 {{Error deleting category link.}}
     return
 }
 
