@@ -17,7 +17,7 @@ db_transaction {
     category::delete $category_id
     category_tree::flush_cache $tree_id
 } on_error {
-    ad_return_complaint "Error Deleting Node" "<p> This node contains leaf (child) nodes. If you really want to delete those leaf nodes, plesae delete them first. Thank you."
+    ad_return_complaint 1 "Error Deleting Node<p>This node contains leaf (child) nodes. If you really want to delete those leaf nodes, plesae delete them first. Thank you."
     return
 }
 
