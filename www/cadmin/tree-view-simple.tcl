@@ -32,11 +32,11 @@ set tree_name $one_tree(tree_name)
 set page_title "Simplified tree view"
 
 if {[info exists object_id]} {
-    set context_bar [list [category::get_object_context $object_id] [list [export_vars -base one-object {locale object_id}] "Category Management"]]
+    set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base one-object {locale object_id}] "Category Management"]]
 } else {
-    set context_bar [list [list ".?[export_vars {locale}]" "Category Management"]]
+    set context_bar [list [list ".?[export_vars -no_empty {locale}]" "Category Management"]]
 }
-lappend context_bar [list [export_vars -base tree-view {tree_id locale object_id}] $target_tree_name] [list [export_vars -base tree-copy [list [list tree_id $target_tree_id] locale object_id]] "Copy a tree"] "View \"$tree_name\""
+lappend context_bar [list [export_vars -no_empty -base tree-view {tree_id locale object_id}] $target_tree_name] [list [export_vars -no_empty -base tree-copy { {tree_id $target_tree_id} locale object_id }] "Copy a tree"] "View \"$tree_name\""
 
 template::multirow create tree category_name deprecated_p level left_indent
 
