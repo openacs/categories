@@ -5,7 +5,8 @@
       <querytext>
       
     select label, locale
-    from ad_locales
+    from   ad_locales
+    where  enabled_p = 't'
 
       </querytext>
 </fullquery>
