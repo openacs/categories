@@ -7,40 +7,30 @@
 
           -- create the object types
 
-create function inline_0 ()
-returns integer as '
-begin
-
-    PERFORM acs_object_type__create_type (
-                ''category_tree'',        -- object_type
-                ''Category Tree'',        -- pretty_name
-                ''Category Trees'',       -- pretty_plural
-                ''acs_object'',           -- supertype
-                ''category_trees'',       -- table_name
-                ''tree_id'',              -- id_column
-                ''category_tree.name'',    -- name_method
-                ''f'',
-                null,
-                null
-        );
-    PERFORM acs_object_type__create_type (
-                ''category'',             -- object_type
-                ''Category'',             -- pretty_name
-                ''Categories'',           -- pretty_plural
-                ''acs_object'',           -- supertype
-                ''categories'',           -- table_name
-                ''category_id'',          -- id_column
-                ''category.name'',         -- name_method
-                ''f'',
-                null,
-                null
-        );
-
-    return 0;
-end;' language 'plpgsql';
-
-select inline_0 ();
-drop function inline_0 ();
+select acs_object_type__create_type (
+    'category_tree',        -- object_type
+    'Category Tree',        -- pretty_name
+    'Category Trees',       -- pretty_plural
+    'acs_object',           -- supertype
+    'category_trees',       -- table_name
+    'tree_id',              -- id_column
+    'category_tree.name',    -- name_method
+    'f',
+    null,
+    null
+);
+select acs_object_type__create_type (
+    'category',             -- object_type
+    'Category',             -- pretty_name
+    'Categories',           -- pretty_plural
+    'acs_object',           -- supertype
+    'categories',           -- table_name
+    'category_id',          -- id_column
+    'category.name',         -- name_method
+    'f',
+    null,
+    null
+);
 
 create table category_trees (
        tree_id			integer primary key 
