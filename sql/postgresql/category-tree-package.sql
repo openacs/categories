@@ -37,7 +37,9 @@ begin
 		p_creation_date,   -- creation_date
 		p_creation_user,   -- creation_user
 		p_creation_ip,     -- creation_ip
-		p_context_id       -- context_id
+		p_context_id,      -- context_id
+                p_tree_name,       -- title
+                null               -- package_id
 	);
 
 	insert into category_trees

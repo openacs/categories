@@ -41,7 +41,9 @@ begin
 		p_creation_user,        -- creation_user
 		p_creation_ip,          -- creation_ip
 		p_tree_id,              -- context_id
-                ''t''                   -- security_inherit_p
+                ''t'',                  -- security_inherit_p
+                p_name,                 -- title
+                null                    -- package_id
 	);
 
 	if (p_parent_id is null) then

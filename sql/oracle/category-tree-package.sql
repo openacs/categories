@@ -98,7 +98,8 @@ as
 		creation_date => creation_date,
 		creation_user => creation_user,
 		creation_ip   => creation_ip,
-		context_id    => context_id 
+		context_id    => context_id,
+                title         => tree_name
 	);
 
 	insert into category_trees
