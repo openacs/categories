@@ -13,6 +13,8 @@ ad_page_contract {
     {orderby:optional object_name}
     {subtree_p:optional f}
     {letter:optional all}
+    {join:optional or}
+    package_id:optional
 } -properties {
     page_title:onevalue
     context_bar:onevalue
@@ -34,8 +36,8 @@ set user_id [ad_maybe_redirect_for_registration]
 set page_title "Browse categories"
 
 set context_bar [list "Browse categories"]
-set url_vars [export_url_vars tree_ids:multiple category_ids:multiple subtree_p letter]
-set form_vars [export_form_vars tree_ids:multiple orderby subtree_p letter]
+set url_vars [export_url_vars tree_ids:multiple category_ids:multiple subtree_p letter join package_id]
+set form_vars [export_form_vars tree_ids:multiple orderby subtree_p letter package_id]
 
 db_transaction {
     # use temporary table to use only bind vars in queries
@@ -98,13 +100,31 @@ switch -exact $letter {
     }
 }
 
-set category_ids_length [llength $category_ids]
-if {$subtree_p == "t"} {
-    # generate sql for exact categorizations plus subcategories
-    set subtree_sql [db_map include_subtree]
+if {[info exists package_id]} {
+    set package_sql [db_map package_objects]
 } else {
-    # generate sql for exact categorization
-    set subtree_sql [db_map exact_categorization]
+    set package_sql ""
+}
+
+set category_ids_length [llength $category_ids]
+if {$join == "and"} {
+    # combining categories with and
+    if {$subtree_p == "t"} {
+	# generate sql for exact categorizations plus subcategories
+	set subtree_sql [db_map include_subtree_and]
+    } else {
+	# generate sql for exact categorization
+	set subtree_sql [db_map exact_categorization_and]
+    }
+} else {
+    # combining categories with or
+    if {$subtree_p == "t"} {
+	# generate sql for exact categorizations plus subcategories
+	set subtree_sql [db_map include_subtree_or]
+    } else {
+	# generate sql for exact categorization
+	set subtree_sql [db_map exact_categorization_or]
+    }
 }
 
 set p_name "browse_categories"

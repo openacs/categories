@@ -4,6 +4,10 @@
 
 <form action="categories-browse">
   @form_vars;noquote@
+  Combine by
+  [ <input type=radio name=join value="and"<if @join@ eq "and"> checked</if>>AND
+  | <input type=radio name=join value="or"<if @join@ eq "or"> checked</if>>OR ]
+  <br>
   <multiple name=trees>
     @trees.tree_name@:
     <select name=category_ids multiple size=5>
@@ -11,9 +15,6 @@
       <option value="@trees.category_id@"<if @trees.selected_p@ eq 1> selected</if>>@trees.indent;noquote@@trees.category_name@
     </group>
     </select>
-    <if @trees.rownum@ ne @trees:rowcount@>
-      <b>AND</b>
-    </if>
   </multiple>
   <input type=submit name=button value="Show">
 </form>
