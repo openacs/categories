@@ -77,7 +77,7 @@ as
     ------------------------------------------------------------
     --	LOCAL FUNCTIONS and PROCEDURES
     ------------------------------------------------------------
-    FUNCTION index_childs(p_parent_id integer, ind integer) RETURN integer;
+    FUNCTION index_children(p_parent_id integer, ind integer) RETURN integer;
 
     ------------------------------------------------------------
     --	PUBLIC FUNCTIONS and PROCEDURES
@@ -354,7 +354,7 @@ as
 			  from categories
 			  where tree_id = refresh_nested_ind.tree_id
 			  and parent_id is null) loop
-		v_right_ind := index_childs(top_nodes.category_id, v_left_ind);
+		v_right_ind := index_children(top_nodes.category_id, v_left_ind);
 
 		update categories
 		set left_ind = v_left_ind,
@@ -367,7 +367,7 @@ as
 
     ---------------------------------------------------------------------
 
-    FUNCTION index_childs(p_parent_id integer, ind integer) return integer 
+    FUNCTION index_children(p_parent_id integer, ind integer) return integer 
     IS
 	TYPE type_categories IS TABLE OF integer;
 	nodes type_categories := type_categories();
@@ -391,13 +391,13 @@ as
 	   for j in 1..i loop
 	        v_ind := v_ind + 1;
 	        v_left_ind := v_ind;
-	        v_ind:= index_childs(nodes(j), v_ind);
+	        v_ind:= index_children(nodes(j), v_ind);
 	        v_ind := v_ind + 1;
 		update categories set left_ind = v_left_ind, right_ind = v_ind where category_id = nodes(j);
 	   end loop;
 	end if;
 	return v_ind;
-    END index_childs;
+    END index_children;
 
 end category_tree;
 /

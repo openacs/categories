@@ -44,13 +44,18 @@ show errors
 
 create table acs_named_objects (
 	object_id	integer not null
-			constraint acs_named_objs_pk primary key
 			constraint acs_named_objs_object_id_fk
 			references acs_objects(object_id) on delete cascade,
+	locale		varchar2(5)
+			constraint acs_named_objs_locale_fk
+			references ad_locales,
 	object_name	varchar2(200),
+	creation_date	date default sysdate not null,
 	package_id	integer
 			constraint acs_named_objs_package_id_fk
-			references apm_packages(package_id) on delete cascade
+			references apm_packages(package_id) on delete cascade,
+	constraint acs_named_objs_pk
+	primary key (object_id, locale)
 );
 
 create index acs_named_objs_name_ix on acs_named_objects (substr(upper(object_name),1,1));
