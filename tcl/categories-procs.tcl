@@ -263,7 +263,7 @@ ad_proc -public category::get_name {
     }
     if { ![catch { set name $cat_lang([ad_parameter DefaultLocale acs-lang "en_US"]) }] } {
         # default locale found
-        return$name
+        return $name
     } 
     # tried default locale, but nothing found
     return {}
@@ -315,6 +315,24 @@ ad_proc -deprecated category::indent_html { indent_width } {
     }
 
     return $indent_string
+}
+
+ad_proc -private category::context_bar { tree_id locale object_id } {
+    Creates the standard context bar
+
+    @param tree_id
+    @param locale
+    @param object_id
+    @author Timo Hentschel (timo@timohentschel.de)
+} {
+    if {![empty_string_p $object_id]} {
+	set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base one-object {locale object_id}] "Category Management"]]
+    } else {
+	set context_bar [list [list ".?[export_vars -no_empty {locale}]" "Category Management"]]
+    }
+    lappend context_bar [list [export_vars -no_empty -base tree-view {tree_id locale object_id}] [category_tree::get_name $tree_id $locale]]
+
+    return $context_bar
 }
 
 ad_proc category::pageurl { object_id } {

@@ -23,9 +23,8 @@ ad_page_contract {
     form_vars_cancel:onevalue
 }
 
+set user_id [ad_maybe_redirect_for_registration]
 permission::require_permission -object_id $tree_id -privilege category_tree_write
-
-array set tree [category_tree::get_data $tree_id $locale]
 
 if {![empty_string_p $submit_sort]} {
 	
@@ -120,15 +119,11 @@ if {![empty_string_p $submit_sort]} {
 } elseif {![empty_string_p $submit_delete]} {
 
     set category_ids [array names check]
-    set page_title "Delete Confirmation Page"
-    set tree_name $tree(tree_name)
+    set page_title "Confirm deleting categories"
+    set tree_name [category_tree::get_name $tree_id $locale]
 
-    if {[info exists object_id]} {
-	set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base one-object {locale object_id}] "Category Management"]]
-    } else {
-	set context_bar [list [list ".?[export_vars -no_empty {locale}]" "Category Management"]]
-    }
-    lappend context_bar [list [export_vars -no_empty -base tree-view {tree_id locale object_id}] $tree_name] "Delete categories"
+    set context_bar [category::context_bar $tree_id $locale [value_if_exists object_id]]
+    lappend context_bar "Delete categories"
 
     set form_vars_cancel [export_form_vars tree_id locale object_id]
     set form_vars_delete [export_form_vars category_ids:multiple tree_id locale object_id]

@@ -13,24 +13,15 @@ ad_page_contract {
     page_title:onevalue
     context_bar:onevalue
     locale:onevalue
-    tree_name:onevalue
     tree:multirow
 }
 
 set user_id [ad_maybe_redirect_for_registration]
 permission::require_permission -object_id $tree_id -privilege category_tree_write
 
-array set one_tree [category_tree::get_data $tree_id $locale]
-set tree_name $one_tree(tree_name)
-
-set page_title "Choose a parent node"
-
-if {[info exists object_id]} {
-    set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base one-object {locale object_id}] "Category Management"]]
-} else {
-    set context_bar [list [list ".?[export_vars -no_empty {locale}]" "Category Management"]]
-}
-lappend context_bar [list [export_vars -no_empty -base tree-view {tree_id locale object_id}] $tree_name] "Choose parent"
+set page_title "Choose a parent category"
+set context_bar [category::context_bar $tree_id $locale [value_if_exists object_id]]
+lappend context_bar "Choose parent"
 
 
 set subtree_categories_list [db_list subtree ""]

@@ -28,12 +28,8 @@ set tree_name $tree(tree_name)
 set tree_description $tree(description)
 
 set page_title "Delete Category Tree \"$tree_name\""
-if {[info exists object_id]} {
-    set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base one-object {locale object_id}] "Category Management"]]
-} else {
-    set context_bar [list [list ".?[export_vars -no_empty {locale}]" "Category Management"]]
-}
-lappend context_bar [list [export_vars -no_empty -base tree-view {tree_id locale object_id}] $tree_name] Delete
+set context_bar [category::context_bar $tree_id $locale [value_if_exists object_id]]
+lappend context_bar "Delete"
 
 set instance_list [category_tree::usage $tree_id]
 

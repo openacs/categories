@@ -22,12 +22,8 @@ array set tree [category_tree::get_data $tree_id $locale]
 set tree_name $tree(tree_name)
 set page_title "Permission Management for $tree_name"
 
-if {[info exists object_id]} {
-    set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base one-object {locale object_id}] "Category Management"]]
-} else {
-    set context_bar [list [list ".?[export_vars -no_empty {locale}]" "Category Management"]]
-}
-lappend context_bar [list [export_vars -no_empty -base tree-view {tree_id locale object_id}] $tree_name] "Manage Permissions"
+set context_bar [category::context_bar $tree_id $locale [value_if_exists object_id]]
+lappend context_bar "Manage Permissions"
 
 set url_vars [export_vars {tree_id object_id locale}]
 set package_id [ad_conn package_id]

@@ -17,20 +17,16 @@ ad_page_contract {
 }
 
 set user_id [ad_maybe_redirect_for_registration]
-
-array set tree [category_tree::get_data $tree_id $locale]
 permission::require_permission -object_id $tree_id -privilege category_tree_write
 
-set tree_name $tree(tree_name)
+set tree_name [category_tree::get_name $tree_id $locale]
 set category_name [category::get_name $category_id $locale]
-set page_title "Select target to add a link to category \"$tree(tree_name) :: $category_name\""
+set page_title "Select target to add a link to category \"$tree_name :: $category_name\""
 
-if {[info exists object_id]} {
-    set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base one-object {locale object_id}] "Category Management"]]
-} else {
-    set context_bar [list [list ".?[export_vars -no_empty {locale}]" "Category Management"]]
-}
-lappend context_bar [list [export_vars -no_empty -base tree-view {tree_id locale object_id}] $tree_name] [list [export_vars -no_empty -base category-links-view {category_id tree_id locale object_id}] "Links to $category_name"] "Select link target"
+set context_bar [category::context_bar $tree_id $locale [value_if_exists object_id]]
+lappend context_bar \
+    [list [export_vars -no_empty -base category-links-view {category_id tree_id locale object_id}] "Links to $category_name"] \
+    "Select link target"
 
 
 template::multirow create trees tree_name tree_id link_add_url
