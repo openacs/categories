@@ -26,11 +26,11 @@ set tree_name $one_tree(tree_name)
 set page_title "Choose a parent node"
 
 if {[info exists object_id]} {
-    set context_bar [list [category::get_object_context $object_id] [list [export_vars -base one-object {locale object_id}] "Category Management"]]
+    set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base one-object {locale object_id}] "Category Management"]]
 } else {
-    set context_bar [list [list ".?[export_vars {locale}]" "Category Management"]]
+    set context_bar [list [list ".?[export_vars -no_empty {locale}]" "Category Management"]]
 }
-lappend context_bar [list [export_vars -base tree-view {tree_id locale object_id}] $tree_name] "Choose parent"
+lappend context_bar [list [export_vars -no_empty -base tree-view {tree_id locale object_id}] $tree_name] "Choose parent"
 
 
 set subtree_categories_list [db_list subtree ""]
@@ -47,7 +47,7 @@ foreach category [category_tree::get_tree -all $tree_id $locale] {
     } else {
 	set parent_url ""
     }
-    template::multirow append tree $category_name $category_id $deprecated_p $level [category::repeat_string "&nbsp;" [expr ($level-1)*5]] $parent_url
+    template::multirow append tree $category_name $category_id $deprecated_p $level [category::indent_html [expr ($level-1)*5]] $parent_url
 }
 
 template::list::create \
