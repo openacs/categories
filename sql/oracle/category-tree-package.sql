@@ -69,19 +69,12 @@ as
     ) return varchar2;
 
     PROCEDURE check_nested_ind (tree_id in category_trees.tree_id%TYPE);
-
-    PROCEDURE refresh_nested_ind (tree_id in category_trees.tree_id%TYPE);
 end; 
 / 
 show errors
 
 create or replace package body category_tree 
 as 
-    ------------------------------------------------------------
-    --	LOCAL FUNCTIONS and PROCEDURES
-    ------------------------------------------------------------
-    FUNCTION index_children(p_parent_id integer, ind integer) RETURN integer;
-
     ------------------------------------------------------------
     --	PUBLIC FUNCTIONS and PROCEDURES
     ------------------------------------------------------------
@@ -346,64 +339,6 @@ as
 
 	if v_parent>0 then raise_application_error (-20003,'Child Index must be between parent Index!'); end if;
     END check_nested_ind;
-
-
-    PROCEDURE refresh_nested_ind (
-	tree_id in category_trees.tree_id%TYPE
-    )
-    IS
-	v_left_ind	categories.left_ind%TYPE;
-	v_right_ind	categories.right_ind%TYPE;
-    BEGIN
-	v_left_ind := 1;
-	for top_nodes in (select category_id
-			  from categories
-			  where tree_id = refresh_nested_ind.tree_id
-			  and parent_id is null) loop
-		v_right_ind := index_children(top_nodes.category_id, v_left_ind);
-
-		update categories
-		set left_ind = v_left_ind,
-		right_ind = v_right_ind + 1
-		where category_id = top_nodes.category_id;
-
-		v_left_ind := v_right_ind + 2;
-	end loop;
-    END refresh_nested_ind;
-
-    ---------------------------------------------------------------------
-
-    FUNCTION index_children(p_parent_id integer, ind integer) return integer 
-    IS
-	TYPE type_categories IS TABLE OF integer;
-	nodes type_categories := type_categories();
-	TYPE type_cursor IS REF CURSOR ;
-	cc type_cursor;
-	i integer := 0;
-	v_category_id integer;
-	v_ind integer := ind;
-	v_left_ind integer;
-    BEGIN
-	open cc for 'select category_id from categories where parent_id = :p_parent_id ' using p_parent_id;
-	loop	    
-	    fetch cc into v_category_id;
-	    exit when cc%NOTFOUND;
-	    i := i + 1; 
-	    nodes.extend;
-	    nodes(i) := v_category_id;
-	end loop;
-	close cc;
-	if i > 0 then
-	   for j in 1..i loop
-	        v_ind := v_ind + 1;
-	        v_left_ind := v_ind;
-	        v_ind:= index_children(nodes(j), v_ind);
-	        v_ind := v_ind + 1;
-		update categories set left_ind = v_left_ind, right_ind = v_ind where category_id = nodes(j);
-	   end loop;
-	end if;
-	return v_ind;
-    END index_children;
 
 end category_tree;
 /
