@@ -353,3 +353,52 @@ ad_proc -private category::before_uninstall {} {
     acs_sc::impl::delete -contract_name AcsObject -impl_name category_idhandler
     acs_sc::impl::delete -contract_name AcsObject -impl_name category_tree_idhandler
 }
+
+namespace eval category::ad_form {}
+
+ad_proc -public category::ad_form::add_widgets {
+  {-container_object_id:required}
+  {-categorized_object_id}
+  {-form_name:required}
+} {
+    For each category tree associated with this container_object_id (usually
+    package_id) put a category widget into the ad_form.  On form submission the
+    procedure category::ad_form::get_categories should be called to collect
+    the categories in which this object belongs.
+
+    @author Branimir Dolicki (bdolicki@branimir.com)
+} {
+    set category_trees [category_tree::get_mapped_trees $container_object_id]
+    
+    foreach tree $category_trees {
+        foreach { tree_id name subtree_id } $tree {}
+        ad_form -extend -name $form_name -form \
+            [list [list __category__ad_form__category_id_${tree_id}:integer(category),optional \
+                       {label $name} \
+                       {html {single single}} \
+                       {category_tree_id $tree_id} \
+                       {category_subtree_id $subtree_id} \
+                       {category_object_id {[value_if_exists categorized_object_id]}}]]
+    }
+}
+
+ad_proc -public category::ad_form::get_categories {
+    {-object_id:required}
+} {
+
+    Collects categories from the category widget in the format compatible with
+    category::add_ad_form_elements.  To be used in the -on_submit clause of
+    ad_form.
+
+    @author Branimir Dolicki (bdolicki@branimir.com)
+} {
+    set category_trees [category_tree::get_mapped_trees $object_id]
+    set category_ids [list]
+    foreach tree $category_trees {
+        foreach { tree_id name dummy } $tree {}
+        upvar #[template::adp_level] \
+          __category__ad_form__category_id_${tree_id} my_category_id
+        lappend category_ids $my_category_id
+    }
+    return $category_ids
+}
