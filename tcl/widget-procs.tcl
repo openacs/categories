@@ -62,7 +62,7 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
             set assign_single_p $element(category_assign_single_p)
         }
         if { [exists_and_not_null element(require_category_p)] } {
-            set assign_single_p $element(require_category_p)
+            set require_category_p $element(require_category_p)
         }
     }
     if { [empty_string_p $package_id] } {
