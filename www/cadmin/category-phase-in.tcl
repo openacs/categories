@@ -1,5 +1,5 @@
 ad_page_contract {
-    Phases a category in/out.
+    Reactivates deprecated categories.
 
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
