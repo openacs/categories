@@ -48,6 +48,18 @@
       </querytext>
 </fullquery>
 
+
+<fullquery name="category_tree::get_mapped_trees_from_object_list.get_mapped_trees_from_object_list">      
+      <querytext>
+      
+            select tree_id, subtree_category_id, assign_single_p,
+                   require_category_p
+            from category_tree_map
+            where object_id in ([join $object_id_list ", "])
+        
+      </querytext>
+</fullquery>
+
  
 <fullquery name="category_tree::reset_cache.reset_cache">      
       <querytext>
