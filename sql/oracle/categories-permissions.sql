@@ -1,7 +1,7 @@
 --
 -- The Categories Package
 --
--- @author Timo Hentschel (thentschel@sussdorff-roy.com)
+-- @author Timo Hentschel (timo@timohentschel.de)
 -- @creation-date 2003-04-16
 --
 
