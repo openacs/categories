@@ -1,7 +1,7 @@
 <master src="master">
 <property name="page_title">@page_title;noquote@</property>
 <property name="context_bar">@context_bar;noquote@</property>
-<property name="locale">@locale@</property>
+<property name="locale">@locale;noquote@</property>
 
 <!-- pagination context bar -->
 <table cellpadding=4 cellspacing=0 border=0 width="95%">
