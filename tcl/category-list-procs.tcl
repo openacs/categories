@@ -77,6 +77,9 @@ ad_proc -public category::list::get_pretty_list {
     {-category_link ""}
     {-category_link_eval ""}
     {-category_link_html ""}
+    {-remove_link ""}
+    {-remove_link_eval ""}
+    {-remove_link_text ""}
     {-tree_delimiter "; "}
     {-tree_colon ": "}
     {-tree_link ""}
@@ -149,9 +152,16 @@ ad_proc -public category::list::get_pretty_list {
 	if {![empty_string_p $category_link_eval]} {
 	    set category_link [uplevel $uplevel concat $category_link_eval]
 	}
+
+	if {![empty_string_p $remove_link_eval]} {
+	    set remove_link [uplevel $uplevel concat $remove_link_eval]
+	}
 	if {![empty_string_p $category_link]} {
 	    set category_name "<a href=\"$category_link\"$cat_link_html>$category_name</a>"
 	}
+        if {![empty_string_p $remove_link]} { 
+            append category_name "&nbsp;<a href=\"$remove_link\" title=\"Remove this category\">$remove_link_text</a>"
+        }
 
 	if {$tree_id != $old_tree_id} {
 	    if {![empty_string_p $result]} {
