@@ -195,14 +195,22 @@ ad_proc -public category::map_object {
     }
 }
 
-ad_proc -public category::get_mapped_categories { object_id } {
-    Gets the list of categories mapped to an object.
+ad_proc -public category::get_mapped_categories { 
+    {-tree_id {}}
+    object_id 
+} {
+    Gets the list of categories mapped to an object. If tree_id is provided 
+    return only the categories mapped from the given tree.
 
     @param object_id object of which we want to know the mapped categories.
     @return tcl-list of category_ids
     @author Timo Hentschel (timo@timohentschel.de)
 } {
-    set result [db_list get_mapped_categories ""]
+    if { ![empty_string_p $tree_id] } {
+        set result [db_list get_filtered ""]
+    } else {
+        set result [db_list get_mapped_categories ""]
+    }
 
     return $result
 }

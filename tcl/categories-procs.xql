@@ -60,7 +60,16 @@
       </querytext>
 </fullquery>
 
- 
+<fullquery name="category::get_mapped_categories.get_filtered">
+        <querytext>
+                SELECT category_object_map.category_id
+                FROM category_object_map, categories
+                WHERE object_id = :object_id 
+                  AND tree_id = :tree_id
+                  AND category_object_map.category_id = categories.category_id
+        </querytext>
+</fullquery>
+
 <fullquery name="category::reset_translation_cache.reset_translation_cache">      
       <querytext>
       
