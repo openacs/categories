@@ -14,6 +14,7 @@ ad_proc -public category::ad_form::add_widgets {
     {-categorized_object_id}
     {-form_name:required}
     {-element_name "category_id"}
+    {-excluded_trees {}}
     {-help_text {}}
 } {
     For each category tree associated with this container_object_id (usually
@@ -27,6 +28,9 @@ ad_proc -public category::ad_form::add_widgets {
     
     foreach tree $category_trees {
 	util_unlist $tree tree_id name subtree_id assign_single_p require_category_p
+        if {[lsearch -exact $excluded_trees $tree_id] > -1} { 
+            continue
+        } 
 	set options ""
 	if {$assign_single_p == "f"} {
 	    set options ",multiple"
