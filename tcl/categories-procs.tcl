@@ -207,16 +207,18 @@ ad_proc -public category::reset_translation_cache { } {
 } {
     catch {nsv_unset categories}
     set category_id_old 0
+    set tree_id_old 0
     db_foreach reset_translation_cache "" {
         if {$category_id != $category_id_old && $category_id_old != 0} {
-    	nsv_set categories $category_id_old [array get cat_lang]
-    	unset cat_lang
+	    nsv_set categories $category_id_old [list $tree_id_old [array get cat_lang]]
+	    unset cat_lang
         }
         set category_id_old $category_id
+	set tree_id_old $tree_id
         set cat_lang($locale) $name
     }
     if {$category_id_old != 0} {
-        nsv_set categories $category_id [array get cat_lang]
+        nsv_set categories $category_id [list $tree_id [array get cat_lang]]
     }
 }
 
@@ -230,7 +232,7 @@ ad_proc -public category::flush_translation_cache { category_id } {
         set cat_lang($locale) $name
     }
     if {[info exists cat_lang]} {
-        nsv_set categories $category_id [array get cat_lang]
+        nsv_set categories $category_id [list $tree_id [array get cat_lang]]
     } else {
         nsv_set categories $category_id ""
     }
@@ -244,17 +246,14 @@ ad_proc -public category::get_name {
     Use default language otherwise.
 
     @param category_id  category_id or list of category_id's for which to get the name. 
-
     @param locale       language in which to get the name. [ad_conn locale] used by default.
-
     @return list of names corresponding to the list of category_id's supplied.
-
     @author Timo Hentschel (timo@timohentschel.de)
 } {
     if {[empty_string_p $locale]} {
         set locale [ad_conn locale]
     }
-    if { [catch { array set cat_lang [nsv_get categories $category_id] }] } {
+    if { [catch { array set cat_lang [lindex [nsv_get categories $category_id] 1] }] } {
         return {}
     }
     if { ![catch { set name $cat_lang($locale) }] } {
@@ -277,11 +276,8 @@ ad_proc -public category::get_names {
     Use default language otherwise.
 
     @param category_id  category_id or list of category_id's for which to get the name. 
-
     @param locale       language in which to get the name. [ad_conn locale] used by default.
-
     @return list of names corresponding to the list of category_id's supplied.
-
     @author Timo Hentschel (timo@timohentschel.de)
 } {
     set result [list]
@@ -289,6 +285,42 @@ ad_proc -public category::get_names {
         lappend result [category::get_name $category_id $locale]
     }
     return $result
+}
+
+ad_proc -public category::get_tree {
+    category_id
+} {
+    Gets the tree_id of the given category.
+
+    @param category_id  category_id or list of category_id's for which to get the tree_id.
+    @return tree_id of the tree the category belongs to.
+    @author Timo Hentschel (timo@timohentschel.de)
+} {
+    if { [catch { set tree_id [lindex [nsv_get categories $category_id] 0] }] } {
+	# category not found
+        return {}
+    }
+    return $tree_id
+}
+
+ad_proc -public category::get_data {
+    category_id
+    {locale ""}
+} {
+    Gets the category name and the tree name in the specified language, if available.
+    Use default language otherwise.
+
+    @param category_id  category_id to get the names.
+    @param locale       language in which to get the names. [ad_conn locale] used by default.
+    @return list of category_id, category_name, tree_id and tree_name.
+    @author Timo Hentschel (timo@timohentschel.de)
+} {
+    set tree_id [category::get_tree $category_id]
+    if {[empty_string_p $tree_id]} {
+	# category not found
+	return
+    }
+    return [list $category_id [category::get_name $category_id $locale] $tree_id [category_tree::get_name $tree_id $locale]]
 }
 
 ad_proc -public category::get_object_context { object_id } {

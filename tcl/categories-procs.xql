@@ -64,9 +64,10 @@
 <fullquery name="category::reset_translation_cache.reset_translation_cache">      
       <querytext>
       
-	    select category_id, locale, name
-	    from category_translations
-	    order by category_id, locale
+	    select t.category_id, c.tree_id, t.locale, t.name
+	    from category_translations t, categories c
+	    where t.category_id = c.category_id
+	    order by t.category_id, t.locale
 	
       </querytext>
 </fullquery>
@@ -75,10 +76,11 @@
 <fullquery name="category::flush_translation_cache.flush_translation_cache">      
       <querytext>
       
-	    select locale, name
-	    from category_translations
-	    where category_id = :category_id
-	    order by locale
+	    select t.locale, t.name, c.tree_id
+	    from category_translations t, categories c
+	    where t.category_id = :category_id
+	    and t.category_id = c.category_id
+	    order by t.locale
 	
       </querytext>
 </fullquery>
