@@ -10,7 +10,7 @@ ad_page_contract {
     object_id:integer,optional
 }
 
-set user_id [ad_maybe_redirect_for_registration]
+set user_id [auth::require_login]
 permission::require_permission -object_id $tree_id -privilege category_tree_write
 
 set instance_list [category_tree::usage $tree_id]

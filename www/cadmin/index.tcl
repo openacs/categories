@@ -18,7 +18,7 @@ ad_page_contract {
 set page_title "Category Management"
 set context_bar [list $page_title]
 
-set user_id [ad_maybe_redirect_for_registration]
+set user_id [auth::require_login]
 set package_id [ad_conn package_id]
 
 permission::require_permission -object_id $package_id -privilege category_admin

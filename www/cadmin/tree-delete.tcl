@@ -20,7 +20,7 @@ ad_page_contract {
     used_categories:multirow
 }
 
-set user_id [ad_maybe_redirect_for_registration]
+set user_id [auth::require_login]
 permission::require_permission -object_id $tree_id -privilege category_tree_write
 
 array set tree [category_tree::get_data $tree_id $locale]

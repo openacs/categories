@@ -18,7 +18,7 @@ ad_page_contract {
     cancel_form_vars:onevalue
 }
  
-set user_id [ad_maybe_redirect_for_registration]
+set user_id [auth::require_login]
 permission::require_permission -object_id $object_id -privilege admin
 
 array set tree [category_tree::get_data $tree_id $locale]

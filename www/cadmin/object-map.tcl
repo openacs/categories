@@ -18,7 +18,7 @@ ad_page_contract {
     object_name:onevalue
 }
 
-set user_id [ad_maybe_redirect_for_registration]
+set user_id [auth::require_login]
 permission::require_permission -object_id $object_id -privilege admin
 
 set context_bar [category::get_object_context $object_id]

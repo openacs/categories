@@ -16,7 +16,7 @@ ad_page_contract {
     trees:multirow
 }
 
-set user_id [ad_maybe_redirect_for_registration]
+set user_id [auth::require_login]
 permission::require_permission -object_id $tree_id -privilege category_tree_write
 
 set tree_name [category_tree::get_name $tree_id $locale]

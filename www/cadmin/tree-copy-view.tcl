@@ -16,7 +16,7 @@ ad_page_contract {
     tree:multirow
 }
 
-set user_id [ad_maybe_redirect_for_registration]
+set user_id [auth::require_login]
 set tree_id $source_tree_id
 
 array set target_tree [category_tree::get_data $target_tree_id $locale]

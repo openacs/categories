@@ -19,7 +19,7 @@ ad_page_contract {
     can_write_p:onevalue
 }
 
-set user_id [ad_maybe_redirect_for_registration]
+set user_id [auth::require_login]
 
 array set tree [category_tree::get_data $tree_id $locale]
 if {$tree(site_wide_p) == "f"} {
