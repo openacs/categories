@@ -123,7 +123,11 @@ create table category_tree_translations (
 
 <p>
 This table stores the tree hierarchy by holding the information about
-the parent category. The tree is ordered by a nested index (left_ind, right_ind).
+the parent category. The tree is ordered by a nested index (left_ind,
+right_ind). Sorting is thus accomplished by means of a nested set. You 
+can read a <a href="http://www.intelligententerprise.com/001020/celko.jhtml?_requestid=49180">description of how nested sets work</a>. This also <i>describes how to write queries that sort correctly when using categories</i>.
+
+
 <pre>
 create table categories (
        category_id		    integer primary key
