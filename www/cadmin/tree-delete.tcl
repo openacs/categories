@@ -41,6 +41,7 @@ if {[llength $instance_list] > 0} {
 
 set delete_url [export_vars -no_empty -base tree-delete-2 {tree_id locale object_id}]
 set cancel_url [export_vars -no_empty -base tree-view {tree_id locale object_id}]
+set usage_url [export_vars -no_empty -base tree-usage {tree_id}]
 
 template::multirow create used_categories category_id category_name view_url
 

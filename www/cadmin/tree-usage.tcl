@@ -33,15 +33,17 @@ set context_bar [category::context_bar $tree_id $locale [value_if_exists object_
 lappend context_bar "Usage"
 
 
-template::multirow create modules package object_id object_name package_id instance_name read_p
+template::multirow create modules package object_id object_name package_id instance_name read_p unmap_url
 
 set instance_list [category_tree::usage $tree_id]
 
 set instances_without_permission 0
 foreach instance $instance_list {
     util_unlist $instance package object_id object_name package_id instance_name read_p
+    set unmap_url [export_vars -no_empty -base tree-unmap {tree_id object_id}]
+
     if {$read_p == "t"} {
-	template::multirow append modules $package $object_id $object_name $package_id $instance_name $read_p
+	template::multirow append modules $package $object_id $object_name $package_id $instance_name $read_p $unmap_url
     } else {
 	incr instances_without_permission
     }
