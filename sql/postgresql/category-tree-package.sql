@@ -188,6 +188,7 @@ declare
 
     v_new_left_ind          integer;
     v_category_id	    integer;
+    source record;
 begin
 	select coalesce(max(right_ind),0) into v_new_left_ind 
 	from categories
