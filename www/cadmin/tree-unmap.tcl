@@ -27,8 +27,9 @@ if {$tree(site_wide_p) == "f"} {
 }
 
 set page_title "Unmap tree"
-set form_vars [export_form_vars tree_id locale object_id]
-set cancel_form_vars [export_form_vars locale object_id]
+
+set delete_url [export_vars -base tree-unmap-2 { tree_id locale object_id }]
+set cancel_url [export_vars -base one-object { locale object_id }]
 
 set object_context [category::get_object_context $object_id]
 set object_name [lindex $object_context 1]

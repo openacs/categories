@@ -5,16 +5,9 @@
 
 Are you sure you want to unmap the tree "@tree_name@" from "@object_name@"?
 
-<center>
-<form action="tree-unmap-2">
-  @form_vars;noquote@
-  <input type=submit value="Yes">
-</form>  
+<p>
+  <a href="@delete_url@" class="button">Unmap</a>
+  &nbsp;&nbsp;&nbsp;
+  <a href="@cancel_url@" class="button">Cancel, do not unmap</a>
+</p>
 
-
-<form action="one-object">
-  @cancel_form_vars;noquote@
-  <input type=submit value="No">
-</form>  
-
-</center>
