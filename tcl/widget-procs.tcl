@@ -74,10 +74,10 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
         }
 	if {$assign_single_p == "t" || $all_single_p} {
 	    # single-select widget
-	    append output "[template::widget::menu $element(name) $one_tree $mapped_categories attributes $element(mode)]"
+	    append output [template::widget::menu $element(name) $one_tree $mapped_categories attributes $element(mode)]
 	} else {
-	    # multiselect widget (if user didn't override with single option}
-	    append output "[template::widget::menu $element(name) $one_tree $mapped_categories ms_attributes $element(mode)]"
+	    # multiselect widget (if user didn't override with single option)
+	    append output [template::widget::menu $element(name) $one_tree $mapped_categories ms_attributes $element(mode)]
 	}
     }
 
