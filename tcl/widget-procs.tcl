@@ -39,6 +39,7 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
     set tree_id {}
     set subtree_id {}
     set assign_single_p f
+    set require_category_p t
 
     if { [exists_and_not_null element(value)] && [llength $element(value)] == 2 } {
         # Legacy method for passing parameters
@@ -59,6 +60,9 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
         }
         if { [exists_and_not_null element(category_assign_single_p)] } {
             set assign_single_p $element(category_assign_single_p)
+        }
+        if { [exists_and_not_null element(require_category_p)] } {
+            set assign_single_p $element(require_category_p)
         }
     }
     if { [empty_string_p $package_id] } {
@@ -102,7 +106,9 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
 
 	if {$assign_single_p == "t" || $all_single_p} {
 	    # single-select widget
-	    set one_tree [concat [list [list "" ""]] $one_tree]
+            if { ![template::util::is_true $require_category_p] } {
+                set one_tree [concat [list [list "" ""]] $one_tree]
+            }
 	    append output [template::widget::menu $element(name) $one_tree $mapped_categories attributes $element(mode)]
 	} else {
 	    # multiselect widget (if user didn't override with single option)
