@@ -100,8 +100,7 @@
 	    from category_translations t, categories c
 	    where t.category_id = :category_id
 	    and t.category_id = c.category_id
-	    order by t.locale
-	
+
       </querytext>
 </fullquery>
 

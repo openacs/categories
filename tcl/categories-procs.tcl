@@ -51,15 +51,18 @@ ad_proc -public category::add {
     }
     db_transaction {
         set category_id [db_exec_plsql insert_category ""]
-
+        set translations [list $locale $name]
         set default_locale [ad_parameter DefaultLocale acs-lang "en_US"]
         if {$locale != $default_locale} {
+            lappend translations $default_locale $name
             db_exec_plsql insert_default_category ""
         }
         if {!$noflush_p} {
             category_tree::flush_cache $tree_id
         }
-        flush_translation_cache $category_id
+        # JCD: avoid doing a query and set the translation cache directly
+        # flush_translation_cache $category_id
+        nsv_set categories $category_id [list $tree_id $translations]
     }
     return $category_id
 }

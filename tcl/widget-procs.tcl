@@ -102,7 +102,7 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
 	}
 
         if { [llength $mapped_trees] > 1 } {
-            append output " $tree_name\: "
+            append output "<div class=\"categorySelect\"><div class=\"categoryTreeName\">$tree_name</div>"
 	}
 
 	if {$assign_single_p == "t" || $all_single_p} {
@@ -115,6 +115,7 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
 	    # multiselect widget (if user didn't override with single option)
 	    append output [template::widget::menu $element(name) $one_tree $mapped_categories ms_attributes $element(mode)]
 	}
+        append output "</div>"
     }
 
     return $output
