@@ -228,37 +228,37 @@ create or replace function category_synonym__new_cat_trans_trg ()
 returns trigger as '
 -- trigger function for inserting category translation
 declare
-	v_synonym_id	integer;
+    v_synonym_id     integer;
 begin
 	-- create synonym
-	v_synonym_id := category_synonym__new (NEW.name, NEW.locale, NEW.category_id, null);
+    v_synonym_id := category_synonym__new (NEW.name, NEW.locale, NEW.category_id, null);
 
 	-- mark synonym as not editable for users
-	update category_synonyms
-	set synonym_p = ''f''
-	where synonym_id = v_synonym_id;
+    update category_synonyms
+    set synonym_p = ''f''
+    where synonym_id = v_synonym_id;
 
-	return null;
+    return new;
 end;' language 'plpgsql';
 
 create or replace function category_synonym__edit_cat_trans_trg ()
 returns trigger as '
 -- trigger function for updating a category translation
 declare
-	v_synonym_id	integer;
+    v_synonym_id    integer;
 begin
 	-- get synonym_id of updated category translation
-	select	synonym_id into v_synonym_id
-	from	category_synonyms
-	where	category_id = OLD.category_id
-	and	name = OLD.name
-	and	locale = OLD.locale
-	and	synonym_p = ''f'';
+    select synonym_id into v_synonym_id
+    from   category_synonyms
+    where  category_id = OLD.category_id
+           and name = OLD.name
+           and locale = OLD.locale
+           and synonym_p = ''f'';
 
 	-- update synonym
-	PERFORM category_synonym__edit (v_synonym_id, NEW.name, NEW.locale);
+    PERFORM category_synonym__edit (v_synonym_id, NEW.name, NEW.locale);
 
-	return null;
+    return new;
 end;' language 'plpgsql';
 
 
