@@ -301,23 +301,18 @@ ad_proc -public category::get_object_context { object_id } {
     return [list "/o/$object_id" $object_name]
 }
 
-ad_proc category::repeat_string { string iteration_number } {
-    Repeat a string a given number of times.
+ad_proc category::indent_html { indent_width } {
+    Creates a series of &nbsp; to indent subcatories in html output.
 
-    @param string string to be repeated.
-    @param iteration_number number of times the string should be repeated.
+    @param indent_width width of the html indent.
     @author Timo Hentschel (timo@timohentschel.de)
 } {
-    if { $iteration_number <= 0} {
-        return ""
-    } 
-
-    set return_string ""
-    for { set i 0 } { $i < $iteration_number } { incr i } {
-        append return_string $string
+    set indent_string ""
+    for { set i 0 } { $i < $indent_width } { incr i } {
+        append indent_string "&nbsp;"
     }
 
-    return $return_string
+    return $indent_string
 }
 
 ad_proc category::pageurl { object_id } {
