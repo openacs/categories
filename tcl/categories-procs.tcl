@@ -20,6 +20,7 @@ ad_proc -public category::add {
     {-deprecated_p "f"}
     {-user_id ""}
     {-creation_ip ""}
+    -noflush:boolean
 } {
     Insert a new category. The same translation will be added in the default
     language if it's in a different language.
@@ -33,6 +34,9 @@ ad_proc -public category::add {
     @option parent_id id of the parent category. "" if top level category.
     @option user_id user that adds the category. [ad_conn user_id] used by default.
     @option creation_ip ip-address of the user that adds the category. [ad_conn peeraddr] used by default.
+    @option noflush defer calling category_tree::flush_cache (which if adding multiple categories to 
+                    a large tree can be very expensive).  note that if you set this flag you must
+                    call category_tree::flush_cache once the adds are complete.
     @return category_id
     @author Timo Hentschel (timo@timohentschel.de)
 } {
@@ -50,9 +54,11 @@ ad_proc -public category::add {
 
         set default_locale [ad_parameter DefaultLocale acs-lang "en_US"]
         if {$locale != $default_locale} {
-    	db_exec_plsql insert_default_category ""
+            db_exec_plsql insert_default_category ""
         }
-        category_tree::flush_cache $tree_id
+        if {!$noflush_p} {
+            category_tree::flush_cache $tree_id
+        }
         flush_translation_cache $category_id
     }
     return $category_id
@@ -100,7 +106,7 @@ ad_proc -public category::delete {
     category_id
 } {
     Deletes a category.
-    category_tree:flush_cache should be used afterwards.
+    category_tree::flush_cache should be used afterwards.
 
     @option batch_mode Indicates that the cache for category translations
                        should not be flushed. Useful when deleting several

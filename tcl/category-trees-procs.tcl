@@ -142,7 +142,8 @@ namespace eval category_tree {
 		db_exec_plsql insert_default_tree ""
 	    }
 	}
-	flush_translation_cache $tree_id
+
+        flush_translation_cache $tree_id
 	return $tree_id
     }
 
