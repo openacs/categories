@@ -5,6 +5,7 @@ ad_page_contract {
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
+    {search_text:optional ""}
 } -properties {
     page_title:onevalue
     context_bar:onevalue
@@ -42,5 +43,14 @@ template::list::create \
 	    label "Name"
 	}
     }
+
+ad_form -name search_form -action . -form {
+    {search_text:text {label "Search String"} {value $search_text} {html {size 50 maxlength 200}}}
+} -on_submit {
+    set query_id [category_synonym::search -search_text [string trim $search_text] -locale $locale]
+} -after_submit {
+    ad_returnredirect [export_vars -no_empty -base search-result {query_id}]
+    ad_script_abort
+}
 
 ad_return_template
