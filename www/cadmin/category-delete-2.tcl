@@ -11,15 +11,16 @@ ad_page_contract {
     object_id:integer,optional
 }
 
+set user_id [ad_maybe_redirect_for_registration]
 permission::require_permission -object_id $tree_id -privilege category_tree_write
 
 db_transaction {
-    foreach category_id [db_list order_categories_for_delete "" {
+    foreach category_id [db_list order_categories_for_delete ""] {
 	category::delete $category_id
     }
     category_tree::flush_cache $tree_id
 } on_error {
-    ad_return_complaint 1 "Error deleting category.<p>A category still contains subcategories. If you really want to delete those subcategories, please delete them first. Thank you."
+    ad_return_complaint 1 {{Error deleting category. A category probably still contains subcategories. If you really want to delete those subcategories, please delete them first. Thank you.}}
     return
 }
 
