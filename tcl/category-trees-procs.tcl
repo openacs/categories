@@ -181,13 +181,14 @@ namespace eval category_tree {
 	Get the category trees mapped to an object.
 
 	@param object_id object to get the mapped category trees.
-	@return tcl list of lists: tree_id tree_name subtree_category_id assign_single_p
+	@return tcl list of lists: tree_id tree_name subtree_category_id
+	            assign_single_p require_category_p
 	@author Timo Hentschel (timo@timohentschel.de)
     } {
 	set result [list]
 
 	db_foreach get_mapped_trees "" {
-	    lappend result [list $tree_id [get_name $tree_id] $subtree_category_id $assign_single_p]
+	    lappend result [list $tree_id [get_name $tree_id] $subtree_category_id $assign_single_p $require_category_p]
 	}
 
 	return $result

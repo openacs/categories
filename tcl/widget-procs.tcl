@@ -39,7 +39,7 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
     set tree_id {}
     set subtree_id {}
     set assign_single_p f
-    set require_category_p t
+    set require_category_p f
 
     if { [exists_and_not_null element(value)] && [llength $element(value)] == 2 } {
         # Legacy method for passing parameters
@@ -61,8 +61,8 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
         if { [exists_and_not_null element(category_assign_single_p)] } {
             set assign_single_p $element(category_assign_single_p)
         }
-        if { [exists_and_not_null element(require_category_p)] } {
-            set require_category_p $element(require_category_p)
+        if { [exists_and_not_null element(category_require_category_p)] } {
+            set require_category_p $element(category_require_category_p)
         }
     }
     if { [empty_string_p $package_id] } {
@@ -86,8 +86,8 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
         set mapped_trees [list [list $tree_id [category_tree::get_name $tree_id] $subtree_id $assign_single_p $require_category_p]]
     }
 
-    foreach tree $mapped_trees {
-	util_unlist $tree tree_id tree_name subtree_id assign_single_p require_category_p
+    foreach mapped_tree $mapped_trees {
+	util_unlist $mapped_tree tree_id tree_name subtree_id assign_single_p require_category_p
 	set tree_name [ad_quotehtml $tree_name]
 	set one_tree [list]
 
@@ -106,7 +106,7 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
 
 	if {$assign_single_p == "t" || $all_single_p} {
 	    # single-select widget
-            if { ![template::util::is_true $require_category_p] } {
+            if { $require_category_p == "f" } {
                 set one_tree [concat [list [list "" ""]] $one_tree]
             }
 	    append output [template::widget::menu $element(name) $one_tree $mapped_categories attributes $element(mode)]
@@ -187,7 +187,13 @@ ad_proc -public template::data::transform::category { element_ref } {
     }
 
     if { [empty_string_p $tree_id] } {
-        set trees [db_list get_trees_requiring_category ""]
+	set trees [list]
+        foreach tree [category_tree::get_mapped_trees $package_id] {
+	    util_unlist $tree tree_id tree_name subtree_id assign_single_p require_category_p
+	    if {$require_category_p == "t" || ![info exists element(optional)]} {
+		lappend trees [list $tree_id $subtree_id]
+	    }
+	}
     } else {
 	if {$require_category_p == "t"} {
 	    set trees [list [list $tree_id $subtree_id]]
@@ -198,8 +204,9 @@ ad_proc -public template::data::transform::category { element_ref } {
 
     set trees_without_category [list]
     foreach tree $trees {
+	util_unlist $tree tree_id subtree_id
 	# get categories of every tree requiring a categorization
-	foreach category [category_tree::get_tree -all -subtree_id [lindex $tree 1] [lindex $tree 0]] {
+	foreach category [category_tree::get_tree -all -subtree_id $subtree_id $tree_id] {
 	    set tree_categories([lindex $category 0]) 1
 	}
 	set found_p 0
@@ -211,7 +218,7 @@ ad_proc -public template::data::transform::category { element_ref } {
 	}
 	if {!$found_p} {
 	    # no categories of this tree selected, so add for error message
-	    lappend trees_without_category [category_tree::get_name [lindex $tree 0]]
+	    lappend trees_without_category [category_tree::get_name $tree_id]
 	}
 	array unset tree_categories
     }

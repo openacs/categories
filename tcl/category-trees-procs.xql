@@ -27,7 +27,8 @@
 <fullquery name="category_tree::get_mapped_trees.get_mapped_trees">      
       <querytext>
       
-	    select tree_id, subtree_category_id, assign_single_p
+	    select tree_id, subtree_category_id, assign_single_p,
+	           require_category_p
 	    from category_tree_map
 	    where object_id = :object_id
 	
