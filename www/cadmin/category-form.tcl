@@ -34,7 +34,7 @@ if {[info exists object_id]} {
 }
 lappend context_bar [list [export_vars -no_empty -base tree-view {tree_id locale object_id}]" $tree_name] $page_title
 
-set languages [db_list_of_lists get_ad_locales ""]
+set languages [lang::system::get_locale_options]
 
 ad_form -name category_form -action category-form -export { tree_id parent_id locale object_id } -form {
     {category_id:key}
