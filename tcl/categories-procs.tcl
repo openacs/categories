@@ -33,7 +33,7 @@ ad_proc -public category::add {
     @option parent_id id of the parent category. "" if top level category.
     @option user_id user that adds the category. [ad_conn user_id] used by default.
     @option creation_ip ip-address of the user that adds the category. [ad_conn peeraddr] used by default.
-    @returns category_id
+    @return category_id
     @author Timo Hentschel (thentschel@sussdorff-roy.com)
 } {
     if {[empty_string_p $user_id]} {

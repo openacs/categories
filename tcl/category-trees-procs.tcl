@@ -94,7 +94,7 @@ namespace eval category_tree {
 	@option user_id user that adds the category tree. [ad_conn user_id] used by default.
 	@option creation_ip ip-address of the user that adds the category tree. [ad_conn peeraddr] used by default.
 	@option context_id context_id of the category tree. [ad_conn package_id] used by default.
-	@returns tree_id
+	@return tree_id
 	@author Timo Hentschel (thentschel@sussdorff-roy.com)
     } {
 	if {[empty_string_p $user_id]} {
