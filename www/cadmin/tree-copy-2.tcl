@@ -5,15 +5,16 @@ ad_page_contract {
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
-    tree_id:integer
+    target_tree_id:integer
     source_tree_id:integer
     {locale ""}
     object_id:integer,optional
 }
 
 set user_id [ad_maybe_redirect_for_registration]
+set tree_id $target_tree_id
 permission::require_permission -object_id $tree_id -privilege category_tree_write
 
-category_tree::copy -source_tree $source_tree_id -dest_tree $tree_id
+category_tree::copy -source_tree $source_tree_id -dest_tree $target_tree_id
 
 ad_returnredirect [export_vars -base tree-view {tree_id locale object_id}]

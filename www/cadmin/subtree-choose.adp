@@ -3,15 +3,4 @@
 <property name="context_bar">@context_bar;noquote@</property>
 <property name="locale">@locale;noquote@</property>
 
-<if @tree:rowcount@ lt 2>
-  <ul>
-  <li><i> none available</i>
-  </ul>
-</if>
-<else>
-  <table>
-    <multiple name="tree">
-      <tr><td>@tree.left_indent;noquote@ @tree.category_name@ [ <font size=-1><a href="tree-map?category_id=@tree.category_id@&tree_id=@tree_id@&@url_vars;noquote@">Add this subtree</a> </font> ]</td><td align=center> @tree.level@ </font></td></tr>
-    </multiple>
-  </table>
-</else>
+<listtemplate name="tree"></listtemplate>

@@ -32,7 +32,7 @@ set page_title "Modules using Category Tree \"$tree_name\""
 if {[info exists object_id]} {
     set context_bar [list [category::get_object_context $object_id] [list [export_vars -base one-object {locale object_id}] "Category Management"]]
 } else {
-    set context_bar [list [list ".?[export_vars {locale}] "Category Management"]]
+    set context_bar [list [list ".?[export_vars {locale}]" "Category Management"]]
 }
 lappend context_bar [list [export_vars -base tree-view {tree_id locale object_id}] $tree_name] Usage
 

@@ -13,7 +13,6 @@ ad_page_contract {
     page_title:onevalue
     context_bar:onevalue
     locale:onevalue
-    url_vars:onevalue
     tree:multirow
 }
 
@@ -26,16 +25,35 @@ if {$tree_data(site_wide_p) == "f"} {
 }
 
 set page_title "Choose a subtree to map"
-set url_vars [export_vars {locale object_id}]
 
 set context_bar [list [category::get_object_context $object_id] [list [export_vars -base one-object {locale object_id}] "Category Management"] "Map subtree"]
 
-template::multirow create tree category_id category_name level left_indent
+template::multirow create tree category_id category_name level left_indent map_url
 
 foreach category [category_tree::get_tree -all $tree_id $locale] {
     util_unlist $category category_id category_name deprecated_p level
 
-    template::multirow append tree $category_id $category_name $level [category::repeat_string "&nbsp;" [expr ($level-1)*5]]
+    template::multirow append tree $category_id $category_name $level \
+	[category::repeat_string "&nbsp;" [expr ($level-1)*5]] \
+	[export_vars -no_empty -base tree-map { category_id tree_id locale object_id }]
 }
+
+template::list::create \
+    -name tree \
+    -no_data "None" \
+    -elements {
+	category_name {
+	    label "Name"
+	    display_template {
+		@tree.left_indent;noquote@ @tree.category_name@
+	    }
+	}
+	map {
+	    label "Action"
+	    display_template {
+		<a href="@tree.map_url@">Map this subtree</a>
+	    }
+	}
+    }
 
 ad_return_template

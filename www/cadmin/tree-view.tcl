@@ -157,3 +157,5 @@ template::list::create \
     -actions $actions \
     -bulk_actions $bulk_actions \
     -bulk_action_export_vars { tree_id locale object_id }
+
+ad_return_template

@@ -5,7 +5,7 @@ ad_page_contract {
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
-    tree_id:integer
+    source_tree_id:integer
     target_tree_id:integer
     {locale ""}
     object_id:integer,optional
@@ -17,6 +17,7 @@ ad_page_contract {
 }
 
 set user_id [ad_maybe_redirect_for_registration]
+set tree_id $source_tree_id
 
 array set target_tree [category_tree::get_data $target_tree_id $locale]
 set target_tree_name $target_tree(tree_name)
@@ -44,5 +45,17 @@ foreach category [category_tree::get_tree -all $tree_id $locale] {
 
     template::multirow append tree $category_name $deprecated_p $level [category::repeat_string "&nbsp;" [expr ($level-1)*5]]
 }
+
+template::list::create \
+    -name tree \
+    -no_data "None" \
+    -elements {
+	category_name {
+	    label "Name"
+	    display_template {
+		@tree.left_indent;noquote@ @tree.category_name@
+	    }
+	}
+    }
 
 ad_return_template

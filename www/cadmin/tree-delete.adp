@@ -16,20 +16,16 @@
 </if>
 
 <if @used_categories:rowcount@ gt 0>
-  <p>The following categories of this tree are still in use:
-  <ul><multiple name=used_categories><li>@used_categories.name@</li></multiple></ul>
+  <p><b>Categories still used</b>
+  <listtemplate name="used_categories"></listtemplate>
+  <p>
 </if>
 
 <if @instances_using_p@ ne t>
   Are you sure you want to delete the tree "@tree_name@"?
-  <center>
-    <form action="tree-delete-2">
-      @form_vars;noquote@
-      <input type=submit value="Yes">
-    </form>  
-    <form action="tree-view">
-      @form_vars;noquote@
-      <input type=submit value="No">
-    </form>  
-  </center>
+  <p>
+    <a href="@delete_url@" class="button">Delete</a>
+    &nbsp;&nbsp;&nbsp;
+    <a href="@cancel_url@" class="button">No, Cancel</a>
+  </p>
 </if>

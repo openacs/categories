@@ -15,8 +15,8 @@ ad_page_contract {
     tree_name:onevalue
     tree_description:onevalue
     instances_using_p:onevalue
-    form_vars:onevalue
-    url_vars:onevalue
+    delete_url:onevalue
+    cancel_url:onevalue
     used_categories:multirow
 }
 
@@ -43,14 +43,23 @@ if {[llength $instance_list] > 0} {
     set instances_using_p f
 }
 
-set form_vars [export_form_vars tree_id locale object_id]
-set url_vars [export_vars {tree_id locale object_id}]
+set delete_url [export_vars -no_empty -base tree-delete-2 {tree_id locale object_id}]
+set cancel_url [export_vars -no_empty -base tree-view {tree_id locale object_id}]
 
-template::multirow create used_categories category_id name
+template::multirow create used_categories category_id category_name
 
 db_foreach get_category_in_use "" {
     set category_name [category::get_name $category_id $locale]
     template::multirow append used_categories $category_id $category_name
 }
+
+template::list::create \
+    -name used_categories \
+    -no_data "None" \
+    -elements {
+	category_name {
+	    label "Name"
+	}
+    }
 
 ad_return_template

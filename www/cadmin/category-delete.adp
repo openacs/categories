@@ -4,28 +4,13 @@
 <property name="locale">@locale;noquote@</property>
 
 <p>
-  Are you sure you want to delete these categories:
+  <b>Are you sure you want to delete these categories:</b>
 </p>
 
-<ul>
-  <multiple name="categories">
-    <li>
-      @categories.name@
-      <if @categories.objects_p@ true>(Still mapped to objects)</if>
-    </li>
-  </multiple>
-</ul>
+<listtemplate name="categories"></listtemplate>
 
-<center>
-<form action="category-delete-2">
-  @form_vars;noquote@
-  <input type=submit value="Yes">
-</form>  
-
-
-<form action="tree-view">
-  @form_vars;noquote@
-  <input type=submit value="No">
-</form>  
-
-</center>
+<p>
+  <a href="@delete_url@" class="button">Delete</a>
+  &nbsp;&nbsp;&nbsp;
+  <a href="@cancel_url@" class="button">No, Cancel</a>
+</p>
