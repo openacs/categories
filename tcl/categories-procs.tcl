@@ -308,11 +308,11 @@ namespace eval category {
 
 	@author Timo Hentschel (thentschel@sussdorff-roy.com)
     } {
-	acs_sc::impl::new -contract_name AcsObject -name category_idhandler -owner categories
+	acs_sc::impl::new -contract_name AcsObject -name category_idhandler -pretty_name "Category tree handler" -owner categories
 	acs_sc::impl::alias::new -contract_name AcsObject -impl_name category_idhandler -operation PageUrl -alias category::pageurl
 	acs_sc::impl::binding::new -contract_name AcsObject -impl_name category_idhandler
 
-	acs_sc::impl::new -contract_name AcsObject -name category_tree_idhandler -owner categories
+	acs_sc::impl::new -contract_name AcsObject -name category_tree_idhandler -pretty_name "Category tree handler" -owner categories
 	acs_sc::impl::alias::new -contract_name AcsObject -impl_name category_tree_idhandler -operation PageUrl -alias category_tree::pageurl
 	acs_sc::impl::binding::new -contract_name AcsObject -impl_name category_tree_idhandler
     }

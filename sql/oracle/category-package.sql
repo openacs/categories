@@ -203,7 +203,7 @@ CREATE OR REPLACE PACKAGE BODY CATEGORY AS
 	   delete from category_object_map where category_id = node.category_id;
 	   delete from category_translations where category_id = node.category_id;
 	   delete from categories where category_id = node.category_id;
-	   acs_object.delete(node.category_id);
+	   acs_object.del(node.category_id);
 	end loop;
 
 	update categories

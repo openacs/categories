@@ -178,7 +178,7 @@ as
        delete from category_tree_translations where tree_id  = category_tree.del.tree_id;
        delete from category_trees where tree_id  = category_tree.del.tree_id;
  
-       acs_object.delete(category_tree.del.tree_id);
+       acs_object.del(category_tree.del.tree_id);
     END del;
 
 
