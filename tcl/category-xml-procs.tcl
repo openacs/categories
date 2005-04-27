@@ -18,10 +18,7 @@ ad_proc -public ::category_tree::xml::import_from_file {
         error {Cannot open file for reading}
     }
 
-    set fp [open $file r]
-    set xml [read $fp]
-    close $fp
-    return [import -site_wide=$site_wide_p $xml]
+    return [import -site_wide=$site_wide_p [::tDOM::xmlReadFile $file]]
 }
 
 ad_proc -public ::category_tree::xml::import {
