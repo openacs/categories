@@ -142,6 +142,7 @@ namespace eval category_tree {
                 db_exec_plsql insert_default_tree ""
             }
         }
+
         flush_translation_cache $tree_id
         return $tree_id
     }
@@ -215,10 +216,27 @@ namespace eval category_tree {
 
     ad_proc -public get_mapped_trees_from_object_list { object_id_list } {
         Get the category trees mapped to a list of objects.
-
+        
         @param object_id_list list of object to get the mapped category trees.
         @return tcl list of lists: tree_id tree_name subtree_category_id
                     assign_single_p require_category_p
+        @author Jade Rubick (jader@bread.com)
+    } {
+        set result [list]
+
+        db_foreach get_mapped_trees_from_object_list "" {
+            lappend result [list $tree_id [get_name $tree_id] $subtree_category_id $assign_single_p $require_category_p]
+        }
+
+        return $result
+    }
+
+    ad_proc -public get_mapped_trees_from_object_list { object_id_list } {
+        Get the category trees mapped to a list of objects.
+
+        @param object_id_list list of object to get the mapped category trees.
+        @return tcl list of lists: tree_id tree_name subtree_category_id
+                assign_single_p require_category_p
         @author Jade Rubick (jader@bread.com)
     } {
         set result [list]
@@ -448,5 +466,117 @@ namespace eval category_tree {
         @author Timo Hentschel (timo@timohentschel.de)
     } {
         return "categories-browse?tree_ids=$object_id"
+    }
+}
+
+
+ad_proc -public category_tree::get_multirow {
+    {-tree_id {}}
+    {-container_id {}}
+    {-category_counts {}}
+    -datasource 
+} {
+    get a multirow datasource for a given tree or for all trees mapped to a 
+    given container. datasource is: 
+
+    tree_id tree_name category_id category_name level pad deprecated_p count child_sum 
+
+    where:
+    <ul>
+    <li>mapped_p indicates the category_id was found in the list mapped_ids.</li>
+    <li>child_sum is the naive sum of items mapped to children (may double count)</li>
+    <li>count is the number of items mapped directly to the given category</li>
+    <li>pad is a stupid hard coded pad for the tree (I think trees should use nested lists and css)</li>
+    </ul>
+    Here is an example of how to use this in adp:
+    <pre>
+    &lt;multiple name="categories">
+      &lt;h2>@categories.tree_name@&lt;/h2>
+      &lt;ul>
+      &lt;group column="tree_id">
+        &lt;if @categories.count@ gt 0 or @categories.child_sum@ gt 0>
+          &lt;li>@categories.pad;noquote@&lt;a href="@categories.category_id@">@categories.category_name@&lt;/a>
+          &lt;if @categories.count@ gt 0>(@categories.count@)&lt;/if>&lt;/li>
+        &lt;/if>
+      &lt;/group>
+    &lt;/multiple>
+    </pre>
+    
+
+    @parameter tree_id tree_id or container_id must be provided.
+    @parameter container_id returns all mapped trees for the given container_id
+    @parameter category_counts list of category_id and counts {catid count cat count ... }
+    @parameter datasource the name of the datasource to create.
+
+    @author Jeff Davis davis@xarg.net
+} {
+
+    if { [empty_string_p $tree_id] } {
+        if { [empty_string_p $container_id] } { 
+            error "must provide either tree_id or container_id"
+        }
+        set mapped_trees [category_tree::get_mapped_trees $container_id]
+    } else {
+        set mapped_trees [list [list $tree_id [category_tree::get_name $tree_id] $subtree_id $assign_single_p $require_category_p]]
+    }
+    if { ![empty_string_p $mapped_trees] 
+         && [llength $category_counts] > 1} { 
+        array set counts $category_counts
+    } else { 
+        array set counts [list]
+    }
+
+    template::multirow create $datasource tree_id tree_name category_id category_name level pad deprecated_p count child_sum
+    foreach mapped_tree $mapped_trees {
+        foreach {tree_id tree_name subtree_id assign_single_p require_category_p} $mapped_tree { break }
+        foreach category [category_tree::get_tree -subtree_id $subtree_id $tree_id] {
+            foreach {category_id category_name deprecated_p level} $category { break }
+            if { $level > 1 } {
+                set pad "[string repeat "&nbsp;" [expr {2 * $level - 4}]].."
+            } else { 
+                set pad {}
+            }
+            if {[info exists counts($category_id)]} { 
+                set count $counts($category_id)
+            } else { 
+                set count 0
+            }
+
+            template::multirow append $datasource $tree_id $tree_name $category_id $category_name $level $pad $deprecated_p $count 0
+        }
+    }
+
+    # Here we make the possibly incorrect assumption that the 
+    # trees are well formed and we walk the thing in reverse to find nodes
+    # with children categories that are mapped (so we can display a category 
+    # and all its parent categories if mapped.
+
+    # all this stuff here is to maintain a list which has the count of children seen at or above a 
+    # given level
+
+    set size [template::multirow size $datasource]
+    set rollup [list]
+    for {set i $size} {$i > 0} {incr i -1} {
+        set level [template::multirow get $datasource $i level]
+        set count [template::multirow get $datasource $i count]
+        set j 1
+        set nrollup [list]
+        foreach r $rollup {
+            if {$j < $level} {
+                lappend nrollup [expr {$r + $count}]
+            }
+            if { $j == $level } {
+                if { $r > 0 } {
+                    template::multirow set $datasource $i child_sum $r 
+                }
+                break
+            }
+
+            incr j
+        }
+        for {} {$j < $level} {incr j} { 
+            lappend nrollup $count
+        }
+        set rollup $nrollup
     }
 }
