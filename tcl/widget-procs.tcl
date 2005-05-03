@@ -23,10 +23,17 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
       	array set attributes $element(html)
       	array set ms_attributes $element(html)
     }
+
     array set attributes $tag_attributes
     array set ms_attributes $tag_attributes
+
+    if { ![info exists element(display_widget)] } {
+        set display_widget select
+    } else {
+        set display_widget $element(display_widget)
+    }
     set ms_attributes(multiple) {}
-    
+
     set all_single_p [info exists attributes(single)]
 
     # Determine the size automatically for a multiselect
@@ -116,10 +123,10 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
             if { $require_category_p == "f" } {
                 set one_tree [concat [list [list "" ""]] $one_tree]
             }
-	    append output [template::widget::menu $element(name) $one_tree $mapped_categories attributes $element(mode)]
+	    append output [template::widget::menu $element(name) $one_tree $mapped_categories attributes $element(mode) $display_widget]
 	} else {
 	    # multiselect widget (if user didn't override with single option)
-	    append output [template::widget::menu $element(name) $one_tree $mapped_categories ms_attributes $element(mode)]
+	    append output [template::widget::menu $element(name) $one_tree $mapped_categories ms_attributes $element(mode) $display_widget]
 	}
 	if { [llength $mapped_trees] > 1 } {
             append output "</div>"
