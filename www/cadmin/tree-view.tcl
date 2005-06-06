@@ -31,9 +31,9 @@ set tree_description $tree(description)
 
 set page_title "Category Tree \"$tree_name\""
 if {[info exists object_id]} {
-    set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base object-map {locale object_id}] "Category Management"] $tree_name]
+    set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base object-map {locale object_id}] "[_ categories.cadmin]"] $tree_name]
 } else {
-    set context_bar [list [list ".?[export_vars -no_empty {locale}]" "Category Management"] $tree_name]
+    set context_bar [list [list ".?[export_vars -no_empty {locale}]" "[_ categories.cadmin]"] $tree_name]
 }
 
 set can_write_p [permission::permission_p -object_id $tree_id -privilege category_tree_write]
