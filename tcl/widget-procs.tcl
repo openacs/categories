@@ -96,7 +96,7 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
 
     foreach mapped_tree $mapped_trees {
 	util_unlist $mapped_tree tree_id tree_name subtree_id assign_single_p require_category_p
-	set tree_name [ad_quotehtml $tree_name]
+	set tree_name [ad_quotehtml [lang::util::localize $tree_name]]
 	set one_tree [list]
 
         if { $require_category_p == "t" } { 
@@ -107,7 +107,7 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
 
 	foreach category [category_tree::get_tree -subtree_id $subtree_id $tree_id] {
 	    util_unlist $category category_id category_name deprecated_p level
-	    set category_name [ad_quotehtml $category_name]
+	    set category_name [ad_quotehtml [lang::util::localize $category_name]]
 	    if { $level>1 } {
 		set category_name "[string repeat "&nbsp;" [expr 2*$level -4]]..$category_name"
 	    }
