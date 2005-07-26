@@ -1,0 +1,80 @@
+ad_library {
+    Procedures to relate to categories trees (meta category) to one user_id
+
+    @author Miguel Marin (miguelmarin@viaro.net)
+    @author Viaro Networks www.viaro.net
+    @creation-date  2005-07-26
+}
+
+namespace eval category::relation {}
+
+
+ad_proc -public category::relation::add_meta_category {
+    -category_id_one:required
+    -category_id_two:required
+    {-user_id ""}
+} {
+    Creates a new meta category by creating a realtion between category_id_one 
+    and category_id_two. This relation is also related to the user_id.
+
+    @option user_id user that will be related to the meta category.
+    @option catefory_id_one one of the two category_id's to be related.
+    @option catefory_id_two the other category_id to be related.
+    @author Miguel Marin (miguelmarin@viaro.net)
+    @author Viaro Networks www.viaro.net
+} {
+    if { [empty_string_p $user_id] } {
+	set user_id [ad_conn user_id]
+    }
+ 
+    # First we check if the relation exist, if it does, we don't create a new one
+    set meta_category_id [db_string get_meta_relation_id { } -default "0"]
+    if { [string equal $meta_category_id "0"] } { 
+	db_exec_plsql add_meta_relation { }
+    }
+    
+    # Now we check if the user already has the meta category associated,
+    # if it does, we don't create a new one
+    set user_meta_category_id [db_string get_user_meta_relation_id { } -default "0"]
+    if { [string equal $user_meta_category_id "0"] } { 
+	db_exec_plsql add_user_meta_relation { }
+	set user_meta_category_id [db_string get_user_meta_relation_id { } -default "0"]
+	return $user_meta_category_id
+    } else {
+	return $user_meta_category_id
+    }
+}
+
+ad_proc -public category::relation::get_widget {
+    -tree_id_one:required
+    -tree_id_two:required
+} {
+    Returns two select menus of the categories on each tree to be used in ad_form. The name of the elements
+    are meta_category_one and meta_category_two.
+    
+
+    @option tree_id_one 
+    @option tree_id_two
+    @author Miguel Marin (miguelmarin@viaro.net)
+    @author Viaro Networks www.viaro.net
+} {
+    set label_one [category_tree::get_name $tree_id_one]
+    set label_two [category_tree::get_name $tree_id_two]
+    set element_one  "\{meta_category_one:integer(select) \{label $label_one\} \{options \{ "
+    set element_two  "\{meta_category_two:integer(select) \{label $label_two\} \{options \{ "
+   
+    foreach category_one [category_tree::get_tree $tree_id_one] {
+	set value_one [lindex $category_one 0]
+	set label_one [lindex $category_one 1]
+	append element_one "\{$label_one $value_one\} "
+    }
+    foreach category_two [category_tree::get_tree $tree_id_two] {
+	set value_two [lindex $category_two 0]
+	set label_two [lindex $category_two 1]
+	append element_two "\{$label_two $value_two\} "
+    }
+    append element_one "\} \} \}"
+    append element_two "\} \} \}"
+
+    return "$element_one  $element_two"
+}
