@@ -91,7 +91,16 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
     if { [empty_string_p $tree_id] } {
         set mapped_trees [category_tree::get_mapped_trees $package_id]
     } else {
-        set mapped_trees [list [list $tree_id [category_tree::get_name $tree_id] $subtree_id $assign_single_p $require_category_p]]
+	set mapped_trees {}
+	foreach one_tree $tree_id one_subtree $subtree_id assign_single $assign_single_p require_category $require_category_p {
+	    if {[empty_string_p $assign_single]} {
+		set assign_single f
+	    }
+	    if {[empty_string_p $require_category]} {
+		set require_category f
+	    }
+	    lappend mapped_trees [list $one_tree [category_tree::get_name $one_tree] $one_subtree $assign_single $require_category]
+	}
     }
 
     foreach mapped_tree $mapped_trees {
