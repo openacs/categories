@@ -28,18 +28,16 @@ ad_proc -public category::relation::add_meta_category {
     }
  
     # First we check if the relation exist, if it does, we don't create a new one
-    set meta_category_id [db_string get_meta_relation_id { } -default "0"]
-    if { [string equal $meta_category_id "0"] } { 
-	db_exec_plsql add_meta_relation { }
+    set meta_category_id [db_string get_meta_relation_id {} -default ""]
+    if { [empty_string_p $meta_category_id] } { 
+	set meta_category_id [db_exec_plsql add_meta_relation {}]
     }
     
     # Now we check if the user already has the meta category associated,
     # if it does, we don't create a new one
-    set user_meta_category_id [db_string get_user_meta_relation_id { } -default "0"]
-    if { [string equal $user_meta_category_id "0"] } { 
-	db_exec_plsql add_user_meta_relation { }
-	set user_meta_category_id [db_string get_user_meta_relation_id { } -default "0"]
-	return $user_meta_category_id
+    set user_meta_category_id [db_string get_user_meta_relation_id {} -default ""]
+    if { [empty_string_p $user_meta_category_id] } { 
+	return [db_exec_plsql add_user_meta_relation {}]
     } else {
 	return $user_meta_category_id
     }

@@ -45,8 +45,8 @@ begin
       ''meta_category'',		-- role_one
       1,				-- min_n_rels_one
       1,				-- max_n_rels_one
-      ''user'',				-- object_type_two
-      ''user'',				-- role_two
+      ''party'',			-- object_type_two
+      ''party'',			-- role_two
       1,				-- min_n_rels_two
       1					-- max_n_rels_two
   );

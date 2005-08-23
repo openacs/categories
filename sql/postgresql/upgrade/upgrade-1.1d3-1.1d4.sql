@@ -16,39 +16,39 @@ begin
 
   -- Creating two new rel_types
   PERFORM acs_rel_type__create_type (
-      ''meta_category_rel'',		-- rel_type 
+      ''meta_category_rel'',            -- rel_type 
       ''Meta Category Relation'',       -- pretty_name
       ''Meta Category Relation'',       -- pretty_plural
-      ''relationship'',			-- supertype
-      ''meta_categories'',		-- table_name
-      ''meta_category_id'',		-- id_column 
-      null,				-- package_name
-      ''category'',		        -- object_type_one 
-      ''category'',		        -- role_one
-      1,				-- min_n_rels_one
-      1,				-- max_n_rels_one 
-      ''category'',           		-- object_type_two
-      ''category'',		        -- role_two
-      1,				-- min_n_rels_two
-      1					-- max_n_rels_two
+      ''relationship'',                 -- supertype
+      ''meta_categories'',              -- table_name
+      ''meta_category_id'',             -- id_column 
+      null,                             -- package_name
+      ''category'',                     -- object_type_one 
+      ''category'',                     -- role_one
+      1,                                -- min_n_rels_one
+      1,                                -- max_n_rels_one 
+      ''category'',                     -- object_type_two
+      ''category'',                     -- role_two
+      1,                                -- min_n_rels_two
+      1                                 -- max_n_rels_two
   );
 
   PERFORM acs_rel_type__create_type (
-      ''user_meta_category_rel'',	-- rel_type
+      ''user_meta_category_rel'',       -- rel_type
       ''User Meta Category Relation'',  -- pretty_name
       ''User Meta Category Relation'',  -- pretty_plural
-      ''relationship'',			-- supertype
-      ''user_meta_categories'',		-- table_name
-      ''user_meta_category_id'',	-- id_column
-      null,				-- package_name
-      ''meta_category_rel'',		-- object_type_one
-      ''meta_category'',		-- role_one
-      1,				-- min_n_rels_one
-      1,				-- max_n_rels_one
-      ''user'',				-- object_type_two
-      ''user'',				-- role_two
-      1,				-- min_n_rels_two
-      1					-- max_n_rels_two
+      ''relationship'',                 -- supertype
+      ''user_meta_categories'',         -- table_name
+      ''user_meta_category_id'',        -- id_column
+      null,                             -- package_name
+      ''meta_category_rel'',            -- object_type_one
+      ''meta_category'',                -- role_one
+      1,                                -- min_n_rels_one
+      1,                                -- max_n_rels_one
+      ''party'',                        -- object_type_two
+      ''party'',                        -- role_two
+      1,                                -- min_n_rels_two
+      1                                 -- max_n_rels_two
   );
 
   return 0;
