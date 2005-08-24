@@ -18,8 +18,8 @@ ad_proc -public category::relation::add_meta_category {
     and category_id_two. This relation is also related to the user_id.
 
     @option user_id user that will be related to the meta category.
-    @option catefory_id_one one of the two category_id's to be related.
-    @option catefory_id_two the other category_id to be related.
+    @option category_id_one one of the two category_id's to be related.
+    @option category_id_two the other category_id to be related.
     @author Miguel Marin (miguelmarin@viaro.net)
     @author Viaro Networks www.viaro.net
 } {
@@ -75,4 +75,21 @@ ad_proc -public category::relation::get_widget {
     append element_two "\} \} \}"
 
     return "$element_one  $element_two"
+}
+
+ad_proc -public category::relation::get_meta_categories {
+    -rel_id:required
+} {
+    return cached list of category_one and category_two of the meta-category
+} {
+    return [util_memoize [list category::relation::get_meta_category_internal -rel_id $rel_id]]
+}
+
+ad_proc -private category::relation::get_meta_category_internal {
+    -rel_id:required
+} {
+    get list of category_one and category_two of the meta-category
+} {
+    db_1row get_categories {}
+    return [list $object_id_one $object_id_two]
 }

@@ -27,5 +27,14 @@
     </querytext>
 </fullquery>
 
+<fullquery name="category::relation::get_meta_category_internal.get_categories">
+    <querytext>
+ 	select object_id_one, object_id_two
+	from acs_rels
+	where rel_id = :rel_id
+	and rel_type = 'meta_category_rel'
+    </querytext>
+</fullquery>
+
 
 </queryset>
