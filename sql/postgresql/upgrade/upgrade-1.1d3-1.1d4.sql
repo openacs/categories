@@ -11,6 +11,7 @@ returns integer as '
 begin
 
   -- We create two roles to use them on the rel_type create
+  PERFORM acs_rel_type__create_role(''party'', ''Party'', ''Parties'');
   PERFORM acs_rel_type__create_role(''category'', ''Category'', ''Categories'');
   PERFORM acs_rel_type__create_role(''meta_category'', ''Meta Category'', ''Meta Categories'');
 
