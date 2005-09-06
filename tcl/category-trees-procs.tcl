@@ -594,3 +594,67 @@ ad_proc -public category_tree::get_multirow {
         set rollup $nrollup
     }
 }
+
+ad_proc -public category_tree::import {
+    {-name:required}
+    {-description ""}
+    {-categories:required}
+    {-locale ""}
+    {-user_id ""}
+    {-creation_ip ""}
+    {-context_id ""}
+} {
+    Insert a new category tree with categories.
+    Here is an example of how to use this in tcl:
+    <pre>
+    set tree_id [category_tree::import -name regions -description {regions and states} -categories {
+    1 europe
+    2 germany
+	2 {united kingdom}
+    2 france
+    1 asia
+    2 china
+	1 {north america}
+	2 {united states}
+    }]
+    </pre>
+
+    @option name tree name.
+    @option description tree description.
+    @option categories Tcl list of levels and category_names.
+    @option locale locale of the language. [ad_conn locale] used by default.
+    @option user_id user that adds the category tree. [ad_conn user_id] used by default.
+    @option creation_ip ip-address of the user that adds the category tree. [ad_conn peeraddr] used by default.
+    @option context_id context_id of the category tree. [ad_conn package_id] used by default.
+    @return tree_id
+    @author Jeff Davis <davis@xarg.net>
+    @author Timo Hentschel (timo@timohentschel.de)
+} {
+    if {[empty_string_p $locale]} {
+        set locale [ad_conn locale]
+    }
+    if {[empty_string_p $user_id]} {
+        set user_id [ad_conn user_id]
+    }
+    if {[empty_string_p $creation_ip]} {
+        set creation_ip [ad_conn peeraddr]
+    }
+    if {[empty_string_p $context_id]} {
+        set creation_ip [ad_conn package_id]
+    }
+
+    db_transaction {
+        set tree_id [category_tree::add -name $name -description $description -locale $locale -user_id $user_id -creation_ip $creation_ip -context_id $context_id]
+
+        set parent(0) {}
+        set parent(1) {}
+        set parent(2) {}
+        foreach {level category_name} $categories {
+            set parent([expr $level + 1]) [category::add -noflush -name $category_name -description $category_name -tree_id $tree_id -parent_id $parent($level) -locale $locale -user_id $user_id -creation_ip $creation_ip]
+        }
+
+        category_tree::flush_cache $tree_id
+    }
+
+    return $tree_id
+}
