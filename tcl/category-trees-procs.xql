@@ -24,6 +24,17 @@
       </querytext>
 </fullquery>
 
+<fullquery name="category_tree::get_id.get_category_tree_id">
+      <querytext>
+      
+		select tree_id
+		from category_tree_translations
+		where name = :name
+		and locale = :locale
+	    
+      </querytext>
+</fullquery>
+
  
 <fullquery name="category_tree::update.check_tree_existence">      
       <querytext>
