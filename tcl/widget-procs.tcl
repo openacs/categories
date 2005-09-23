@@ -133,7 +133,7 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
         }
     }
 
-    return $output
+    return [lang::util::localize $output]
 }
 
 ad_proc -public template::data::validate::category { value_ref message_ref } {
