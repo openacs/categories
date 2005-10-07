@@ -486,6 +486,9 @@ namespace eval category_tree {
 
 ad_proc -public category_tree::get_multirow {
     {-tree_id {}}
+    {-subtree_id {}}
+    {-assign_single_p f}
+    {-require_category_p f}
     {-container_id {}}
     {-category_counts {}}
     -datasource 
