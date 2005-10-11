@@ -39,11 +39,49 @@ ad_proc -public install::xml::action::load-categories { node } {
 ad_proc -public install::xml::action::map-category-tree { node } {
     Maps a category tree to a specified object.
 } {
-    set tree_id [apm_required_attribute_value $node tree-id]
-    set object_id [apm_required_attribute_value $node object-id]
+    set tree_id [apm_attribute_value -default "" $node tree-id]
+    set object_id [apm_attribute_value -default "" $node object-id]
 
-    set tree_id [install::xml::util::get_id $tree_id]
-    set object_id [install::xml::util::get_id $object_id]
+    set tree_ids [list]
+    if {[string equal $tree_id ""]} {
+        set trees_node [lindex [xml_node_get_children_by_name $node trees] 0]
+        set trees [xml_node_get_children $trees_node]
 
-    category_tree::map -tree_id $tree_id -object_id $object_id
+        foreach tree_node $trees {
+            lappend tree_ids [apm_invoke_install_proc \
+                -type object_id \
+                -node $tree_node]
+        }
+    } else {
+        lappend tree_ids [install::xml::util::get_id $tree_id]
+    }
+
+    set object_ids [list]
+    if {[string equal $object_id ""]} {
+        set objects_node [lindex [xml_node_get_children_by_name $node objects] 0]
+        set objects [xml_node_get_children $objects_node]
+
+        foreach object_node $objects {
+            lappend object_ids [apm_invoke_install_proc \
+                -type object_id \
+                -node $object_node]
+        }
+    } else {
+        lappend object_ids [install::xml::util::get_id $object_id]
+    }
+
+    foreach tree_id $tree_ids {
+        if {[string equal [acs_object_type $tree_id] category]} {
+            set subtree_category_id $tree_id
+            set tree_id [category::get_tree $subtree_category_id]
+        } else {
+            set subtree_category_id {}
+        }
+
+        foreach object_id $object_ids {
+            category_tree::map -tree_id $tree_id \
+                -object_id $object_id \
+                -subtree_category_id $subtree_category_id
+        }
+    }
 }
