@@ -279,7 +279,7 @@ namespace eval category_tree {
             set subtree_level 0
             foreach category $tree {
                 util_unlist $category category_id deprecated_p level
-                if {$level == $subtree_level} {
+                if {$level <= $subtree_level} {
                     set in_subtree_p 0
                 }
                 if {$in_subtree_p && $deprecated_p == "f"} {
