@@ -79,6 +79,8 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
 
     if { ![empty_string_p $object_id] && ![info exists element(submit)] } {
         set mapped_categories [category::get_mapped_categories $object_id]
+    } elseif { ![empty_string_p $element(values)] && ![info exists element(submit)] } {
+	set mapped_categories $element(values)
     } else {
 	set mapped_categories [ns_querygetall $element(id)]
 	# QUIRK: ns_querygetall returns a single-element list {{}} for no values
