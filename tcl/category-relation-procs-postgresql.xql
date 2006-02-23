@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <queryset>
 
+<rdbms><type>postgresql</type><version>7.1</version></rdbms>
+
 <fullquery name="category::relation::add_meta_category.add_meta_relation">
     <querytext>
 	 select acs_rel__new ( null, 'meta_category_rel', :category_id_one, :category_id_two, null, null, null )
