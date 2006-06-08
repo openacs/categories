@@ -37,7 +37,9 @@ begin
 		p_creation_date,   -- creation_date
 		p_creation_user,   -- creation_user
 		p_creation_ip,     -- creation_ip
-		p_context_id       -- context_id
+		p_context_id,      -- context_id
+                p_tree_name,       -- title
+                null               -- package_id
 	);
 
 	insert into category_trees
@@ -188,6 +190,7 @@ declare
 
     v_new_left_ind          integer;
     v_category_id	    integer;
+    source record;
 begin
 	select coalesce(max(right_ind),0) into v_new_left_ind 
 	from categories
@@ -210,7 +213,7 @@ begin
 	end loop;
 
 	-- correct parent_ids
-	update categories c
+	update categories
 	set parent_id = (select t.category_id
 			from categories s, categories t
 			where s.category_id = c.parent_id
