@@ -491,6 +491,7 @@ ad_proc -public category_tree::get_multirow {
     {-require_category_p f}
     {-container_id {}}
     {-category_counts {}}
+    -append:boolean
     -datasource 
 } {
     get a multirow datasource for a given tree or for all trees mapped to a 
@@ -543,7 +544,12 @@ ad_proc -public category_tree::get_multirow {
         array set counts [list]
     }
 
-    template::multirow create $datasource tree_id tree_name category_id category_name level pad deprecated_p count child_sum
+    # If we should append, then don't create the datasource if it already exists
+    if {$append_p && [template::multirow exists $datasource]} {
+	# do nothing
+    } else {
+	template::multirow create $datasource tree_id tree_name category_id category_name level pad deprecated_p count child_sum
+    }
     foreach mapped_tree $mapped_trees {
         foreach {tree_id tree_name subtree_id assign_single_p require_category_p} $mapped_tree { break }
         foreach category [category_tree::get_tree -subtree_id $subtree_id $tree_id] {
