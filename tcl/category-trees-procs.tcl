@@ -486,6 +486,9 @@ namespace eval category_tree {
 
 ad_proc -public category_tree::get_multirow {
     {-tree_id {}}
+    {-subtree_id {}}
+    {-assign_single_p f}
+    {-require_category_p f}
     {-container_id {}}
     {-category_counts {}}
     -append:boolean
@@ -547,7 +550,6 @@ ad_proc -public category_tree::get_multirow {
     } else {
 	template::multirow create $datasource tree_id tree_name category_id category_name level pad deprecated_p count child_sum
     }
-
     foreach mapped_tree $mapped_trees {
         foreach {tree_id tree_name subtree_id assign_single_p require_category_p} $mapped_tree { break }
         foreach category [category_tree::get_tree -subtree_id $subtree_id $tree_id] {
@@ -665,3 +667,4 @@ ad_proc -public category_tree::import {
 
     return $tree_id
 }
+

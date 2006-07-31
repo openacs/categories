@@ -109,3 +109,12 @@ select acs_sc_operation__delete(acs_sc_operation__get_id('AcsObject','PageUrl'))
 -- this should be being handled at the tcl callback level but isn't?
 select acs_sc_impl__delete('AcsObject','category_idhandler');
 select acs_sc_impl__delete('AcsObject','category_tree_idhandler');
+
+
+-- from categories-relation
+select acs_rel_type__drop_type('meta_category_rel','t');
+select acs_rel_type__drop_type('user_meta_category_rel','t');
+select acs_rel_type__drop_role('meta-category');
+select acs_rel_type__drop_role('category');
+
+

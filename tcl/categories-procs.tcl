@@ -291,10 +291,32 @@ ad_proc -public category::get_name {
         # exact match: found name for this locale
         return $name
     }
+
+    # try default locale for this language
+    set language [lindex [split $locale "_"] 0]
+    set locale [lang::util::default_locale_from_lang $language]
+    if { ![catch { set name $cat_lang($locale) }] } {
+        # exact match: found name for this default language locale
+        return $name
+    }
+    
+    # Trying system locale for package (or site-wide)
+    set locale [lang::system::locale]
+    if { ![catch { set name $cat_lang($locale) }] } {
+        return $name
+    }
+
+    # Trying site-wide system locale
+    set locale [lang::system::locale -site_wide]
+    if { ![catch { set name $cat_lang($locale) }] } {
+        return $name
+    }
+
+    # Resort to en_US
     if { ![catch { set name $cat_lang([ad_parameter DefaultLocale acs-lang "en_US"]) }] } {
-        # default locale found
         return $name
     } 
+
     # tried default locale, but nothing found
     return {}
 }

@@ -213,7 +213,7 @@ begin
 	end loop;
 
 	-- correct parent_ids
-	update categories c
+	update categories
 	set parent_id = (select t.category_id
 			from categories s, categories t
 			where s.category_id = c.parent_id
