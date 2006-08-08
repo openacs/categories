@@ -619,12 +619,12 @@ ad_proc -public category_tree::import {
     set tree_id [category_tree::import -name regions -description {regions and states} -categories {
     1 europe
     2 germany
-    2 {united kingdom}
+	2 {united kingdom}
     2 france
     1 asia
     2 china
-    1 {north america}
-    2 {united states}
+	1 {north america}
+	2 {united states}
     }]
     </pre>
 
@@ -653,18 +653,17 @@ ad_proc -public category_tree::import {
     }
 
     db_transaction {
-	set tree_id [category_tree::add -name $name -description $description -locale $locale -user_id $user_id -creation_ip $creation_ip -context_id $context_id]
+        set tree_id [category_tree::add -name $name -description $description -locale $locale -user_id $user_id -creation_ip $creation_ip -context_id $context_id]
 
-	set parent(0) {}
-	set parent(1) {}
-	set parent(2) {}
-	foreach {level category_name} $categories {
-	    set parent([expr $level + 1]) [category::add -noflush -name $category_name -description $category_name -tree_id $tree_id -parent_id $parent($level) -locale $locale -user_id $user_id -creation_ip $creation_ip]
-	}
+        set parent(0) {}
+        set parent(1) {}
+        set parent(2) {}
+        foreach {level category_name} $categories {
+            set parent([expr $level + 1]) [category::add -noflush -name $category_name -description $category_name -tree_id $tree_id -parent_id $parent($level) -locale $locale -user_id $user_id -creation_ip $creation_ip]
+        }
 
-	category_tree::flush_cache $tree_id
+        category_tree::flush_cache $tree_id
     }
 
     return $tree_id
 }
-
