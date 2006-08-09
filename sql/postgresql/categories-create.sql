@@ -453,4 +453,3 @@ comment on column category_search_results.similarity is '
 
 \i categories-init.sql
 
-\i categories-relation.sql
