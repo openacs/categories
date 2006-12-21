@@ -197,10 +197,11 @@ namespace eval category_tree {
         category::reset_translation_cache
     }
 
-    ad_proc -public get_mapped_trees { object_id } {
+    ad_proc -public get_mapped_trees { object_id {locale ""}} {
         Get the category trees mapped to an object.
 
         @param object_id object to get the mapped category trees.
+        @param locale language in which to get the name. [ad_conn locale] used by default.
         @return tcl list of lists: tree_id tree_name subtree_category_id
                     assign_single_p require_category_p
         @author Timo Hentschel (timo@timohentschel.de)
@@ -208,16 +209,17 @@ namespace eval category_tree {
         set result [list]
 
         db_foreach get_mapped_trees "" {
-            lappend result [list $tree_id [get_name $tree_id] $subtree_category_id $assign_single_p $require_category_p]
+            lappend result [list $tree_id [get_name $tree_id $locale] $subtree_category_id $assign_single_p $require_category_p]
         }
 
         return $result
     }
 
-    ad_proc -public get_mapped_trees_from_object_list { object_id_list } {
+    ad_proc -public get_mapped_trees_from_object_list { object_id_list {locale ""}} {
         Get the category trees mapped to a list of objects.
         
         @param object_id_list list of object to get the mapped category trees.
+        @param locale language in which to get the name. [ad_conn locale] used by default.
         @return tcl list of lists: tree_id tree_name subtree_category_id
                     assign_single_p require_category_p
         @author Jade Rubick (jader@bread.com)
@@ -225,16 +227,17 @@ namespace eval category_tree {
         set result [list]
 
         db_foreach get_mapped_trees_from_object_list "" {
-            lappend result [list $tree_id [get_name $tree_id] $subtree_category_id $assign_single_p $require_category_p]
+            lappend result [list $tree_id [get_name $tree_id $locale] $subtree_category_id $assign_single_p $require_category_p]
         }
 
         return $result
     }
 
-    ad_proc -public get_mapped_trees_from_object_list { object_id_list } {
+    ad_proc -public get_mapped_trees_from_object_list { object_id_list {locale ""}} {
         Get the category trees mapped to a list of objects.
 
         @param object_id_list list of object to get the mapped category trees.
+        @param locale language in which to get the name. [ad_conn locale] used by default.
         @return tcl list of lists: tree_id tree_name subtree_category_id
                 assign_single_p require_category_p
         @author Jade Rubick (jader@bread.com)
@@ -242,7 +245,7 @@ namespace eval category_tree {
         set result [list]
 
         db_foreach get_mapped_trees_from_object_list "" {
-            lappend result [list $tree_id [get_name $tree_id] $subtree_category_id $assign_single_p $require_category_p]
+            lappend result [list $tree_id [get_name $tree_id $locale] $subtree_category_id $assign_single_p $require_category_p]
         }
 
         return $result
@@ -455,7 +458,7 @@ namespace eval category_tree {
         @param locale language in which to get the name. [ad_conn locale] used by default.
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        return [lindex [get_translation $tree_id] 0]
+        return [lindex [get_translation $tree_id $locale] 0]
     }
 
     ad_proc pageurl { object_id } {
