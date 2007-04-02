@@ -17,7 +17,7 @@
         <maturity>0</maturity>
 
         <provides url="categories" version="1.1"/>
-        <requires url="acs-kernel" version="5.2.0d2"/>
+        <requires url="acs-kernel" version="5.3.1a1"/>
 
         <callbacks>
             <callback type="after-install"  proc="category::after_install"/>
