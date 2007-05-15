@@ -83,7 +83,7 @@ template::list::create \
             layout list
             template {
                 <div style="padding: 0 0 1em 0;"><listelement name="object_title"> \[<listelement name="pretty_name">\] - <listelement name="new"><br>
-                <span style="color: #ccc;">by <listelement name="name">, <listelement name="last_modified"></span></div>
+                <span style="color: \#ccc;">by <listelement name="name">, <listelement name="last_modified"></span></div>
             }
         } 
     } \
@@ -150,4 +150,3 @@ db_multirow -extend {url_one user_url new} content content "
            set url_one $errorCode
        }
    }
-
