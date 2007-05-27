@@ -217,6 +217,21 @@ ad_proc -public category::get_mapped_categories {
 
     return $result
 }
+ad_proc -public category::get_mapped_categories_multirow { 
+    {-locale ""}
+    {-multirow mapped_categories}
+    object_id 
+} {
+    Returns multirow with: tree_id, tree_name, category_id, category_name 
+
+    @param object_id object of which we want to know the mapped categories.
+    @return multirow with tree and category information
+    @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
+} {
+    if { $locale == ""} {set locale [ad_conn locale]}
+    upvar $multirow mapped_categories
+    db_multirow mapped_categories select {}
+}
 
 ad_proc -public category::get_id { 
     name
@@ -339,7 +354,38 @@ ad_proc -public category::get_names {
     }
     return $result
 }
+ad_proc -public category::get_children {
+    -category_id:required
+} {
+    Returns the category ids of the direct children of the given category
 
+    @param category_id  category_id 
+    @return list of category ids of the children of the supplied category_id
+    @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
+} {
+    set result [list]
+    set child_categories [db_list get_children_ids ""]
+    foreach category_id $child_categories {
+        lappend result $category_id
+    }
+    if {$result eq ""} {set result 0} 
+    return $result
+}                
+
+ad_proc -public category::get_parent {
+    -category_id:required
+} {
+    Returns the category id of the parent category
+
+    @param category_id  category_id 
+    @return category id of the parent category
+    @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
+} {
+    set result [db_list get_parent_id ""]
+    if {$result eq "{}"} {set result 0}
+    return $result
+}                
+    
 ad_proc -public category::get_tree {
     category_id
 } {

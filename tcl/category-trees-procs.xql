@@ -58,7 +58,15 @@
 	
       </querytext>
 </fullquery>
-
+<fullquery name="category_tree::get_trees.get_trees">      
+      <querytext>
+      
+	    select distinct tree_id
+	    from category_object_map_tree
+	    where object_id = :object_id
+	
+      </querytext>
+</fullquery>
 
 <fullquery name="category_tree::get_mapped_trees_from_object_list.get_mapped_trees_from_object_list">      
       <querytext>

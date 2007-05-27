@@ -214,6 +214,21 @@ namespace eval category_tree {
 
         return $result
     }
+    ad_proc -public get_trees { object_id } {
+        Get the category trees mapped to an object.
+
+        @param object_id object to get the mapped category trees.
+        @return tcl list of tree_ids
+        @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
+    } {
+        set result [list]
+
+        db_foreach get_trees "" {
+            lappend result $tree_id
+        }
+
+        return $result
+    }
 
     ad_proc -public get_mapped_trees_from_object_list { object_id_list {locale ""}} {
         Get the category trees mapped to a list of objects.
