@@ -120,6 +120,14 @@
         </querytext>
 </fullquery>
 
+<fullquery name="category::get_objects.get_objects">
+        <querytext>
+                SELECT com.object_id
+                FROM category_object_map com $join_clause
+                WHERE com.category_id = :category_id $where_clause
+        </querytext>
+</fullquery>
+
 <fullquery name="category::reset_translation_cache.reset_translation_cache">      
       <querytext>
       

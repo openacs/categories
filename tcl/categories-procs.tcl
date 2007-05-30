@@ -422,6 +422,34 @@ ad_proc -public category::get_data {
     return [list $category_id [category::get_name $category_id $locale] $tree_id [category_tree::get_name $tree_id $locale]]
 }
 
+ad_proc -public category::get_objects { 
+    -category_id
+    {-object_type ""}
+    {-content_type ""}
+    {-include_children:boolean}
+} {
+    Returns a list of objects which are mapped to this category_id
+    
+    @param category_id CategoryID of the category we want to get the objects for
+    @param object_type Limit the search for objects of this object type
+    @param content_type Limit the search for objects of this content_type
+    @param include_children Include child categories' objects as well. Not yet implemented
+    
+    @author malte ()
+    @creation-date Wed May 30 06:28:25 CEST 2007
+} {
+    set join_clause ""
+    set where_clause ""
+    if {$content_type ne ""} {
+        set join_clause ", cr_items i"
+        set where_clause "and i.item_id = com.object_id and i.content_type = :content_type"
+    } elseif {$object_type ne ""} {
+        set join_clause ", acs_objects o"
+        set where_clause "and o.object_id = com.object_id and o.object_type = :object_type"        
+    }
+    return [db_list get_objects {}]
+}
+
 ad_proc -public category::get_object_context { object_id } {
     Returns the object name and url to be used in a context bar.
 
