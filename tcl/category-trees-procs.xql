@@ -35,6 +35,16 @@
       </querytext>
 </fullquery>
 
+<fullquery name="category_tree::get_id_by_object_title.get_tree_id">
+      <querytext>
+
+                select object_id
+                from acs_objects
+                where title = :title
+                and object_type = 'category_tree'
+
+      </querytext>
+</fullquery>
  
 <fullquery name="category_tree::update.check_tree_existence">      
       <querytext>

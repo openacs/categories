@@ -230,6 +230,22 @@ namespace eval category_tree {
         return $result
     }
 
+    ad_proc -public get_id_by_object_title {
+    	{-title}
+    } {
+        Gets the id of a category_tree given an object title (object_type=category).
+        This is highly useful as the category_tree object title will not change if you change the
+        name (label) of the category_tree, so you can access the category_tree even if the label has changed.
+        Why would you want this? E.g. if you have the category widget and want to get only one specific tree
+        displayed and not all of them.
+
+        @param title object title of the category to retrieve
+        @return the category_tree_id or empty string it no category was found
+    	@author Malte Sussdorff (malte.sussdorff@cognovis.de)
+    } {
+    	return [db_string get_tree_id {} -default ""]
+    }
+    
     ad_proc -public get_mapped_trees_from_object_list { object_id_list {locale ""}} {
         Get the category trees mapped to a list of objects.
         

@@ -138,7 +138,6 @@
 
       </querytext>
 </fullquery>
-
 <fullquery name="category::reset_translation_cache.reset_translation_cache">      
       <querytext>
       
