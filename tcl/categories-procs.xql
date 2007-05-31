@@ -128,6 +128,17 @@
         </querytext>
 </fullquery>
 
+<fullquery name="category::get_id_by_object_title.get_category_id">
+      <querytext>
+
+                select object_id
+                from acs_objects
+                where title = :title
+                and object_type = 'category'
+
+      </querytext>
+</fullquery>
+
 <fullquery name="category::reset_translation_cache.reset_translation_cache">      
       <querytext>
       

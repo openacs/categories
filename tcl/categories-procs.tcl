@@ -450,6 +450,20 @@ ad_proc -public category::get_objects {
     return [db_list get_objects {}]
 }
 
+ad_proc -public category::get_id_by_object_title {
+	title
+} {
+    Gets the id of a category given an object title (object_type=category).
+    This is highly useful as the category object title will not change if you change the
+    name (label) of the category, so you can access the category even if the label has changed
+    
+    @param title object title of the category to retrieve
+    @return the category id or empty string it no category was found
+	@author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
+} {
+	return [db_string get_category_id {} -default ""]
+}
+
 ad_proc -public category::get_object_context { object_id } {
     Returns the object name and url to be used in a context bar.
 
