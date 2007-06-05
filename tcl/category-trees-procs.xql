@@ -11,7 +11,17 @@
       </querytext>
 </fullquery>
 
- 
+<fullquery name="category_tree::get_categories.get_categories">
+       <querytext>
+            select c.category_id as category_id from categories c, category_translations ct
+            where parent_id is null
+		and tree_id = :tree_id
+		and c.category_id = ct.category_id
+		and locale = :locale
+            order by name
+       </querytext>
+</fullquery>
+         
 <fullquery name="category_tree::edit_mapping.edit_mapping">
       <querytext>
       

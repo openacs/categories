@@ -26,6 +26,21 @@ namespace eval category_tree {
         return [array get tree]
     }
 
+    ad_proc -public get_categories {
+	   {-tree_id:required}
+    } {
+           returns the main categories of a given tree
+    } {
+	   set locale [ad_conn locale]
+           set result [list]
+           set categories [db_list get_categories ""]
+           foreach category_id $categories {
+           	lappend result $category_id
+           }
+           return $result
+           
+    }
+                                                                                
     ad_proc -public map {
         -tree_id:required
         -object_id:required

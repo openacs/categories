@@ -372,6 +372,14 @@ ad_proc -public category::get_children {
     return $result
 }                
 
+ad_proc -public category::count_children {
+    {-category_id:required}
+} {
+    counts all direct sub categories
+} {
+    return [db_string select {}]
+}
+                                             
 ad_proc -public category::get_parent {
     -category_id:required
 } {
