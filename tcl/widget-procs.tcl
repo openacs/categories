@@ -48,6 +48,7 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
     set subtree_id {}
     set assign_single_p f
     set require_category_p f
+    set widget {}
 
     if { [exists_and_not_null element(value)] && [llength $element(value)] == 2 } {
         # Legacy method for passing parameters
@@ -72,6 +73,9 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
         if { [exists_and_not_null element(category_require_category_p)] } {
             set require_category_p $element(category_require_category_p)
         }
+        if { [exists_and_not_null element(category_require_category_p)] } {
+            set widget $element(category_widget)
+        }
     }
     if { [empty_string_p $package_id] } {
 	set package_id [ad_conn package_id]
@@ -94,19 +98,19 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
         set mapped_trees [category_tree::get_mapped_trees $package_id]
     } else {
         set mapped_trees {}
-        foreach one_tree $tree_id one_subtree $subtree_id assign_single $assign_single_p require_category $require_category_p {
+        foreach one_tree $tree_id one_subtree $subtree_id assign_single $assign_single_p require_category $require_category_p widget $widget {
             if {[empty_string_p $assign_single]} {
                 set assign_single f
             }
             if {[empty_string_p $require_category]} {
                 set require_category f
             }
-            lappend mapped_trees [list $one_tree [category_tree::get_name $one_tree] $one_subtree $assign_single $require_category]
+            lappend mapped_trees [list $one_tree [category_tree::get_name $one_tree] $one_subtree $assign_single $require_category $widget]
         }
     }
 
     foreach mapped_tree $mapped_trees {
-	util_unlist $mapped_tree tree_id tree_name subtree_id assign_single_p require_category_p
+	util_unlist $mapped_tree tree_id tree_name subtree_id assign_single_p require_category_p widget
 	set tree_name [ad_quotehtml [lang::util::localize $tree_name]]
 	set one_tree [list]
 
@@ -134,10 +138,24 @@ ad_proc -public template::widget::category { element_reference tag_attributes } 
             if { $require_category_p == "f" } {
                 set one_tree [concat [list [list "" ""]] $one_tree]
             }
-	    append output [template::widget::menu $element(name) $one_tree $mapped_categories attributes $element(mode) $display_widget]
+	    # we default to the select widget unless the valid option of radio was provided
+	    ns_log notice "template::widget::menu $element(name) $one_tree $mapped_categories [array get attributes] $element(mode) $widget $display_widget [info exists element(display_widget)]"
+
+	    if { $widget eq "radio" && ![info exists element(display_widget)] } {
+		# checkbox was specified at mapping and the display widget was not explicitly defined code
+		append output [template::widget::menu $element(name) $one_tree $mapped_categories attributes $element(mode) radio]
+	    } else {
+		append output [template::widget::menu $element(name) $one_tree $mapped_categories attributes $element(mode) $display_widget]
+	    }
 	} else {
-	    # multiselect widget (if user didn't override with single option)
-	    append output [template::widget::menu $element(name) $one_tree $mapped_categories ms_attributes $element(mode) $display_widget]
+	    ns_log notice "template::widget::menu $element(name) $one_tree $mapped_categories [array get ms_attributes] $element(mode) $widget $display_widget [info exists element(display_widget)]"
+	    # we default to the multiselect widget (if user didn't override with single option) or select checkbox
+	    if { $widget eq "checkbox" && ![info exists element(display_widget)] } {
+		# checkbox was specified at mapping and the display widget was not explicitly defined in code
+		append output [template::widget::menu $element(name) $one_tree $mapped_categories ms_attributes $element(mode) checkbox]
+	    } else {
+		append output [template::widget::menu $element(name) $one_tree $mapped_categories ms_attributes $element(mode) $display_widget]
+	    }
 	}
 	if { [llength $mapped_trees] > 1 } {
             append output "</div>"

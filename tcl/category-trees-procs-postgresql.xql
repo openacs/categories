@@ -10,7 +10,9 @@
 			      :tree_id,
 			      :subtree_category_id,
 			      :assign_single_p,
-			      :require_category_p)
+			      :require_category_p,
+			      :widget
+			      )
       </querytext>
 </fullquery>
 

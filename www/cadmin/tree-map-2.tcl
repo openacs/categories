@@ -40,20 +40,40 @@ if {[empty_string_p $category_id]} {
 }
 
 ad_form -name tree_map_form -action tree-map-2 -export { tree_id category_id locale object_id edit_p } -form {
-    {assign_single_p:text(radio) {label "Let users assign multiple categories?"} {options {{"Yes" f} {"No" t}}}}
+    {widget:text(radio) {label "Widget"} {options {
+	{"Select" select}
+	{"Multiselect - let users assign multiple categories" multiselect}
+	{"Radio" radio}
+	{"Checkbox - let users assign multiple categories" checkbox}
+    }}}
     {require_category_p:text(radio) {label "Require users to assign at least one category?"} {options {{"Yes" t} {"No" f}}}}
 } -on_request {
     if {$edit_p} {
 	db_1row get_mapping_parameters ""
+	if { $widget eq "" } {
+	    # this is pre-widget selection and we default to the same
+	    # look and feel as before
+	    if { $assign_single_p } {
+		set widget "select"
+	    } else {
+		set widget "multiselect"
+	    }
+	}
     } else {
-	set assign_single_p f
+	# we default to the default before widgets could be selected
+	set widget multiselect
 	set require_category_p f
     }
 } -on_submit {
-    if {$edit_p} {
-	category_tree::edit_mapping -tree_id $tree_id -object_id $object_id -assign_single_p $assign_single_p -require_category_p $require_category_p
+    if { $widget eq "select" || $widget eq "radio" } {
+	set assign_single_p t
     } else {
-	category_tree::map -tree_id $tree_id -subtree_category_id $category_id -object_id $object_id -assign_single_p $assign_single_p -require_category_p $require_category_p
+	set assign_single_p f
+    }
+    if {$edit_p} {
+	category_tree::edit_mapping -tree_id $tree_id -object_id $object_id -assign_single_p $assign_single_p -require_category_p $require_category_p -widget $widget
+    } else {
+	category_tree::map -tree_id $tree_id -subtree_category_id $category_id -object_id $object_id -assign_single_p $assign_single_p -require_category_p $require_category_p -widget $widget
     }
 } -after_submit {
     ad_returnredirect [export_vars -no_empty -base object-map {locale object_id}]

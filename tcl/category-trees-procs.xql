@@ -17,7 +17,8 @@
       
 	    update category_tree_map
 	    set assign_single_p = :assign_single_p,
-	        require_category_p = :require_category_p
+                require_category_p = :require_category_p,
+                widget = :widget
 	    where tree_id = :tree_id
 	    and object_id = :object_id
 	
@@ -52,7 +53,7 @@
       <querytext>
       
 	    select tree_id, subtree_category_id, assign_single_p,
-	           require_category_p
+	           require_category_p, widget
 	    from category_tree_map
 	    where object_id = :object_id
 	
@@ -64,7 +65,7 @@
       <querytext>
       
             select tree_id, subtree_category_id, assign_single_p,
-                   require_category_p
+                   require_category_p, widget
             from category_tree_map
             where object_id in ([join $object_id_list ", "])
         
