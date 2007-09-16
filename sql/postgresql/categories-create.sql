@@ -172,6 +172,7 @@ create table category_tree_map (
 	require_category_p	char(1) default 'f'
 				constraint cat_tree_map_categ_p_ck
 				check (require_category_p in ('t','f')),
+        widget                  varchar(20),
 	primary key (object_id, tree_id)
 );
 
