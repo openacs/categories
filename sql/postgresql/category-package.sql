@@ -326,11 +326,13 @@ begin
 end;
 ' language 'plpgsql';
 
+
 create or replace function category__name (
     integer   -- category_id
 )
 returns integer as '
 declare
+    p_category_id       alias for $1;
     v_name      varchar;
 begin
 	select name into v_name
