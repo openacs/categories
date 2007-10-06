@@ -4,7 +4,7 @@ ad_library {
     @author Branimir Dolicki (bdolicki@branimir.com)
 
     @creation-date 06 February 2004
-    @cvs-id $Id:
+    @cvs-id $Id$
 }
 
 namespace eval category::ad_form {}

@@ -57,7 +57,7 @@ lappend elements last_modified {
 #    html {align right}
 #}
 
-if {[empty_string_p $user_id]} {
+if {$user_id eq ""} {
     lappend elements name {
         label {Created by}
         display_template {<a href="@content.user_url@" title="Member page">@content.name@</a>}
@@ -108,15 +108,15 @@ set now [clock_to_ansi [clock seconds]]
 
 set restrict {}
 
-if {![empty_string_p $user_id]} {
+if {$user_id ne ""} {
     append restrict "\nand o.creation_user = :user_id"
 }
 
-if {![empty_string_p $category]} {
+if {$category ne ""} {
     append restrict "\nand exists (select 1 from category_object_map c where c.object_id = o.object_id and c.category_id = :category)"
 }
 
-if {![empty_string_p $packages]} {
+if {$packages ne ""} {
     append restrict "\nand o.package_id in ([join $packages ,])"
 }
 
