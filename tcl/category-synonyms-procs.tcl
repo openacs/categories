@@ -5,7 +5,7 @@ ad_library {
     @author Timo Hentschel (timo@timohentschel.de)
 
     @creation-date 8 January 2004
-    @cvs-id $Id:
+    @cvs-id $Id$
 }
 
 
