@@ -11,7 +11,17 @@
       </querytext>
 </fullquery>
 
- 
+<fullquery name="category_tree::get_categories.get_categories">
+       <querytext>
+            select c.category_id as category_id from categories c, category_translations ct
+            where parent_id is null
+		and tree_id = :tree_id
+		and c.category_id = ct.category_id
+		and locale = :locale
+            order by name
+       </querytext>
+</fullquery>
+         
 <fullquery name="category_tree::edit_mapping.edit_mapping">
       <querytext>
       
@@ -36,6 +46,16 @@
       </querytext>
 </fullquery>
 
+<fullquery name="category_tree::get_id_by_object_title.get_tree_id">
+      <querytext>
+
+                select object_id
+                from acs_objects
+                where title = :title
+                and object_type = 'category_tree'
+
+      </querytext>
+</fullquery>
  
 <fullquery name="category_tree::update.check_tree_existence">      
       <querytext>
@@ -59,7 +79,15 @@
 	
       </querytext>
 </fullquery>
-
+<fullquery name="category_tree::get_trees.get_trees">      
+      <querytext>
+      
+	    select distinct tree_id
+	    from category_object_map_tree
+	    where object_id = :object_id
+	
+      </querytext>
+</fullquery>
 
 <fullquery name="category_tree::get_mapped_trees_from_object_list.get_mapped_trees_from_object_list">      
       <querytext>

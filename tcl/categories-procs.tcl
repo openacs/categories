@@ -217,6 +217,21 @@ ad_proc -public category::get_mapped_categories {
 
     return $result
 }
+ad_proc -public category::get_mapped_categories_multirow { 
+    {-locale ""}
+    {-multirow mapped_categories}
+    object_id 
+} {
+    Returns multirow with: tree_id, tree_name, category_id, category_name 
+
+    @param object_id object of which we want to know the mapped categories.
+    @return multirow with tree and category information
+    @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
+} {
+    if { $locale == ""} {set locale [ad_conn locale]}
+    upvar $multirow mapped_categories
+    db_multirow mapped_categories select {}
+}
 
 ad_proc -public category::get_id { 
     name
@@ -339,7 +354,46 @@ ad_proc -public category::get_names {
     }
     return $result
 }
+ad_proc -public category::get_children {
+    -category_id:required
+} {
+    Returns the category ids of the direct children of the given category
 
+    @param category_id  category_id 
+    @return list of category ids of the children of the supplied category_id
+    @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
+} {
+    set result [list]
+    set child_categories [db_list get_children_ids ""]
+    foreach category_id $child_categories {
+        lappend result $category_id
+    }
+    if {$result eq ""} {set result 0} 
+    return $result
+}                
+
+ad_proc -public category::count_children {
+    {-category_id:required}
+} {
+    counts all direct sub categories
+} {
+    return [db_string select {}]
+}
+                                             
+ad_proc -public category::get_parent {
+    -category_id:required
+} {
+    Returns the category id of the parent category
+
+    @param category_id  category_id 
+    @return category id of the parent category
+    @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
+} {
+    set result [db_list get_parent_id ""]
+    if {$result eq "{}"} {set result 0}
+    return $result
+}                
+    
 ad_proc -public category::get_tree {
     category_id
 } {
@@ -374,6 +428,48 @@ ad_proc -public category::get_data {
 	return
     }
     return [list $category_id [category::get_name $category_id $locale] $tree_id [category_tree::get_name $tree_id $locale]]
+}
+
+ad_proc -public category::get_objects { 
+    -category_id
+    {-object_type ""}
+    {-content_type ""}
+    {-include_children:boolean}
+} {
+    Returns a list of objects which are mapped to this category_id
+    
+    @param category_id CategoryID of the category we want to get the objects for
+    @param object_type Limit the search for objects of this object type
+    @param content_type Limit the search for objects of this content_type
+    @param include_children Include child categories' objects as well. Not yet implemented
+    
+    @author malte ()
+    @creation-date Wed May 30 06:28:25 CEST 2007
+} {
+    set join_clause ""
+    set where_clause ""
+    if {$content_type ne ""} {
+        set join_clause ", cr_items i"
+        set where_clause "and i.item_id = com.object_id and i.content_type = :content_type"
+    } elseif {$object_type ne ""} {
+        set join_clause ", acs_objects o"
+        set where_clause "and o.object_id = com.object_id and o.object_type = :object_type"        
+    }
+    return [db_list get_objects {}]
+}
+
+ad_proc -public category::get_id_by_object_title {
+	title
+} {
+    Gets the id of a category given an object title (object_type=category).
+    This is highly useful as the category object title will not change if you change the
+    name (label) of the category, so you can access the category even if the label has changed
+    
+    @param title object title of the category to retrieve
+    @return the category id or empty string it no category was found
+	@author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
+} {
+	return [db_string get_category_id {} -default ""]
 }
 
 ad_proc -public category::get_object_context { object_id } {

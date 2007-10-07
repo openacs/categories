@@ -14,9 +14,24 @@ namespace eval template::data {}
 namespace eval template::data::transform {}
 namespace eval template::data::validate {}
 
-ad_proc -public template::widget::category { element_reference tag_attributes } {
-    # author: Timo Hentschel (timo@timohentschel.de)
-
+ad_proc -public template::widget::category { 
+    element_reference 
+    tag_attributes 
+} {
+    Display the category widget. This has a multitude of options:
+    <ul>
+    <li>value: Values should be a list of two items: the object_id being viewed and the object_id which the trees are mapped to. 
+    This will get the mapped trees (if no value provided defaults to package_id) and the mapped categories for the object_id. If you
+    do not provide a value, the following options are used:
+    <li>category_application_id></li>
+    <li>category_object_id</li>
+    <li>category_tree_id</li>
+    <li>category_subtree_id</li>
+    <li>category_assign_single_p</li>
+    <li>category_require_category_p</li>
+    </ul>
+    @author: Timo Hentschel (timo@timohentschel.de)
+} {
     upvar $element_reference element
 
     if { [info exists element(html)] } {
