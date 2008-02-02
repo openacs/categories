@@ -13,8 +13,20 @@ if {![exists_and_not_null locale]} {
 
 set languages [lang::system::get_locale_options]
 
-ad_form -name locale_form -action [ad_conn url] -export { tree_id category_id } -form {
-    {locale:text(select) {label "Language"} {value $locale} {options $languages}}
+set vars_to_export_list {tree_id category_id}
+
+set set_id [ad_conn form]
+set varname_list [ad_ns_set_keys -exclude {locale form:mode form:id __confirmed_p __refreshing_p formbutton:ok} $set_id]
+
+foreach name $varname_list {
+    set $name [ns_set get $set_id $name]
+    lappend vars_to_export_list $name
 }
 
-set form_vars [export_ns_set_vars form {locale form:mode form:id __confirmed_p __refreshing_p formbutton:ok} [ad_conn form]]
+ad_form -name locale_form -action [ad_conn url] -export $vars_to_export_list -html {class "inline-form"} -form {
+    {locale:text(select),optional 
+        {label "Language"} 
+        {value $locale} 
+        {options $languages}
+    }
+}
