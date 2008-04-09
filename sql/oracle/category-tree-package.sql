@@ -58,7 +58,7 @@ as
 	subtree_category_id	in categories.category_id%TYPE		default null,
 	assign_single_p		in category_tree_map.assign_single_p%TYPE	default 'f',
 	require_category_p	in category_tree_map.require_category_p%TYPE	default 'f',
-	require_category_p	in category_tree_map.widget%TYPE	
+	widget              in category_tree_map.widget%TYPE	
     );
 
     PROCEDURE unmap (
