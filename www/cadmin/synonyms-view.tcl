@@ -60,7 +60,7 @@ template::list::create \
 	edit {
 	    sub_class narrow
 	    display_template {
-		<img src="/resources/acs-subsite/Edit16.gif" height="16" width="16" alt="Edit" border="0">
+		<img src="/resources/acs-subsite/Edit16.gif" height="16" width="16" alt="Edit" style="border:0">
 	    }
 	    link_url_col edit_url
 	    link_html {title "Edit this synonym"}
@@ -76,7 +76,7 @@ template::list::create \
 	delete {
 	    sub_class narrow
 	    display_template {
-		<img src="/resources/acs-subsite/Delete16.gif" height="16" width="16" alt="Delete" border="0">
+		<img src="/resources/acs-subsite/Delete16.gif" height="16" width="16" alt="Delete" style="border:0">
 	    }
 	    link_url_col delete_url
 	    link_html { title "Delete synonym" }
