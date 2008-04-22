@@ -200,6 +200,10 @@ comment on column category_tree_map.assign_single_p is '
 comment on column category_tree_map.require_category_p is '
   Do the users have to assign at least one category to objects?
 ';
+comment on column category_tree_map.widget is '
+  What widget do we want to use for this cateogry?
+';
+
 
 create table category_object_map (
        category_id		integer
