@@ -25,7 +25,6 @@
 		select parent_id
 		from categories
 		where category_id = :category_id
-		limit 1
 
       </querytext>
 </fullquery>
