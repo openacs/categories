@@ -199,6 +199,7 @@ begin
 	for source in (select category_id, parent_id, left_ind, right_ind from categories where tree_id = p_source_tree) loop
 
 	   v_category_id := acs_object__new ( 
+                null,
 		''category'',     -- object_type
 		now(),            -- creation_date
 		p_creation_user,  -- creation_user
@@ -213,11 +214,11 @@ begin
 	end loop;
 
 	-- correct parent_ids
-	update categories
+	update categories c
 	set parent_id = (select t.category_id
 			from categories s, categories t
 			where s.category_id = c.parent_id
-			and t.tree_id = copy.dest_tree
+			and t.tree_id = p_dest_tree
 			and s.left_ind + v_new_left_ind = t.left_ind)
 	where tree_id = p_dest_tree;
 
