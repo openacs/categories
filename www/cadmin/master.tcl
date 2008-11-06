@@ -29,5 +29,5 @@ foreach name $varname_list {
 ad_form -name locale_form -action [ad_conn url] \
     -export $vars_to_export_list \
     -form {
-      {locale:text(select) {label "Language"} {value $locale} {options $languages}}
+      {locale:text(select),optional {label "Language"} {value $locale} {options $languages}}
     }
