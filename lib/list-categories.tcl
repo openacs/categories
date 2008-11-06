@@ -11,6 +11,7 @@ set user_id [ad_conn user_id]
 set counts {}
 set node_id [ad_conn node_id]
 set packages [subsite::util::packages -node_id $node_id]
+
 db_foreach category_count "
     SELECT c.category_id as catid, count(*) as count
     FROM category_object_map c, acs_objects o

@@ -10,6 +10,7 @@ ad_page_contract {
     tree_id:integer,notnull
     {locale ""}
     object_id:integer,optional
+    ctx_id:integer,optional
 } -properties {
     context_bar:onevalue
     page_title:onevalue
@@ -28,13 +29,16 @@ if {[info exists synonym_id]} {
 }
 set page_title "$action category synonym of \"$tree_name :: $category_name\""
 
-set context_bar [category::context_bar $tree_id $locale [value_if_exists object_id]]
-lappend context_bar [list [export_vars -no_empty -base synonyms-view { category_id tree_id locale object_id }] "Synonyms of $category_name"] "$action synonym"
+set context_bar [category::context_bar $tree_id $locale \
+                     [value_if_exists object_id] \
+                     [value_if_exists ctx_id]]
+
+lappend context_bar [list [export_vars -no_empty -base synonyms-view { category_id tree_id locale object_id ctx_id}] "Synonyms of $category_name"] "$action synonym"
 
 
 set languages [lang::system::get_locale_options]
 
-ad_form -name synonym_form -action synonym-form -export { category_id tree_id locale object_id } -form {
+ad_form -name synonym_form -action synonym-form -export { category_id tree_id locale object_id ctx_id} -form {
     {synonym_id:key(category_synonyms_id_seq)}
     {name:text {label "Name"} {html {size 50 maxlength 200}}}
     {language:text(select) {label "Language"} {options $languages}}
@@ -52,7 +56,7 @@ ad_form -name synonym_form -action synonym-form -export { category_id tree_id lo
 } -edit_data {
     category_synonym::edit -name $name -locale $language -synonym_id $synonym_id
 } -after_submit {
-    ad_returnredirect [export_vars -no_empty -base synonyms-view {category_id tree_id locale object_id}]
+    ad_returnredirect [export_vars -no_empty -base synonyms-view {category_id tree_id locale object_idctx_id}]
     ad_script_abort
 }
 

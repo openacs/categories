@@ -14,6 +14,7 @@ ad_page_contract {
     {locale ""}
     object_id:integer,notnull
     {edit_p 0}
+    ctx_id:integer,optional
 }
 
 set user_id [auth::require_login]
@@ -25,7 +26,7 @@ if {$tree(site_wide_p) == "f"} {
     permission::require_permission -object_id $tree_id -privilege category_tree_read
 }
 
-set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base object-map {locale object_id}]" "Category Management"] "Mapping Parameters"]
+set context_bar [list [category::get_object_context $object_id] [list "[export_vars -no_empty -base object-map {locale object_id ctx_id}]" [_ categories.cadmin]] "Mapping Parameters"]
 
 if {$edit_p} {
     # parameters are edited, so get old data
@@ -39,7 +40,7 @@ if {[empty_string_p $category_id]} {
     set page_title "Parameters of mapping to subtree \"$tree_name :: $category_name\""
 }
 
-ad_form -name tree_map_form -action tree-map-2 -export { tree_id category_id locale object_id edit_p } -form {
+ad_form -name tree_map_form -action tree-map-2 -export { tree_id category_id locale object_id edit_p ctx_id} -form {
     {widget:text(radio) {label "Widget"} {options {
 	{"Select" select}
 	{"Multiselect - let users assign multiple categories" multiselect}
@@ -76,7 +77,7 @@ ad_form -name tree_map_form -action tree-map-2 -export { tree_id category_id loc
 	category_tree::map -tree_id $tree_id -subtree_category_id $category_id -object_id $object_id -assign_single_p $assign_single_p -require_category_p $require_category_p -widget $widget
     }
 } -after_submit {
-    ad_returnredirect [export_vars -no_empty -base object-map {locale object_id}]
+    ad_returnredirect [export_vars -no_empty -base object-map {locale object_id ctx_id}]
     ad_script_abort
 }
 

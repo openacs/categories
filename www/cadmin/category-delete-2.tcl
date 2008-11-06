@@ -9,6 +9,7 @@ ad_page_contract {
     category_id:integer,multiple
     {locale ""}
     object_id:integer,optional
+    ctx_id:integer,optional
 }
 
 set user_id [auth::require_login]
@@ -24,4 +25,4 @@ db_transaction {
     return
 }
 
-ad_returnredirect [export_vars -no_empty -base tree-view {tree_id locale object_id}]
+ad_returnredirect [export_vars -no_empty -base tree-view {tree_id locale object_id ctx_id}]

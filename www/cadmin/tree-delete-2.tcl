@@ -8,6 +8,7 @@ ad_page_contract {
     tree_id:integer,notnull
     {locale ""}
     object_id:integer,optional
+    ctx_id:integer,optional
 }
 
 set user_id [auth::require_login]
@@ -23,7 +24,7 @@ if {[llength $instance_list] > 0} {
 category_tree::delete $tree_id
 
 if {![info exists object_id]} {
-    ad_returnredirect ".?[export_vars -no_empty {locale}]"
+    ad_returnredirect ".?[export_vars -no_empty {locale ctx_id}]"
 } else {
-    ad_returnredirect [export_vars -no_empty -base object-map {locale object_id}]
+    ad_returnredirect [export_vars -no_empty -base object-map {locale object_id ctx_id}]
 }

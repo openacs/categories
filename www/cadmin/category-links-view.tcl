@@ -10,6 +10,7 @@ ad_page_contract {
     {locale ""}
     object_id:integer,optional
     orderby:optional
+    ctx_id:integer,optional
 } -properties {
     page_title:onevalue
     context_bar:onevalue
@@ -23,7 +24,9 @@ set tree_name [category_tree::get_name $tree_id $locale]
 set category_name [category::get_name $category_id $locale]
 set page_title "Categories linked with category \"$tree_name :: $category_name\""
 
-set context_bar [category::context_bar $tree_id $locale [value_if_exists object_id]]
+set context_bar [category::context_bar $tree_id $locale \
+                     [value_if_exists object_id] \
+                     [value_if_exists ctx_id]]
 lappend context_bar "Links to $category_name"
 
 
@@ -51,11 +54,12 @@ template::list::create \
 	tree_id {}
 	locale {}
 	object_id {}
+	ctx_id {}
     } -actions [list \
-		  "Add link" [export_vars -no_empty -base category-link-add { category_id tree_id locale object_id }] "Add new category link"] \
+		  "Add link" [export_vars -no_empty -base category-link-add { category_id tree_id locale object_id ctx_id}] "Add new category link"] \
     -bulk_actions {
 	"Delete" "category-link-delete" "Delete checked category links"
-    } -bulk_action_export_vars { category_id tree_id locale object_id } \
+    } -bulk_action_export_vars { category_id tree_id locale object_id ctx_id} \
     -elements {
 	checkbox {
 	    display_template {
@@ -92,9 +96,9 @@ db_multirow category_links get_category_links ""
 
 multirow extend category_links delete_url tree_view_url category_view_url tree_name category_name
 multirow foreach category_links {
-    set delete_url [export_vars -no_empty -base category-link-delete { link_id category_id tree_id locale object_id }]
-    set tree_view_url [export_vars -no_empty -base tree-view { {tree_id $linked_tree_id} locale object_id }]
-    set category_view_url [export_vars -no_empty -base category-links-view { {category_id $linked_category_id} {tree_id $linked_tree_id} locale object_id }]
+    set delete_url [export_vars -no_empty -base category-link-delete { link_id category_id tree_id locale object_id ctx_id}]
+    set tree_view_url [export_vars -no_empty -base tree-view { {tree_id $linked_tree_id} locale object_id ctx_id}]
+    set category_view_url [export_vars -no_empty -base category-links-view { {category_id $linked_category_id} {tree_id $linked_tree_id} locale object_id ctx_id}]
 
     set tree_name [category_tree::get_name $linked_tree_id $locale]
     set category_name [category::get_name $linked_category_id $locale]

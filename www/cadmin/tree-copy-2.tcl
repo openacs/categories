@@ -9,6 +9,7 @@ ad_page_contract {
     source_tree_id:integer
     {locale ""}
     object_id:integer,optional
+    ctx_id:integer,optional
 }
 
 set user_id [auth::require_login]
@@ -17,4 +18,4 @@ permission::require_permission -object_id $tree_id -privilege category_tree_writ
 
 category_tree::copy -source_tree $source_tree_id -dest_tree $target_tree_id
 
-ad_returnredirect [export_vars -no_empty -base tree-view {tree_id locale object_id}]
+ad_returnredirect [export_vars -no_empty -base tree-view {tree_id locale object_id ctx_id}]

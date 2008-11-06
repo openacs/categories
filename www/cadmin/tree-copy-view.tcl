@@ -9,6 +9,7 @@ ad_page_contract {
     target_tree_id:integer
     {locale ""}
     object_id:integer,optional
+    ctx_id:integer,optional
 } -properties {
     page_title:onevalue
     context_bar:onevalue
@@ -29,8 +30,10 @@ if {$target_tree(site_wide_p) == "f"} {
 set tree_name [category_tree::get_name $tree_id $locale]
 set page_title "Category Tree \"$tree_name\""
 
-set context_bar [category::context_bar $tree_id $locale [value_if_exists object_id]]
-lappend context_bar [list [export_vars -no_empty -base tree-copy { {tree_id $target_tree_id} locale object_id }] "Copy tree"] "View \"$tree_name\""
+set context_bar [category::context_bar $tree_id $locale \
+                     [value_if_exists object_id] \
+                     [value_if_exists ctx_id]]
+lappend context_bar [list [export_vars -no_empty -base tree-copy { {tree_id $target_tree_id} locale object_id ctx_id }] "Copy tree"] "View \"$tree_name\""
 
 template::multirow create tree category_name deprecated_p level left_indent
 

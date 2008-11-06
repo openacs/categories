@@ -5,5 +5,5 @@
 <property name="focus">tree_form.tree_name</property>
 
 <blockquote>
-  <include src="/packages/categories/lib/tree-form" &="tree_id" &="locale">
+  <include src="/packages/categories/lib/tree-form" &="tree_id" &="locale" &="ctx_id" &="object_id">
 </blockquote>

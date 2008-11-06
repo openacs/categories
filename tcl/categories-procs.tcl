@@ -498,7 +498,7 @@ ad_proc -deprecated category::indent_html { indent_width } {
     return $indent_string
 }
 
-ad_proc -private category::context_bar { tree_id locale object_id } {
+ad_proc -private category::context_bar { tree_id locale object_id {ctx_id ""}} {
     Creates the standard context bar
 
     @param tree_id
@@ -506,12 +506,13 @@ ad_proc -private category::context_bar { tree_id locale object_id } {
     @param object_id
     @author Timo Hentschel (timo@timohentschel.de)
 } {
+    if {$ctx_id eq ""} {unset ctx_id}
     if {![empty_string_p $object_id]} {
-	set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base object-map {locale object_id}] "Category Management"]]
+	set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base object-map {locale object_id ctx_id}] [_ categories.cadmin]]]
     } else {
-	set context_bar [list [list ".?[export_vars -no_empty {locale}]" "Category Management"]]
+	set context_bar [list [list ".?[export_vars -no_empty {locale ctx_id}]" [_ categories.cadmin]]]
     }
-    lappend context_bar [list [export_vars -no_empty -base tree-view {tree_id locale object_id}] [category_tree::get_name $tree_id $locale]]
+    lappend context_bar [list [export_vars -no_empty -base tree-view {tree_id locale object_id ctx_id}] [category_tree::get_name $tree_id $locale]]
 
     return $context_bar
 }
