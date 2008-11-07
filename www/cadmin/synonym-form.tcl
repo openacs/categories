@@ -56,7 +56,7 @@ ad_form -name synonym_form -action synonym-form -export { category_id tree_id lo
 } -edit_data {
     category_synonym::edit -name $name -locale $language -synonym_id $synonym_id
 } -after_submit {
-    ad_returnredirect [export_vars -no_empty -base synonyms-view {category_id tree_id locale object_idctx_id}]
+    ad_returnredirect [export_vars -no_empty -base synonyms-view {category_id tree_id locale object_id ctx_id}]
     ad_script_abort
 }
 
