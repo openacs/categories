@@ -23,20 +23,20 @@ ad_proc -public category::relation::add_meta_category {
     @author Miguel Marin (miguelmarin@viaro.net)
     @author Viaro Networks www.viaro.net
 } {
-    if { [empty_string_p $user_id] } {
+    if { $user_id eq "" } {
 	set user_id [ad_conn user_id]
     }
  
     # First we check if the relation exist, if it does, we don't create a new one
     set meta_category_id [db_string get_meta_relation_id {} -default ""]
-    if { [empty_string_p $meta_category_id] } { 
+    if { $meta_category_id eq "" } { 
 	set meta_category_id [db_exec_plsql add_meta_relation {}]
     }
     
     # Now we check if the user already has the meta category associated,
     # if it does, we don't create a new one
     set user_meta_category_id [db_string get_user_meta_relation_id {} -default ""]
-    if { [empty_string_p $user_meta_category_id] } { 
+    if { $user_meta_category_id eq "" } { 
 	return [db_exec_plsql add_user_meta_relation {}]
     } else {
 	return $user_meta_category_id

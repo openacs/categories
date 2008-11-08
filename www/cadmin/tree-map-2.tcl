@@ -33,7 +33,7 @@ if {$edit_p} {
     db_1row get_mapped_subtree_id ""
 }
 
-if {[empty_string_p $category_id]} {
+if {$category_id eq ""} {
     set page_title "Parameters of mapping to tree \"$tree_name\""
 } else {
     set category_name [category::get_name $category_id $locale]

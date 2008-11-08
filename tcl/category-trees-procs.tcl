@@ -139,16 +139,16 @@ namespace eval category_tree {
         @return tree_id
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        if {[empty_string_p $user_id]} {
+        if {$user_id eq ""} {
             set user_id [ad_conn user_id]
         }
-        if {[empty_string_p $creation_ip]} {
+        if {$creation_ip eq ""} {
             set creation_ip [ad_conn peeraddr]
         }
-        if {[empty_string_p $locale]} {
+        if {$locale eq ""} {
             set locale [ad_conn locale]
         }
-        if {[empty_string_p $context_id]} {
+        if {$context_id eq ""} {
             set context_id [ad_conn package_id]
         }
         db_transaction {
@@ -183,13 +183,13 @@ namespace eval category_tree {
         @option modifying_ip ip-address of the user that updated the category tree. [ad_conn peeraddr] used by default.
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        if {[empty_string_p $user_id]} {
+        if {$user_id eq ""} {
             set user_id [ad_conn user_id]
         }
-        if {[empty_string_p $modifying_ip]} {
+        if {$modifying_ip eq ""} {
             set modifying_ip [ad_conn peeraddr]
         }
-        if {[empty_string_p $locale]} {
+        if {$locale eq ""} {
             set locale [ad_conn locale]
         }
         db_transaction {
@@ -300,7 +300,7 @@ namespace eval category_tree {
             return
         }
         set result ""
-        if {[empty_string_p $subtree_id]} {
+        if {$subtree_id eq ""} {
             foreach category $tree {
                 util_unlist $category category_id deprecated_p level
                 if {$all_p || $deprecated_p == "f"} {
@@ -316,7 +316,7 @@ namespace eval category_tree {
                     set in_subtree_p 0
                 }
                 if {$in_subtree_p && $deprecated_p == "f"} {
-                    lappend result [list $category_id [category::get_name $category_id $locale] $deprecated_p [expr $level - $subtree_level]]
+                    lappend result [list $category_id [category::get_name $category_id $locale] $deprecated_p [expr {$level - $subtree_level}]]
                 }
                 if {$category_id == $subtree_id} {
                     set in_subtree_p 1
@@ -360,7 +360,7 @@ namespace eval category_tree {
             }
             set tree_id_old $tree_id
             lappend tree [list $category_id [ad_decode "$invalid_p$deprecated_p" "" f t] $cur_level]
-            if { [expr $right_ind - $left_ind] > 1} {
+            if { [expr {$right_ind - $left_ind}] > 1} {
                 incr cur_level 1
                 set invalid_p "$invalid_p$deprecated_p"
                 set stack [linsert $stack 0 [list $right_ind $invalid_p]]
@@ -391,7 +391,7 @@ namespace eval category_tree {
         set tree [list]
         db_foreach flush_cache "" {
             lappend tree [list $category_id [ad_decode "$invalid_p$deprecated_p" "" f t] $cur_level]
-            if { [expr $right_ind - $left_ind] > 1} {
+            if { [expr {$right_ind - $left_ind}] > 1} {
                 incr cur_level 1
                 set invalid_p "$invalid_p$deprecated_p"
                 set stack [linsert $stack 0 [list $right_ind $invalid_p]]
@@ -459,7 +459,7 @@ namespace eval category_tree {
         @return tcl-list: name description
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        if {[empty_string_p $locale]} {
+        if {$locale eq ""} {
             set locale [ad_conn locale]
         }
         if {[catch {array set tree_lang [nsv_get category_tree_translations $tree_id]}]} {
@@ -562,15 +562,15 @@ ad_proc -public category_tree::get_multirow {
     @author Jeff Davis davis@xarg.net
 } {
 
-    if { [empty_string_p $tree_id] } {
-        if { [empty_string_p $container_id] } { 
+    if { $tree_id eq "" } {
+        if { $container_id eq "" } { 
             error "must provide either tree_id or container_id"
         }
         set mapped_trees [category_tree::get_mapped_trees $container_id]
     } else {
         set mapped_trees [list [list $tree_id [category_tree::get_name $tree_id] $subtree_id $assign_single_p $require_category_p]]
     }
-    if { ![empty_string_p $mapped_trees] 
+    if { $mapped_trees ne "" 
          && [llength $category_counts] > 1} { 
         array set counts $category_counts
     } else { 
@@ -672,16 +672,16 @@ ad_proc -public category_tree::import {
     @author Jeff Davis <davis@xarg.net>
     @author Timo Hentschel (timo@timohentschel.de)
 } {
-    if {[empty_string_p $locale]} {
+    if {$locale eq ""} {
         set locale [ad_conn locale]
     }
-    if {[empty_string_p $user_id]} {
+    if {$user_id eq ""} {
         set user_id [ad_conn user_id]
     }
-    if {[empty_string_p $creation_ip]} {
+    if {$creation_ip eq ""} {
         set creation_ip [ad_conn peeraddr]
     }
-    if {[empty_string_p $context_id]} {
+    if {$context_id eq ""} {
         set creation_ip [ad_conn package_id]
     }
 
@@ -692,7 +692,7 @@ ad_proc -public category_tree::import {
         set parent(1) {}
         set parent(2) {}
         foreach {level category_name} $categories {
-            set parent([expr $level + 1]) [category::add -noflush -name $category_name -description $category_name -tree_id $tree_id -parent_id $parent($level) -locale $locale -user_id $user_id -creation_ip $creation_ip]
+            set parent([expr {$level + 1}]) [category::add -noflush -name $category_name -description $category_name -tree_id $tree_id -parent_id $parent($level) -locale $locale -user_id $user_id -creation_ip $creation_ip]
         }
 
         category_tree::flush_cache $tree_id

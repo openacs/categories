@@ -32,7 +32,7 @@ template::multirow create mapped_trees tree_name tree_id \
 
 db_foreach get_mapped_trees "" {
     set tree_name [category_tree::get_name $tree_id $locale]
-    if {![empty_string_p $subtree_category_id]} {
+    if {$subtree_category_id ne ""} {
       append tree_name " :: [category::get_name $subtree_category_id $locale]"
     }
     template::multirow append mapped_trees $tree_name $tree_id $site_wide_p \
@@ -47,7 +47,7 @@ template::multirow sort mapped_trees -dictionary tree_name
 template::multirow create unmapped_trees tree_id tree_name site_wide_p view_url map_url subtree_url
 
 db_foreach get_unmapped_trees "" {
-    if { [string equal $has_read_permission t] || [string equal $site_wide_p t] } {
+    if { $has_read_permission == "t" || $site_wide_p == "t" } {
 	set tree_name [category_tree::get_name $tree_id $locale]
 
 	template::multirow append unmapped_trees $tree_id $tree_name $site_wide_p \

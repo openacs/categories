@@ -31,7 +31,7 @@ ad_proc -public install::xml::action::load-categories { node } {
         }
     }
 
-    if {![string equal $id ""]} {
+    if {$id ne "" } {
         set ::install::xml::ids($id) $tree_id
     }
 }
@@ -43,7 +43,7 @@ ad_proc -public install::xml::action::map-category-tree { node } {
     set object_id [apm_attribute_value -default "" $node object-id]
 
     set tree_ids [list]
-    if {[string equal $tree_id ""]} {
+    if {$tree_id eq ""} {
         set trees_node [lindex [xml_node_get_children_by_name $node trees] 0]
         set trees [xml_node_get_children $trees_node]
 
@@ -57,7 +57,7 @@ ad_proc -public install::xml::action::map-category-tree { node } {
     }
 
     set object_ids [list]
-    if {[string equal $object_id ""]} {
+    if {$object_id eq ""} {
         set objects_node [lindex [xml_node_get_children_by_name $node objects] 0]
         set objects [xml_node_get_children $objects_node]
 
@@ -71,7 +71,7 @@ ad_proc -public install::xml::action::map-category-tree { node } {
     }
 
     foreach tree_id $tree_ids {
-        if {[string equal [acs_object_type $tree_id] category]} {
+        if {[acs_object_type $tree_id] eq "category"} {
             set subtree_category_id $tree_id
             set tree_id [category::get_tree $subtree_category_id]
         } else {

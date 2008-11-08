@@ -43,13 +43,13 @@ ad_proc -private category::tagcloud::scale_weight {
 
     @author Matthew Burke (matt-oacs@bluedino.net)
 } {
-    set denominator [expr [lindex $extremes 1] - [lindex $extremes 0]]
+    set denominator [expr {[lindex $extremes 1] - [lindex $extremes 0]}]
     if {$denominator != 0} {
         set multiplier [expr ($weight * 1.0)/$denominator]
     } else {
         set multiplier 0
     }
-    set result [expr 10 + round($multiplier*(36-10))]
+    set result [expr {10 + round($multiplier*(36-10))}]
     return $result
 }
 

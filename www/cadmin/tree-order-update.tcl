@@ -21,7 +21,7 @@ db_transaction {
     set count 0
     db_foreach get_tree "" {
         incr count 10
-        if {[empty_string_p $parent_id]} {
+        if {$parent_id eq ""} {
             # need this as an anchor for toplevel categories
             set parent_id -1
         }

@@ -31,9 +31,9 @@ db_foreach trees {} {
     array unset tree_array
     array set tree_array [category_tree::get_data $tree_id $locale]
 
-    if { [string equal $has_write_p "t"] } {
+    if {$has_write_p == "t"} {
 	template::multirow append trees_with_write_permission $tree_id $tree_array(tree_name) $site_wide_p $tree_array(description)
-    } elseif { [string equal $has_read_p "t"] || [string equal $site_wide_p "t"] } {
+    } elseif { $has_read_p == "t" || $site_wide_p == "t" } {
 	template::multirow append trees_with_read_permission $tree_id $tree_name $site_wide_p $tree_array(description)
     }
 }

@@ -40,13 +40,13 @@ ad_proc -public category::add {
     @return category_id
     @author Timo Hentschel (timo@timohentschel.de)
 } {
-    if {[empty_string_p $user_id]} {
+    if {$user_id eq ""} {
         set user_id [ad_conn user_id]
     }
-    if {[empty_string_p $creation_ip]} {
+    if {$creation_ip eq ""} {
         set creation_ip [ad_conn peeraddr]
     }
-    if {[empty_string_p $locale]} {
+    if {$locale eq ""} {
         set locale [ad_conn locale]
     }
     db_transaction {
@@ -85,13 +85,13 @@ ad_proc -public category::update {
     @option modifying_ip ip-address of the user that updates the category. [ad_conn peeraddr] used by default.
     @author Timo Hentschel (timo@timohentschel.de)
 } {
-    if {[empty_string_p $user_id]} {
+    if {$user_id eq ""} {
         set user_id [ad_conn user_id]
     }
-    if {[empty_string_p $modifying_ip]} {
+    if {$modifying_ip eq ""} {
         set modifying_ip [ad_conn peeraddr]
     }
-    if {[empty_string_p $locale]} {
+    if {$locale eq ""} {
         set locale [ad_conn locale]
     }
     db_transaction {
@@ -188,7 +188,7 @@ ad_proc -public category::map_object {
         }
 
         foreach category_id $category_id_list {
-	    if {![empty_string_p $category_id]} {
+	    if {$category_id ne ""} {
 		db_dml insert_mapped_categories ""
 	    }
         }
@@ -209,7 +209,7 @@ ad_proc -public category::get_mapped_categories {
     @return tcl-list of category_ids
     @author Timo Hentschel (timo@timohentschel.de)
 } {
-    if { ![empty_string_p $tree_id] } {
+    if { $tree_id ne "" } {
         set result [db_list get_filtered ""]
     } else {
         set result [db_list get_mapped_categories ""]
@@ -228,7 +228,7 @@ ad_proc -public category::get_mapped_categories_multirow {
     @return multirow with tree and category information
     @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
 } {
-    if { $locale == ""} {set locale [ad_conn locale]}
+    if { $locale eq ""} {set locale [ad_conn locale]}
     upvar $multirow mapped_categories
     db_multirow mapped_categories select {}
 }
@@ -296,7 +296,7 @@ ad_proc -public category::get_name {
     @return list of names corresponding to the list of category_id's supplied.
     @author Timo Hentschel (timo@timohentschel.de)
 } {
-    if {[empty_string_p $locale]} {
+    if {$locale eq ""} {
         set locale [ad_conn locale]
     }
     if { [catch { array set cat_lang [lindex [nsv_get categories $category_id] 1] }] } {
@@ -423,7 +423,7 @@ ad_proc -public category::get_data {
     @author Timo Hentschel (timo@timohentschel.de)
 } {
     set tree_id [category::get_tree $category_id]
-    if {[empty_string_p $tree_id]} {
+    if {$tree_id eq ""} {
 	# category not found
 	return
     }
@@ -507,7 +507,7 @@ ad_proc -private category::context_bar { tree_id locale object_id {ctx_id ""}} {
     @author Timo Hentschel (timo@timohentschel.de)
 } {
     if {$ctx_id eq ""} {unset ctx_id}
-    if {![empty_string_p $object_id]} {
+    if {$object_id ne ""} {
 	set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base object-map {locale object_id ctx_id}] [_ categories.cadmin]]]
     } else {
 	set context_bar [list [list ".?[export_vars -no_empty {locale ctx_id}]" [_ categories.cadmin]]]

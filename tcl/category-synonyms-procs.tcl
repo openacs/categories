@@ -26,7 +26,7 @@ ad_proc -public category_synonym::add {
     @author Bernd Schmeil (bernd@thebernd.de)
     @author Timo Hentschel (timo@timohentschel.de)
 } {
-    if {[empty_string_p $locale]} {
+    if {$locale eq ""} {
 	set locale [ad_conn locale]
     }
 
@@ -50,7 +50,7 @@ ad_proc -public category_synonym::edit {
     @author Bernd Schmeil (bernd@thebernd.de)
     @author Timo Hentschel (timo@timohentschel.de)
 } {
-    if {[empty_string_p $locale]} {
+    if {$locale eq ""} {
 	set locale [ad_conn locale]
     }
 
@@ -84,7 +84,7 @@ ad_proc -public category_synonym::search {
     @author Bernd Schmeil (bernd@thebernd.de)
     @author Timo Hentschel (timo@timohentschel.de)
 } {
-    if {[empty_string_p $locale]} {
+    if {$locale eq ""} {
 	set locale [ad_conn locale]
     }
 

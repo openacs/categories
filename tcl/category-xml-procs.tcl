@@ -32,7 +32,7 @@ ad_proc -public ::category_tree::xml::import {
     @author Tom Ayles (tom@beatniq.net)
 } {
     # recode site_wide_p to DB-style boolean
-    if $site_wide_p { set site_wide_p t } else { set site_wide_p f }
+    if {$site_wide_p} { set site_wide_p t } else { set site_wide_p f }
 
     set doc [dom parse $xml]
     if [catch {set root [$doc documentElement]} err] {
@@ -53,7 +53,7 @@ ad_proc -public ::category_tree::xml::import {
                            [[$translation selectNodes {description}] text]}] {
                 set description {}
             }
-            if $tree_id {
+            if {$tree_id} {
                 # tree initialised, add translation
                 category_tree::update \
                     -tree_id $tree_id \
@@ -102,7 +102,7 @@ ad_proc -private ::category_tree::xml::add_category {
             set description {}
         }
 
-        if $category_id {
+        if {$category_id} {
             # category exists, add translation
             category::update \
                 -category_id $category_id \

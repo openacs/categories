@@ -92,13 +92,13 @@ ad_proc -public template::widget::category {
             set widget $element(category_widget)
         }
     }
-    if { [empty_string_p $package_id] } {
+    if { $package_id eq "" } {
 	set package_id [ad_conn package_id]
     }
 
-    if { ![empty_string_p $object_id] && ![info exists element(submit)] } {
+    if { $object_id ne "" && ![info exists element(submit)] } {
         set mapped_categories [category::get_mapped_categories $object_id]
-    } elseif { ![empty_string_p $element(values)] && ![info exists element(submit)] } {
+    } elseif { $element(values) ne "" && ![info exists element(submit)] } {
 	set mapped_categories $element(values)
     } else {
 	set mapped_categories [ns_querygetall $element(id)]
@@ -109,15 +109,15 @@ ad_proc -public template::widget::category {
     }
     set output {}
 
-    if { [empty_string_p $tree_id] } {
+    if { $tree_id eq "" } {
         set mapped_trees [category_tree::get_mapped_trees $package_id]
     } else {
         set mapped_trees {}
         foreach one_tree $tree_id one_subtree $subtree_id assign_single $assign_single_p require_category $require_category_p widget $widget {
-            if {[empty_string_p $assign_single]} {
+            if {$assign_single eq ""} {
                 set assign_single f
             }
-            if {[empty_string_p $require_category]} {
+            if {$require_category eq ""} {
                 set require_category f
             }
             lappend mapped_trees [list $one_tree [category_tree::get_name $one_tree] $one_subtree $assign_single $require_category $widget]
@@ -139,7 +139,7 @@ ad_proc -public template::widget::category {
 	    util_unlist $category category_id category_name deprecated_p level
 	    set category_name [ad_quotehtml [lang::util::localize $category_name]]
 	    if { $level>1 } {
-		set category_name "[string repeat "&nbsp;" [expr 2*$level -4]]..$category_name"
+		set category_name "[string repeat "&nbsp;" [expr {2*$level -4}]]..$category_name"
 	    }
 	    lappend one_tree [list $category_name $category_id]
 	}
@@ -243,11 +243,11 @@ ad_proc -public template::data::transform::category { element_ref } {
             set require_category_p $element(category_require_category_p)
         }
     }
-    if { [empty_string_p $package_id] } {
+    if { $package_id eq "" } {
 	set package_id [ad_conn package_id]
     }
 
-    if { [empty_string_p $tree_id] } {
+    if { $tree_id eq "" } {
 	set trees [list]
         foreach tree [category_tree::get_mapped_trees $package_id] {
 	    util_unlist $tree tree_id tree_name subtree_id assign_single_p require_category_p
