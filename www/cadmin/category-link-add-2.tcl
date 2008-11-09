@@ -71,8 +71,8 @@ template::list::create \
 	links {
 	    sub_class narrow
 	    display_template {
-		<if @tree.backward_exists_p@ true><img src="/resources/acs-subsite/left.gif" height="16" width="16" alt="backward link" border="0"></if>
-		<if @tree.forward_exists_p@ true><img src="/resources/acs-subsite/right.gif" height="16" width="16" alt="forward link" border="0"></if>
+		<if @tree.backward_exists_p@ true><img src="/resources/acs-subsite/left.gif" height="16" width="16" alt="backward link" style="border:0"></if>
+		<if @tree.forward_exists_p@ true><img src="/resources/acs-subsite/right.gif" height="16" width="16" alt="forward link" style="border:0"></if>
 	    }
 	    html {align center}
 	}

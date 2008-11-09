@@ -66,8 +66,8 @@ template::list::create \
 	    sub_class narrow
 	    label "Direction"
 	    display_template {
-		<if @category_links.direction@ eq f><img src="/resources/acs-subsite/right.gif" height="16" width="16" alt="forward link" border="0"></if>
-		<else><img src="/resources/acs-subsite/left.gif" height="16" width="16" alt="backward link" border="0"></else>
+		<if @category_links.direction@ eq f><img src="/resources/acs-subsite/right.gif" height="16" width="16" alt="forward link" style="border:0"></if>
+		<else><img src="/resources/acs-subsite/left.gif" height="16" width="16" alt="backward link" style="border:0"></else>
 	    }
 	    html {align center}
 	}

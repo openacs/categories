@@ -81,7 +81,7 @@ if { $can_write_p } {
     lappend elements edit {
 	sub_class narrow
 	display_template {
-	    <img src="/resources/acs-subsite/Edit16.gif" height="16" width="16" alt="Edit" border="0">
+	    <img src="/resources/acs-subsite/Edit16.gif" height="16" width="16" alt="Edit" style="border:0">
 	}
 	link_url_col edit_url
 	link_html {title "Edit this category"}
@@ -100,7 +100,7 @@ if { $can_write_p } {
     lappend elements add_child {
 	sub_class narrow
 	display_template {
-	    <img src="/resources/acs-subsite/Add16.gif" height="16" width="16" alt="Add" border="0">
+	    <img src="/resources/acs-subsite/Add16.gif" height="16" width="16" alt="Add" style="border:0">
 	}
 	link_url_col add_url
 	link_html { title "Add subcategory" }
@@ -123,7 +123,7 @@ if { $can_write_p } {
     lappend elements delete {
 	sub_class narrow
 	display_template {
-	    <img src="/resources/acs-subsite/Delete16.gif" height="16" width="16" alt="Delete" border="0">
+	    <img src="/resources/acs-subsite/Delete16.gif" height="16" width="16" alt="Delete" style="border:0">
 	}
 	link_url_col delete_url
 	link_html { title "Delete category and all subcategories" }

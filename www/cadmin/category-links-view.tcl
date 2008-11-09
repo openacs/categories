@@ -70,8 +70,8 @@ template::list::create \
 	    sub_class narrow
 	    label "Direction"
 	    display_template {
-		<if @category_links.direction@ eq f><img src="/resources/acs-subsite/right.gif" height="16" width="16" alt="forward link" border="0"></if>
-		<else><img src="/resources/acs-subsite/left.gif" height="16" width="16" alt="backward link" border="0"></else>
+		<if @category_links.direction@ eq f><img src="/resources/acs-subsite/right.gif" height="16" width="16" alt="forward link" style="border:0"></if>
+		<else><img src="/resources/acs-subsite/left.gif" height="16" width="16" alt="backward link" style="border:0"></else>
 	    }
 	    html {align center}
 	}
@@ -85,7 +85,7 @@ template::list::create \
 	delete {
 	    sub_class narrow
 	    display_template {
-		<img src="/resources/acs-subsite/Delete16.gif" height="16" width="16" alt="Delete" border="0">
+		<img src="/resources/acs-subsite/Delete16.gif" height="16" width="16" alt="Delete" style="border:0">
 	    }
 	    link_url_col delete_url
 	    link_html { title "Delete link" }
