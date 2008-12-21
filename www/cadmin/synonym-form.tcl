@@ -47,7 +47,7 @@ ad_form -name synonym_form -action synonym-form -export { category_id tree_id lo
     if {![empty_string_p [ad_conn locale]]} {
 	set language [ad_conn locale]
     } else {
-	set language [ad_parameter DefaultLocale acs-lang "en_US"]
+	set language [parameter::get -parameter DefaultLocale -default en_US]
     }
 } -edit_request {
     db_1row get_synonym ""

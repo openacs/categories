@@ -52,7 +52,7 @@ ad_proc -public category::add {
     db_transaction {
         set category_id [db_exec_plsql insert_category ""]
         set translations [list $locale $name]
-        set default_locale [ad_parameter DefaultLocale acs-lang "en_US"]
+        set default_locale [parameter::get -parameter DefaultLocale -default en_US]
         if {$locale != $default_locale} {
             lappend translations $default_locale $name
             db_exec_plsql insert_default_category ""
@@ -328,7 +328,7 @@ ad_proc -public category::get_name {
     }
 
     # Resort to en_US
-    if { ![catch { set name $cat_lang([ad_parameter DefaultLocale acs-lang "en_US"]) }] } {
+    if { ![catch { set name $cat_lang([parameter::get -parameter DefaultLocale -default en_US]) }] } {
         return $name
     } 
 

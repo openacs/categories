@@ -7,7 +7,7 @@ if { ![info exists change_locale] } {
 }
 
 if {![exists_and_not_null locale]} {
-    #set locale [ad_parameter DefaultLocale acs-lang "en_US"]
+    #set locale [parameter::get -parameter DefaultLocale -default en_US]
     set locale [ad_conn locale]
 }
 

@@ -94,7 +94,7 @@ ad_proc -private category::tagcloud::get_tags_no_mem {
 
     set user_locale [ad_conn locale]
     set user_id [ad_conn user_id]
-    set default_locale [ad_parameter DefaultLocale acs-lang "en_US"]
+    set default_locale [parameter::get -parameter DefaultLocale -default en_US]
     ns_log Warning "def loc $default_locale"
 
     # this whole locale thing isn't handled well.

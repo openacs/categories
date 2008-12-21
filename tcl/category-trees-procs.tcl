@@ -154,7 +154,7 @@ namespace eval category_tree {
         db_transaction {
             set tree_id [db_exec_plsql insert_tree ""]
 
-            set default_locale [ad_parameter DefaultLocale acs-lang "en_US"]
+            set default_locale [parameter::get -parameter DefaultLocale -default en_US]
             if {$locale != $default_locale} {
                 db_exec_plsql insert_default_tree ""
             }
@@ -469,7 +469,7 @@ namespace eval category_tree {
             # exact match: found name for this locale
             return $names
         }
-        if {![catch {set names $tree_lang([ad_parameter DefaultLocale acs-lang "en_US"])}]} {
+        if {![catch {set names $tree_lang([parameter::get -parameter DefaultLocale -default en_US])}]} {
             # default locale found
             return $names
         }

@@ -44,7 +44,7 @@ ad_form -name category_form -action category-form \
     set description ""
 } -edit_request {
     if {![db_0or1row check_translation_existance ""]} {
-	set default_locale [ad_parameter DefaultLocale acs-lang "en_US"]
+	set default_locale [parameter::get -parameter DefaultLocale -default en_US]
 	db_1row get_default_translation ""
     }
 } -on_submit {
