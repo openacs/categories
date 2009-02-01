@@ -217,7 +217,7 @@ begin
 	update categories
 	set parent_id = (select t.category_id
 			from categories s, categories t
-			where s.category_id = c.parent_id
+			where s.category_id = categories.parent_id
 			and t.tree_id = p_dest_tree
 			and s.left_ind + v_new_left_ind = t.left_ind)
 	where tree_id = p_dest_tree;
