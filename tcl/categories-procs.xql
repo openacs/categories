@@ -15,6 +15,8 @@
 		select category_id
 		from categories
 		where parent_id = :category_id
+        and deprecated_p = 'f'
+        order by tree_id, left_ind
 
       </querytext>
 </fullquery>

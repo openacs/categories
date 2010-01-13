@@ -363,13 +363,7 @@ ad_proc -public category::get_children {
     @return list of category ids of the children of the supplied category_id
     @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
 } {
-    set result [list]
-    set child_categories [db_list get_children_ids ""]
-    foreach category_id $child_categories {
-        lappend result $category_id
-    }
-    if {$result eq ""} {set result 0} 
-    return $result
+    return [db_list get_children_ids ""]
 }                
 
 ad_proc -public category::count_children {
