@@ -6,33 +6,48 @@
 -- @creation-date 2004-02-04
 --
 
-create or replace function category_link__new (
-	integer,   -- from_category_id
-	integer    -- to_category_id
-) returns integer as '
+
+
+-- added
+select define_function_args('category_link__new','from_category_id,to_category_id');
+
+--
+-- procedure category_link__new/2
+--
+CREATE OR REPLACE FUNCTION category_link__new(
+   p_from_category_id integer,
+   p_to_category_id integer
+) RETURNS integer AS $$
 	-- function for adding category links
-declare
-	p_from_category_id	alias for $1;
-	p_to_category_id	alias for $2;
+DECLARE
 	v_link_id		integer;
-begin
-	v_link_id := nextval (''category_links_id_seq'');
+BEGIN
+	v_link_id := nextval ('category_links_id_seq');
 
 	insert into category_links (link_id, from_category_id, to_category_id)
 	values (v_link_id, p_from_category_id, p_to_category_id);
 
 	return v_link_id;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function category_link__del (
-	integer    -- link_id
-) returns integer as '
+
+
+-- added
+select define_function_args('category_link__del','link_id');
+
+--
+-- procedure category_link__del/1
+--
+CREATE OR REPLACE FUNCTION category_link__del(
+   p_link_id integer
+) RETURNS integer AS $$
 	-- function for deleting category links
-declare
-	p_link_id	alias for $1;
-begin
+DECLARE
+BEGIN
 	delete from category_links
 	where link_id = p_link_id;
 
 	return p_link_id;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;

@@ -4,43 +4,40 @@
 -- @author Jeff Davis <davis@xarg.net>
 -- @creation-date 2005-02-06
 
-create or replace function category__new (
-    integer,   -- category_id
-    integer,   -- tree_id
-    varchar,   -- locale
-    varchar,   -- name
-    varchar,   -- description
-    integer,   -- parent_id
-    char,      -- deprecated_p
-    timestamp with time zone, -- creation_date
-    integer,   -- creation_user
-    varchar    -- creation_ip
-)
-returns integer as '
-declare
-    p_category_id       alias for $1;
-    p_tree_id           alias for $2;
-    p_locale            alias for $3;
-    p_name              alias for $4;
-    p_description       alias for $5;
-    p_parent_id         alias for $6;
-    p_deprecated_p      alias for $7;
-    p_creation_date     alias for $8;
-    p_creation_user     alias for $9;
-    p_creation_ip       alias for $10;
+
+
+-- added
+select define_function_args('category__new','category_id,tree_id,locale,name,description,parent_id,deprecated_p,creation_date,creation_user,creation_ip');
+
+--
+-- procedure category__new/10
+--
+CREATE OR REPLACE FUNCTION category__new(
+   p_category_id integer,
+   p_tree_id integer,
+   p_locale varchar,
+   p_name varchar,
+   p_description varchar,
+   p_parent_id integer,
+   p_deprecated_p char,
+   p_creation_date timestamp with time zone,
+   p_creation_user integer,
+   p_creation_ip varchar
+) RETURNS integer AS $$
+DECLARE
 
     v_category_id       integer; 
     v_left_ind          integer;
     v_right_ind         integer;
-begin
+BEGIN
 	v_category_id := acs_object__new ( 
 		p_category_id,          -- object_id
-		''category'',           -- object_type
+		'category',           -- object_type
 		p_creation_date,        -- creation_date
 		p_creation_user,        -- creation_user
 		p_creation_ip,          -- creation_ip
 		p_tree_id,              -- context_id
-                ''t'',                  -- security_inherit_p
+                't',                  -- security_inherit_p
                 p_name,                 -- title
                 null                    -- package_id
 	);
@@ -86,38 +83,37 @@ begin
 	    (v_category_id, p_locale, p_name, p_description);
 
 	return v_category_id;
-end;
-' language 'plpgsql';
+END;
+
+$$ LANGUAGE plpgsql;
 
 
-create or replace function category_tree__new (
-    integer, -- tree_id
-    varchar, -- locale
-    varchar, -- tree_name
-    varchar, -- description
-    char,    -- site_wide_p
-    timestamp with time zone, -- creation_date
-    integer, -- creation_user
-    varchar, -- creation_ip
-    integer  -- context_id
-)
-returns integer as '
-declare
-    p_tree_id               alias for $1;
-    p_locale                alias for $2;
-    p_tree_name             alias for $3;
-    p_description           alias for $4;
-    p_site_wide_p           alias for $5;
-    p_creation_date         alias for $6;
-    p_creation_user         alias for $7;
-    p_creation_ip           alias for $8;
-    p_context_id            alias for $9;
+
+
+-- added
+select define_function_args('category_tree__new','tree_id,locale,tree_name,description,site_wide_p,creation_date,creation_user,creation_ip,context_id');
+
+--
+-- procedure category_tree__new/9
+--
+CREATE OR REPLACE FUNCTION category_tree__new(
+   p_tree_id integer,
+   p_locale varchar,
+   p_tree_name varchar,
+   p_description varchar,
+   p_site_wide_p char,
+   p_creation_date timestamp with time zone,
+   p_creation_user integer,
+   p_creation_ip varchar,
+   p_context_id integer
+) RETURNS integer AS $$
+DECLARE
   
     v_tree_id               integer;
-begin
+BEGIN
 	v_tree_id := acs_object__new (
 		p_tree_id,         -- object_id
-		''category_tree'', -- object_type
+		'category_tree', -- object_type
 		p_creation_date,   -- creation_date
 		p_creation_user,   -- creation_user
 		p_creation_ip,     -- creation_ip
@@ -134,17 +130,17 @@ begin
 	perform acs_permission__grant_permission (
 		v_tree_id,             -- object_id
 		p_creation_user,       -- grantee_id
-		''category_tree_read'' -- privilege
+		'category_tree_read' -- privilege
 	);
 	perform acs_permission__grant_permission (
 		v_tree_id,                -- object_id
 		p_creation_user,          -- grantee_id
-		''category_tree_write''   -- privilege
+		'category_tree_write'   -- privilege
 	);
 	perform acs_permission__grant_permission (
 		v_tree_id,                          -- object_id
 		p_creation_user,                    -- grantee_id
-		''category_tree_grant_permissions'' -- privilege
+		'category_tree_grant_permissions' -- privilege
 	);
 
 	insert into category_tree_translations
@@ -153,6 +149,7 @@ begin
 	    (v_tree_id, p_locale, p_tree_name, p_description);
 
 	return v_tree_id;
-end;
-' language 'plpgsql';
+END;
+
+$$ LANGUAGE plpgsql;
 

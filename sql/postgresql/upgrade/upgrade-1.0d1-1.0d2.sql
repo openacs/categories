@@ -19,23 +19,25 @@ comment on column category_tree_map.require_category_p is '
 
 drop function category_tree__map (integer,integer,integer);
 
-create or replace function category_tree__map (
-    integer,   -- object_id
-    integer,   -- tree_id
-    integer,   -- subtree_category_id
-    char,      -- assign_single_p
-    char       -- require_category_p
-)
-returns integer as '
-declare
-    p_object_id              alias for $1;
-    p_tree_id                alias for $2;
-    p_subtree_category_id    alias for $3;
-    p_assign_single_p        alias for $4;
-    p_require_category_p     alias for $5;
+
+
+-- added
+select define_function_args('category_tree__map','object_id,tree_id,subtree_category_id,assign_single_p,require_category_p');
+
+--
+-- procedure category_tree__map/5
+--
+CREATE OR REPLACE FUNCTION category_tree__map(
+   p_object_id integer,
+   p_tree_id integer,
+   p_subtree_category_id integer,
+   p_assign_single_p char,
+   p_require_category_p char
+) RETURNS integer AS $$
+DECLARE
 
     v_map_count              integer;
-begin
+BEGIN
 	select count(*) 
 	into v_map_count
 	from category_tree_map
@@ -50,5 +52,6 @@ begin
 	           p_assign_single_p, p_require_category_p);
 	end if;
         return 0;
-end;
-' language 'plpgsql';
+END;
+
+$$ LANGUAGE plpgsql;

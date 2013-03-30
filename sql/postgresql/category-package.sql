@@ -5,43 +5,40 @@
 -- @creation-date 2003-04-16
 --
 
-create or replace function category__new (
-    integer,   -- category_id
-    integer,   -- tree_id
-    varchar,   -- locale
-    varchar,   -- name
-    varchar,   -- description
-    integer,   -- parent_id
-    char,      -- deprecated_p
-    timestamp with time zone, -- creation_date
-    integer,   -- creation_user
-    varchar    -- creation_ip
-)
-returns integer as '
-declare
-    p_category_id       alias for $1;
-    p_tree_id           alias for $2;
-    p_locale            alias for $3;
-    p_name              alias for $4;
-    p_description       alias for $5;
-    p_parent_id         alias for $6;
-    p_deprecated_p      alias for $7;
-    p_creation_date     alias for $8;
-    p_creation_user     alias for $9;
-    p_creation_ip       alias for $10;
+
+
+-- added
+select define_function_args('category__new','category_id,tree_id,locale,name,description,parent_id,deprecated_p,creation_date,creation_user,creation_ip');
+
+--
+-- procedure category__new/10
+--
+CREATE OR REPLACE FUNCTION category__new(
+   p_category_id integer,
+   p_tree_id integer,
+   p_locale varchar,
+   p_name varchar,
+   p_description varchar,
+   p_parent_id integer,
+   p_deprecated_p char,
+   p_creation_date timestamp with time zone,
+   p_creation_user integer,
+   p_creation_ip varchar
+) RETURNS integer AS $$
+DECLARE
 
     v_category_id       integer; 
     v_left_ind          integer;
     v_right_ind         integer;
-begin
+BEGIN
 	v_category_id := acs_object__new ( 
 		p_category_id,          -- object_id
-		''category'',           -- object_type
+		'category',           -- object_type
 		p_creation_date,        -- creation_date
 		p_creation_user,        -- creation_user
 		p_creation_ip,          -- creation_ip
 		p_tree_id,              -- context_id
-                ''t'',                  -- security_inherit_p
+                't',                  -- security_inherit_p
                 p_name,                 -- title
                 null                    -- package_id
 	);
@@ -87,28 +84,29 @@ begin
 	    (v_category_id, p_locale, p_name, p_description);
 
 	return v_category_id;
-end;
-' language 'plpgsql';
+END;
 
-create or replace function category__new_translation (
-    integer,   -- category_id
-    varchar,   -- locale
-    varchar,   -- name
-    varchar,   -- description
-    timestamp with time zone, -- modifying_date
-    integer,   -- modifying_user
-    varchar    -- modifying_ip
-)
-returns integer as '
-declare
-    p_category_id       alias for $1;
-    p_locale            alias for $2;
-    p_name              alias for $3;
-    p_description       alias for $4;
-    p_modifying_date    alias for $5;
-    p_modifying_user    alias for $6;
-    p_modifying_ip      alias for $7;
-begin
+$$ LANGUAGE plpgsql;
+
+
+
+-- added
+select define_function_args('category__new_translation','category_id,locale,name,description,modifying_date,modifying_user,modifying_ip');
+
+--
+-- procedure category__new_translation/7
+--
+CREATE OR REPLACE FUNCTION category__new_translation(
+   p_category_id integer,
+   p_locale varchar,
+   p_name varchar,
+   p_description varchar,
+   p_modifying_date timestamp with time zone,
+   p_modifying_user integer,
+   p_modifying_ip varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
         insert into category_translations
 	    (category_id, locale, name, description)
 	values
@@ -121,51 +119,72 @@ begin
 	where object_id = p_category_id;
         
         return 0;
-end;
-' language 'plpgsql';
+END;
 
-create or replace function category__phase_out (
-    integer   -- category_id
-)
-returns integer as '
-declare
-    p_category_id       alias for $1;
-begin
+$$ LANGUAGE plpgsql;
+
+
+
+-- added
+select define_function_args('category__phase_out','category_id');
+
+--
+-- procedure category__phase_out/1
+--
+CREATE OR REPLACE FUNCTION category__phase_out(
+   p_category_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
        update categories
-       set deprecated_p = ''t''
+       set deprecated_p = 't'
        where category_id = p_category_id;
 
        return 0;
-end;
-' language 'plpgsql';
+END;
 
-create or replace function category__phase_in (
-    integer   -- category_id
-)
-returns integer as '
-declare
-    p_category_id       alias for $1;
-begin
+$$ LANGUAGE plpgsql;
+
+
+
+-- added
+select define_function_args('category__phase_in','category_id');
+
+--
+-- procedure category__phase_in/1
+--
+CREATE OR REPLACE FUNCTION category__phase_in(
+   p_category_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
        update categories
-       set deprecated_p = ''f''
+       set deprecated_p = 'f'
        where category_id = p_category_id;
 
        return 0;
-end;
-' language 'plpgsql';
+END;
 
-create or replace function category__del (
-    integer   -- category_id
-)
-returns integer as '
-declare
-        p_category_id   alias for $1;
+$$ LANGUAGE plpgsql;
+
+
+
+-- added
+select define_function_args('category__del','category_id');
+
+--
+-- procedure category__del/1
+--
+CREATE OR REPLACE FUNCTION category__del(
+   p_category_id integer
+) RETURNS integer AS $$
+DECLARE
 
         v_tree_id       integer;
 	v_left_ind      integer;
 	v_right_ind     integer;
         node            record;
-begin
+BEGIN
         select tree_id, left_ind, right_ind
 	into v_tree_id, v_left_ind, v_right_ind
 	from categories where category_id = p_category_id;
@@ -198,28 +217,29 @@ begin
         -- for debugging reasons
         perform category_tree__check_nested_ind(v_tree_id);
         return 0;
-end;
-' language 'plpgsql';
+END;
 
-create or replace function category__edit (
-    integer,   -- category_id
-    varchar,   -- locale
-    varchar,   -- name
-    varchar,   -- description
-    timestamp with time zone, -- modifying_date
-    integer,   -- modifying_user
-    varchar    -- modifying_ip
-)
-returns integer as '
-declare
-    p_category_id       alias for $1;
-    p_locale            alias for $2;
-    p_name              alias for $3;
-    p_description       alias for $4;
-    p_modifying_date    alias for $5;
-    p_modifying_user    alias for $6;
-    p_modifying_ip      alias for $7;
-begin
+$$ LANGUAGE plpgsql;
+
+
+
+-- added
+select define_function_args('category__edit','category_id,locale,name,description,modifying_date,modifying_user,modifying_ip');
+
+--
+-- procedure category__edit/7
+--
+CREATE OR REPLACE FUNCTION category__edit(
+   p_category_id integer,
+   p_locale varchar,
+   p_name varchar,
+   p_description varchar,
+   p_modifying_date timestamp with time zone,
+   p_modifying_user integer,
+   p_modifying_ip varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 	-- change category name
     update category_translations
     set name = p_name,
@@ -234,26 +254,31 @@ begin
     where object_id = p_category_id;
 
     return 0;
-end;
-' language 'plpgsql';
+END;
 
-create or replace function category__change_parent (
-    integer,   -- category_id
-    integer,   -- tree_id
-    integer    -- parent_id
-)
-returns integer as '
-declare
-    p_category_id       alias for $1;
-    p_tree_id           alias for $2;
-    p_parent_id         alias for $3;
+$$ LANGUAGE plpgsql;
+
+
+
+-- added
+select define_function_args('category__change_parent','category_id,tree_id,parent_id');
+
+--
+-- procedure category__change_parent/3
+--
+CREATE OR REPLACE FUNCTION category__change_parent(
+   p_category_id integer,
+   p_tree_id integer,
+   p_parent_id integer
+) RETURNS integer AS $$
+DECLARE
 
     v_old_left_ind      integer;
     v_old_right_ind     integer;
     v_new_left_ind      integer;
     v_new_right_ind     integer;
     v_width             integer;
-begin
+BEGIN
  	update categories
 	set parent_id = p_parent_id
 	where category_id = p_category_id;
@@ -323,23 +348,31 @@ begin
         perform category_tree__check_nested_ind(p_tree_id);
 
         return 0;
-end;
-' language 'plpgsql';
+END;
+
+$$ LANGUAGE plpgsql;
 
 
-create or replace function category__name (
-    integer   -- category_id
-)
-returns integer as '
-declare
-    p_category_id       alias for $1;
+
+
+-- added
+select define_function_args('category__name','category_id');
+
+--
+-- procedure category__name/1
+--
+CREATE OR REPLACE FUNCTION category__name(
+   p_category_id integer
+) RETURNS integer AS $$
+DECLARE
     v_name      varchar;
-begin
+BEGIN
 	select name into v_name
 	from category_translations
 	where category_id = p_category_id
-	and locale = ''en_US'';
+	and locale = 'en_US';
 
         return 0;
-end;
-' language 'plpgsql';
+END;
+
+$$ LANGUAGE plpgsql;

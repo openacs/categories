@@ -7,13 +7,21 @@
 -- @creation-date 2004-01-08
 --
 
-create or replace function category_synonym__convert_string (varchar(100))
-returns varchar(200) as '
+
+
+-- added
+select define_function_args('category_synonym__convert_string','name');
+
+--
+-- procedure category_synonym__convert_string/1
+--
+CREATE OR REPLACE FUNCTION category_synonym__convert_string(
+   p_name varchar(100)
+) RETURNS varchar(200) AS $$
 -- return string to build search index
-declare
-        p_name		alias for $1;
+DECLARE
         v_index_string	varchar(200);
-begin
+BEGIN
 	-- convert string to uppercase and substitute special chars
         -- TODO: complete
         v_index_string := upper (
@@ -23,39 +31,57 @@ begin
                         replace (
                         replace (
                         replace (
-			replace (p_name, ''ä'', ''AE''), 
-					 ''Ä'', ''AE''),
-					 ''ö'', ''OE''),
-					 ''Ö'', ''OE''),
-					 ''ü'', ''UE''),
-					 ''Ü'', ''UE''),
-					 ''ß'', ''SS''));
+			replace (p_name, 'ä', 'AE'), 
+					 'Ä', 'AE'),
+					 'ö', 'OE'),
+					 'Ö', 'OE'),
+					 'ü', 'UE'),
+					 'Ü', 'UE'),
+					 'ß', 'SS'));
 					  
-	return ('' '' || v_index_string || '' '');
-end;' language 'plpgsql';
+	return (' ' || v_index_string || ' ');
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function category_synonym__get_similarity (integer, integer, bigint)
-returns integer as '
+
+
+-- added
+select define_function_args('category_synonym__get_similarity','len1,len2,matches');
+
+--
+-- procedure category_synonym__get_similarity/3
+--
+CREATE OR REPLACE FUNCTION category_synonym__get_similarity(
+   p_len1 integer,
+   p_len2 integer,
+   p_matches bigint
+) RETURNS integer AS $$
 -- calculates similarity of two strings
-declare
-	p_len1		alias for $1;
-	p_len2		alias for $2;
-	p_matches	alias for $3;
-begin
+DECLARE
+BEGIN
 	return (p_matches * 200 / (p_len1 + p_len2));
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function category_synonym__search (varchar(100), varchar(5))
-returns integer as '
+
+
+-- added
+select define_function_args('category_synonym__search','search_text,locale');
+
+--
+-- procedure category_synonym__search/2
+--
+CREATE OR REPLACE FUNCTION category_synonym__search(
+   p_search_text varchar(100),
+   p_locale varchar(5)
+) RETURNS integer AS $$
 -- return id for search string
-declare
-	p_search_text	alias for $1;
-	p_locale	alias for $2;
+DECLARE
 	v_search_text	varchar(200);
 	v_query_id	integer;
 	v_len		integer;
 	v_i		integer;
-begin
+BEGIN
 	-- check if search text already exists
 	select	query_id into v_query_id
 	from	category_search
@@ -66,20 +92,20 @@ begin
 	if (v_query_id is not null) then
 		update	category_search
 		set	queried_count = queried_count + 1,
-			last_queried = date(''now'')
+			last_queried = date('now')
 		where	query_id = v_query_id;
 		return (v_query_id);
 	end if;
 
 	-- get new search query id
-	v_query_id := nextval (''category_search_id_seq'');
+	v_query_id := nextval ('category_search_id_seq');
 
 	-- convert string to uppercase and substitute special chars
 	v_search_text := category_synonym__convert_string (p_search_text);
 
 	-- insert search data
 	insert into category_search (query_id, search_text, locale, queried_count, last_queried)
-	values (v_query_id, p_search_text, p_locale, 1, date(''now''));
+	values (v_query_id, p_search_text, p_locale, 1, date('now'));
 
 	-- build search index
 	v_len := length (v_search_text) - 2;
@@ -104,19 +130,28 @@ begin
 	group by s.synonym_id, s.name;
 
 	return (v_query_id);
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function category_synonym__reindex (integer, varchar(100), varchar(5))
-returns integer as '
+
+
+-- added
+select define_function_args('category_synonym__reindex','synonym_id,name,locale');
+
+--
+-- procedure category_synonym__reindex/3
+--
+CREATE OR REPLACE FUNCTION category_synonym__reindex(
+   p_synonym_id integer,
+   p_name varchar(100),
+   p_locale varchar(5)
+) RETURNS integer AS $$
 -- build search index for synonym
-declare
-	p_synonym_id	alias for $1;
-	p_name		alias for $2;
-	p_locale	alias for $3;
+DECLARE
 	v_name		varchar(200);
 	v_len		integer;
 	v_i		integer;
-begin
+BEGIN
 	-- delete old search results for this synonym
 	delete	from category_search_results
 	where	synonym_id = p_synonym_id;
@@ -151,40 +186,58 @@ begin
 	group by s.query_id, s.search_text;
 
 	return (1);
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function category_synonym__new (varchar(100), varchar(5), integer, integer)
-returns integer as '
-declare
-	p_name		alias for $1;
-	p_locale	alias for $2;
-	p_category_id	alias for $3;
-	p_synonym_id	alias for $4;
+
+
+-- added
+select define_function_args('category_synonym__new','name,locale,category_id,synonym_id');
+
+--
+-- procedure category_synonym__new/4
+--
+CREATE OR REPLACE FUNCTION category_synonym__new(
+   p_name varchar(100),
+   p_locale varchar(5),
+   p_category_id integer,
+   p_synonym_id integer
+) RETURNS integer AS $$
+DECLARE
 	v_synonym_id	integer;
-begin
+BEGIN
 	-- get new synonym_id
 	if (p_synonym_id is null) then
-		v_synonym_id := nextval (''category_synonyms_id_seq'');
+		v_synonym_id := nextval ('category_synonyms_id_seq');
 	else 
 		v_synonym_id := p_synonym_id;
 	end if;
 
 	-- insert synonym data
 	insert into category_synonyms (synonym_id, category_id, locale, name, synonym_p)
-	values (v_synonym_id, p_category_id, p_locale, p_name, ''t'');
+	values (v_synonym_id, p_category_id, p_locale, p_name, 't');
 
 	-- insert in synonym index and search results
 	PERFORM category_synonym__reindex (v_synonym_id, p_name, p_locale);
 
 	return (v_synonym_id);
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function category_synonym__del (integer)
-returns integer as '
+
+
+-- added
+select define_function_args('category_synonym__del','synonym_id');
+
+--
+-- procedure category_synonym__del/1
+--
+CREATE OR REPLACE FUNCTION category_synonym__del(
+   p_synonym_id integer
+) RETURNS integer AS $$
 -- delete synonym
-declare
-	p_synonym_id	alias for $1;
-begin
+DECLARE
+BEGIN
 	-- delete search results
 	delete	from category_search_results
 	where	synonym_id = p_synonym_id;
@@ -198,15 +251,24 @@ begin
 	where	synonym_id = p_synonym_id;
 
 	return (1);
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 	
-create or replace function category_synonym__edit (integer, varchar(100), varchar(5))
-returns integer as '
-declare
-	p_synonym_id	alias for $1;
-	p_new_name	alias for $2;
-	p_locale	alias for $3;
-begin
+
+
+-- added
+select define_function_args('category_synonym__edit','synonym_id,new_name,locale');
+
+--
+-- procedure category_synonym__edit/3
+--
+CREATE OR REPLACE FUNCTION category_synonym__edit(
+   p_synonym_id integer,
+   p_new_name varchar(100),
+   p_locale varchar(5)
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 	-- update synonym data
 	update	category_synonyms
 	set	name = p_new_name,
@@ -217,49 +279,64 @@ begin
 	PERFORM category_synonym__reindex (p_synonym_id, p_new_name, p_locale);
 
 	return (p_synonym_id);
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -----
 -- triggers for category synonyms
 -----
 
-create or replace function category_synonym__new_cat_trans_trg ()
-returns trigger as '
+
+
+--
+-- procedure category_synonym__new_cat_trans_trg/0
+--
+CREATE OR REPLACE FUNCTION category_synonym__new_cat_trans_trg(
+
+) RETURNS trigger AS $$
 -- trigger function for inserting category translation
-declare
+DECLARE
     v_synonym_id     integer;
-begin
+BEGIN
 	-- create synonym
     v_synonym_id := category_synonym__new (NEW.name, NEW.locale, NEW.category_id, null);
 
 	-- mark synonym as not editable for users
     update category_synonyms
-    set synonym_p = ''f''
+    set synonym_p = 'f'
     where synonym_id = v_synonym_id;
 
     return new;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function category_synonym__edit_cat_trans_trg ()
-returns trigger as '
+
+
+--
+-- procedure category_synonym__edit_cat_trans_trg/0
+--
+CREATE OR REPLACE FUNCTION category_synonym__edit_cat_trans_trg(
+
+) RETURNS trigger AS $$
 -- trigger function for updating a category translation
-declare
+DECLARE
     v_synonym_id    integer;
-begin
+BEGIN
 	-- get synonym_id of updated category translation
     select synonym_id into v_synonym_id
     from   category_synonyms
     where  category_id = OLD.category_id
            and name = OLD.name
            and locale = OLD.locale
-           and synonym_p = ''f'';
+           and synonym_p = 'f';
 
 	-- update synonym
     PERFORM category_synonym__edit (v_synonym_id, NEW.name, NEW.locale);
 
     return new;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 create trigger category_synonym__insert_cat_trans_trg 

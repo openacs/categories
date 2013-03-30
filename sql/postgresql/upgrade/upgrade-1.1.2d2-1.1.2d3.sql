@@ -1,18 +1,25 @@
 -- add missing alias for $1
 
-create or replace function category__name (
-    integer   -- category_id
-)
-returns integer as '
-declare
-    p_category_id       alias for $1;
+
+
+-- added
+select define_function_args('category__name','category_id');
+
+--
+-- procedure category__name/1
+--
+CREATE OR REPLACE FUNCTION category__name(
+   p_category_id integer
+) RETURNS integer AS $$
+DECLARE
     v_name      varchar;
-begin
+BEGIN
 	select name into v_name
 	from category_translations
 	where category_id = p_category_id
-	and locale = ''en_US'';
+	and locale = 'en_US';
 
         return 0;
-end;
-' language 'plpgsql';
+END;
+
+$$ LANGUAGE plpgsql;

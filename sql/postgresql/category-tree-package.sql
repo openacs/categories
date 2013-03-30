@@ -6,34 +6,32 @@
 -- @creation-date 2003-04-16
 --
 
-create or replace function category_tree__new (
-    integer, -- tree_id
-    varchar, -- locale
-    varchar, -- tree_name
-    varchar, -- description
-    char,    -- site_wide_p
-    timestamp with time zone, -- creation_date
-    integer, -- creation_user
-    varchar, -- creation_ip
-    integer  -- context_id
-)
-returns integer as '
-declare
-    p_tree_id               alias for $1;
-    p_locale                alias for $2;
-    p_tree_name             alias for $3;
-    p_description           alias for $4;
-    p_site_wide_p           alias for $5;
-    p_creation_date         alias for $6;
-    p_creation_user         alias for $7;
-    p_creation_ip           alias for $8;
-    p_context_id            alias for $9;
+
+
+-- added
+select define_function_args('category_tree__new','tree_id,locale,tree_name,description,site_wide_p,creation_date,creation_user,creation_ip,context_id');
+
+--
+-- procedure category_tree__new/9
+--
+CREATE OR REPLACE FUNCTION category_tree__new(
+   p_tree_id integer,
+   p_locale varchar,
+   p_tree_name varchar,
+   p_description varchar,
+   p_site_wide_p char,
+   p_creation_date timestamp with time zone,
+   p_creation_user integer,
+   p_creation_ip varchar,
+   p_context_id integer
+) RETURNS integer AS $$
+DECLARE
   
     v_tree_id               integer;
-begin
+BEGIN
 	v_tree_id := acs_object__new (
 		p_tree_id,         -- object_id
-		''category_tree'', -- object_type
+		'category_tree', -- object_type
 		p_creation_date,   -- creation_date
 		p_creation_user,   -- creation_user
 		p_creation_ip,     -- creation_ip
@@ -50,17 +48,17 @@ begin
 	perform acs_permission__grant_permission (
 		v_tree_id,             -- object_id
 		p_creation_user,       -- grantee_id
-		''category_tree_read'' -- privilege
+		'category_tree_read' -- privilege
 	);
 	perform acs_permission__grant_permission (
 		v_tree_id,                -- object_id
 		p_creation_user,          -- grantee_id
-		''category_tree_write''   -- privilege
+		'category_tree_write'   -- privilege
 	);
 	perform acs_permission__grant_permission (
 		v_tree_id,                          -- object_id
 		p_creation_user,                    -- grantee_id
-		''category_tree_grant_permissions'' -- privilege
+		'category_tree_grant_permissions' -- privilege
 	);
 
 	insert into category_tree_translations
@@ -69,28 +67,29 @@ begin
 	    (v_tree_id, p_locale, p_tree_name, p_description);
 
 	return v_tree_id;
-end;
-' language 'plpgsql';
+END;
 
-create or replace function category_tree__new_translation (
-    integer,   -- tree_id
-    varchar,   -- locale
-    varchar,   -- tree_name
-    varchar,   -- description
-    timestamp with time zone, -- modifying_date
-    integer,   -- modifying_user
-    varchar    -- modifying_ip
-)
-returns integer as '
-declare
-    p_tree_id                alias for $1;
-    p_locale                 alias for $2;
-    p_tree_name              alias for $3;
-    p_description            alias for $4;
-    p_modifying_date         alias for $5;
-    p_modifying_user         alias for $6;
-    p_modifying_ip           alias for $7;
-begin
+$$ LANGUAGE plpgsql;
+
+
+
+-- added
+select define_function_args('category_tree__new_translation','tree_id,locale,tree_name,description,modifying_date,modifying_user,modifying_ip');
+
+--
+-- procedure category_tree__new_translation/7
+--
+CREATE OR REPLACE FUNCTION category_tree__new_translation(
+   p_tree_id integer,
+   p_locale varchar,
+   p_tree_name varchar,
+   p_description varchar,
+   p_modifying_date timestamp with time zone,
+   p_modifying_user integer,
+   p_modifying_ip varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 	insert into category_tree_translations
 	    (tree_id, locale, name, description)
 	values
@@ -102,16 +101,23 @@ begin
 	    modifying_ip = p_modifying_ip
 	where object_id = p_tree_id;
         return 0;
-end;
-' language 'plpgsql';
+END;
 
-create or replace function category_tree__del (
-    integer   -- tree_id
-)
-returns integer as '
-declare
-    p_tree_id                alias for $1;
-begin
+$$ LANGUAGE plpgsql;
+
+
+
+-- added
+select define_function_args('category_tree__del','tree_id');
+
+--
+-- procedure category_tree__del/1
+--
+CREATE OR REPLACE FUNCTION category_tree__del(
+   p_tree_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 
        delete from category_tree_map where tree_id = p_tree_id;
 
@@ -131,30 +137,30 @@ begin
        perform acs_object__delete(p_tree_id);
 
        return 0;
-end;
-' language 'plpgsql';
+END;
 
-create or replace function category_tree__edit (
-    integer,   -- tree_id
-    varchar,   -- locale
-    varchar,   -- tree_name
-    varchar,   -- description
-    char,      -- site_wide_p
-    timestamp with time zone, -- modifying_date
-    integer,   -- modifying_user
-    varchar    -- modifying_ip
-)
-returns integer as '
-declare
-    p_tree_id                alias for $1;
-    p_locale                 alias for $2;
-    p_tree_name              alias for $3;
-    p_description            alias for $4;
-    p_site_wide_p            alias for $5;
-    p_modifying_date         alias for $6;
-    p_modifying_user         alias for $7;
-    p_modifying_ip           alias for $8;
-begin
+$$ LANGUAGE plpgsql;
+
+
+
+-- added
+select define_function_args('category_tree__edit','tree_id,locale,tree_name,description,site_wide_p,modifying_date,modifying_user,modifying_ip');
+
+--
+-- procedure category_tree__edit/8
+--
+CREATE OR REPLACE FUNCTION category_tree__edit(
+   p_tree_id integer,
+   p_locale varchar,
+   p_tree_name varchar,
+   p_description varchar,
+   p_site_wide_p char,
+   p_modifying_date timestamp with time zone,
+   p_modifying_user integer,
+   p_modifying_ip varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 	update category_trees
 	set site_wide_p = p_site_wide_p
 	where tree_id = p_tree_id;
@@ -172,26 +178,30 @@ begin
 	where object_id = p_tree_id;
 
        return 0;
-end;
-' language 'plpgsql';
+END;
 
-create or replace function category_tree__copy (
-    integer,   -- source_tree
-    integer,   -- dest_tree
-    integer,   -- creation_user
-    varchar    -- creation_ip
-)
-returns integer as '
-declare
-    p_source_tree           alias for $1;
-    p_dest_tree             alias for $2;
-    p_creation_user         alias for $3;
-    p_creation_ip           alias for $4;
+$$ LANGUAGE plpgsql;
+
+
+
+-- added
+select define_function_args('category_tree__copy','source_tree,dest_tree,creation_user,creation_ip');
+
+--
+-- procedure category_tree__copy/4
+--
+CREATE OR REPLACE FUNCTION category_tree__copy(
+   p_source_tree integer,
+   p_dest_tree integer,
+   p_creation_user integer,
+   p_creation_ip varchar
+) RETURNS integer AS $$
+DECLARE
 
     v_new_left_ind          integer;
     v_category_id	    integer;
     source record;
-begin
+BEGIN
 	select coalesce(max(right_ind),0) into v_new_left_ind 
 	from categories
 	where tree_id = p_dest_tree;
@@ -200,7 +210,7 @@ begin
 
 	   v_category_id := acs_object__new ( 
                 null,
-		''category'',     -- object_type
+		'category',     -- object_type
 		now(),            -- creation_date
 		p_creation_user,  -- creation_user
 		p_creation_ip,    -- creation_ip
@@ -236,28 +246,30 @@ begin
 	perform category_tree__check_nested_ind(p_dest_tree);
 
        return 0;
-end;
-' language 'plpgsql';
+END;
 
-create or replace function category_tree__map (
-    integer,   -- object_id
-    integer,   -- tree_id
-    integer,   -- subtree_category_id
-    char,      -- assign_single_p
-    char,      -- require_category_p
-    varchar    -- widget
-)
-returns integer as '
-declare
-    p_object_id              alias for $1;
-    p_tree_id                alias for $2;
-    p_subtree_category_id    alias for $3;
-    p_assign_single_p        alias for $4;
-    p_require_category_p     alias for $5;
-    p_widget                 alias for $6;
+$$ LANGUAGE plpgsql;
+
+
+
+-- added
+select define_function_args('category_tree__map','object_id,tree_id,subtree_category_id,assign_single_p,require_category_p,widget');
+
+--
+-- procedure category_tree__map/6
+--
+CREATE OR REPLACE FUNCTION category_tree__map(
+   p_object_id integer,
+   p_tree_id integer,
+   p_subtree_category_id integer,
+   p_assign_single_p char,
+   p_require_category_p char,
+   p_widget varchar
+) RETURNS integer AS $$
+DECLARE
 
     v_map_count              integer;
-begin
+BEGIN
 	select count(*) 
 	into v_map_count
 	from category_tree_map
@@ -272,57 +284,77 @@ begin
 	           p_assign_single_p, p_require_category_p, p_widget);
 	end if;
         return 0;
-end;
-' language 'plpgsql';
+END;
 
-create or replace function category_tree__unmap (
-    integer,   -- object_id
-    integer   -- tree_id
-)
-returns integer as '
-declare
-    p_object_id              alias for $1;
-    p_tree_id                alias for $2;
-begin
+$$ LANGUAGE plpgsql;
+
+
+
+-- added
+select define_function_args('category_tree__unmap','object_id,tree_id');
+
+--
+-- procedure category_tree__unmap/2
+--
+CREATE OR REPLACE FUNCTION category_tree__unmap(
+   p_object_id integer,
+   p_tree_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 	delete from category_tree_map
 	where object_id = p_object_id
 	and tree_id = p_tree_id;
         return 0;
-end;
-' language 'plpgsql';
+END;
 
-create or replace function category_tree__name (
-    integer   -- tree_id
-)
-returns varchar as '
-declare
-    p_tree_id                alias for $1;
+$$ LANGUAGE plpgsql;
+
+
+
+-- added
+select define_function_args('category_tree__name','tree_id');
+
+--
+-- procedure category_tree__name/1
+--
+CREATE OR REPLACE FUNCTION category_tree__name(
+   p_tree_id integer
+) RETURNS varchar AS $$
+DECLARE
     v_name                   varchar;
-begin
+BEGIN
 	select name into v_name
 	from category_tree_translations
 	where tree_id = p_tree_id
-	and locale = ''en_US'';
+	and locale = 'en_US';
 
 	return v_name;
-end;
-' language 'plpgsql';
+END;
 
-create or replace function category_tree__check_nested_ind (
-    integer   -- tree_id
-)
-returns integer as '
-declare
-    p_tree_id                alias for $1;
+$$ LANGUAGE plpgsql;
+
+
+
+-- added
+select define_function_args('category_tree__check_nested_ind','tree_id');
+
+--
+-- procedure category_tree__check_nested_ind/1
+--
+CREATE OR REPLACE FUNCTION category_tree__check_nested_ind(
+   p_tree_id integer
+) RETURNS integer AS $$
+DECLARE
     v_negative               numeric;
     v_order                  numeric;
     v_parent                 numeric;
-begin
+BEGIN
         select count(*) into v_negative from categories
 	where tree_id = p_tree_id and (left_ind < 1 or right_ind < 1);
 
 	if v_negative > 0 then 
-           raise EXCEPTION ''-20001: negative index not allowed!'';
+           raise EXCEPTION '-20001: negative index not allowed!';
         end if;
 
         select count(*) into v_order from categories
@@ -330,7 +362,7 @@ begin
 	and left_ind >= right_ind;
 	
 	if v_order > 0 then 
-           raise EXCEPTION ''-20002: right index must be greater than left index!'';
+           raise EXCEPTION '-20002: right index must be greater than left index!';
         end if;
 
         select count(*) into v_parent
@@ -341,9 +373,10 @@ begin
 		and child.parent_id = parent.category_id;
 
 	if v_parent > 0 then 
-           raise EXCEPTION ''-20003: child index must be between parent index!'';
+           raise EXCEPTION '-20003: child index must be between parent index!';
         end if;
 
         return 0;
-end;
-' language 'plpgsql';
+END;
+
+$$ LANGUAGE plpgsql;

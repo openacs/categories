@@ -181,20 +181,27 @@ comment on column category_search_results.similarity is '
 
 -- insert existing category translations as synonyms
 -- and build synonym index
-create function inline_0 ()
-returns integer as '
-declare
+
+
+--
+-- procedure inline_0/0
+--
+CREATE OR REPLACE FUNCTION inline_0(
+
+) RETURNS integer AS $$
+DECLARE
   rec_translations record;
   v_synonym_id integer;
-begin
+BEGIN
   for rec_translations in
     select category_id, name, locale
     from   category_translations
   loop
     v_synonym_id := category_synonym__new (rec_translations.name, rec_translations.locale, rec_translations.category_id, null);
-    update category_synonyms set synonym_p = ''f'' where synonym_id = v_synonym_id;
+    update category_synonyms set synonym_p = 'f' where synonym_id = v_synonym_id;
   end loop;
   return 0;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 select inline_0 ();
 drop function inline_0 ();

@@ -1,20 +1,21 @@
-create or replace function category_tree__copy (
-    integer,   -- source_tree
-    integer,   -- dest_tree
-    integer,   -- creation_user
-    varchar    -- creation_ip
-)
-returns integer as '
-declare
-    p_source_tree           alias for $1;
-    p_dest_tree             alias for $2;
-    p_creation_user         alias for $3;
-    p_creation_ip           alias for $4;
 
+-- added
+select define_function_args('category_tree__copy','source_tree,dest_tree,creation_user,creation_ip');
+
+--
+-- procedure category_tree__copy/4
+--
+CREATE OR REPLACE FUNCTION category_tree__copy(
+   p_source_tree integer,
+   p_dest_tree integer,
+   p_creation_user integer,
+   p_creation_ip varchar
+) RETURNS integer AS $$
+DECLARE
     v_new_left_ind          integer;
     v_category_id	    integer;
     source record;
-begin
+BEGIN
 	select coalesce(max(right_ind),0) into v_new_left_ind 
 	from categories
 	where tree_id = p_dest_tree;
@@ -23,7 +24,7 @@ begin
 
 	   v_category_id := acs_object__new ( 
                 null,
-		''category'',     -- object_type
+		'category',     -- object_type
 		now(),            -- creation_date
 		p_creation_user,  -- creation_user
 		p_creation_ip,    -- creation_ip
@@ -59,5 +60,6 @@ begin
 	perform category_tree__check_nested_ind(p_dest_tree);
 
        return 0;
-end;
-' language 'plpgsql';
+END;
+
+$$ LANGUAGE plpgsql;

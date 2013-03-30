@@ -21,17 +21,23 @@ drop trigger category_synonym__update_cat_trans_trg on category_translations;
 -- fix entries destroyed by old procs
 --
 ----
-create function inline_0 ()
-returns integer as '
-declare
+
+
+--
+-- procedure inline_0/0
+--
+CREATE OR REPLACE FUNCTION inline_0(
+
+) RETURNS integer AS $$
+DECLARE
     v_name             category_translations.name%TYPE;
     v_synonym_cursor   RECORD;
-begin
+BEGIN
     FOR v_synonym_cursor IN
        select category_id,
               locale
        from category_synonyms
-            where synonym_p = ''f''
+            where synonym_p = 'f'
     LOOP
        select name into v_name
        from category_translations
@@ -45,8 +51,9 @@ begin
     END LOOP;
 
     return 0;
-end;
-' language 'plpgsql';
+END;
+
+$$ LANGUAGE plpgsql;
 
 select inline_0 ();
 drop function inline_0 ();
@@ -58,42 +65,56 @@ drop function inline_0 ();
 --
 -----
 
-create or replace function category_synonym__new_cat_trans_trg ()
-returns trigger as '
+
+
+--
+-- procedure category_synonym__new_cat_trans_trg/0
+--
+CREATE OR REPLACE FUNCTION category_synonym__new_cat_trans_trg(
+
+) RETURNS trigger AS $$
 -- trigger function for inserting category translation
-declare
+DECLARE
     v_synonym_id     integer;
-begin
+BEGIN
 	-- create synonym
     v_synonym_id := category_synonym__new (NEW.name, NEW.locale, NEW.category_id, null);
 
 	-- mark synonym as not editable for users
     update category_synonyms
-    set synonym_p = ''f''
+    set synonym_p = 'f'
     where synonym_id = v_synonym_id;
 
     return new;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function category_synonym__edit_cat_trans_trg ()
-returns trigger as '
+
+
+--
+-- procedure category_synonym__edit_cat_trans_trg/0
+--
+CREATE OR REPLACE FUNCTION category_synonym__edit_cat_trans_trg(
+
+) RETURNS trigger AS $$
 -- trigger function for updating a category translation
-declare
+DECLARE
     v_synonym_id    integer;
-begin
+BEGIN
 	-- get synonym_id of updated category translation
     select synonym_id into v_synonym_id
     from   category_synonyms
     where  category_id = OLD.category_id
            and name = OLD.name
            and locale = OLD.locale
-           and synonym_p = ''f'';
+           and synonym_p = 'f';
 
 	-- update synonym
     PERFORM category_synonym__edit (v_synonym_id, NEW.name, NEW.locale);
 
     return new;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -----
@@ -118,25 +139,25 @@ execute procedure category_synonym__edit_cat_trans_trg();
 -- fix them to have spaces
 --
 -----
-create or replace function category__edit (
-    integer,   -- category_id
-    varchar,   -- locale
-    varchar,   -- name
-    varchar,   -- description
-    timestamp with time zone, -- modifying_date
-    integer,   -- modifying_user
-    varchar    -- modifying_ip
-)
-returns integer as '
-declare
-    p_category_id       alias for $1;
-    p_locale            alias for $2;
-    p_name              alias for $3;
-    p_description       alias for $4;
-    p_modifying_date    alias for $5;
-    p_modifying_user    alias for $6;
-    p_modifying_ip      alias for $7;
-begin
+
+
+-- added
+select define_function_args('category__edit','category_id,locale,name,description,modifying_date,modifying_user,modifying_ip');
+
+--
+-- procedure category__edit/7
+--
+CREATE OR REPLACE FUNCTION category__edit(
+   p_category_id integer,
+   p_locale varchar,
+   p_name varchar,
+   p_description varchar,
+   p_modifying_date timestamp with time zone,
+   p_modifying_user integer,
+   p_modifying_ip varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 	-- change category name
     update category_translations
     set name = p_name,
@@ -151,5 +172,6 @@ begin
     where object_id = p_category_id;
 
     return 0;
-end;
-' language 'plpgsql';
+END;
+
+$$ LANGUAGE plpgsql;

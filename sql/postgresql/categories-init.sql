@@ -52,22 +52,22 @@ create table acs_named_objects (
 create index acs_named_objs_name_ix on acs_named_objects(object_name);
 create index acs_named_objs_package_ix on acs_named_objects(package_id);
 
-create function inline_0 ()
-returns integer as '
-begin
+CREATE OR REPLACE FUNCTION inline_0 () RETURNS integer AS $$
+BEGIN
         PERFORM acs_object_type__create_type (
-                ''acs_named_object'',     -- object_type
-                ''Named Object'',         -- pretty_name
-                ''Named Objects'',        -- pretty_plural
-                ''acs_object'',           -- supertype
-                ''acs_named_objects'',    -- table_name
-                ''object_id'',            -- id_column
+                'acs_named_object',     -- object_type
+                'Named Object',         -- pretty_name
+                'Named Objects',        -- pretty_plural
+                'acs_object',           -- supertype
+                'acs_named_objects',    -- table_name
+                'object_id',            -- id_column
                 null,                     -- name_method
-                ''f'',
+                'f',
                 null,
                 null
         );
        return 0;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 select inline_0 ();
 drop function inline_0 ();
