@@ -145,7 +145,7 @@ db_multirow -extend {url_one user_url new} content content "
 
        set last_modified [regsub -all { } [util::age_pretty -hours_limit 0 -mode_2_fmt "%X %a" -mode_3_fmt "%x" -timestamp_ansi $last_modified -sysdate_ansi $now] {\&nbsp;}]
        set user_url [acs_community_member_url -user_id $user_id]
-       if {[catch {set url_one [acs_sc_call -error FtsContentProvider url [list $object_id] $object_type]} errMsg]} {
+       if {[catch {set url_one [acs_sc::invoke -error -contract FtsContentProvider -operation url -call_args [list $object_id] -impl $object_type]} errMsg]} {
            global errorCode
            set url_one $errorCode
        }
