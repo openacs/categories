@@ -44,7 +44,7 @@ ad_form -name synonym_form -action synonym-form -export { category_id tree_id lo
     {language:text(select) {label "Language"} {options $languages}}
 } -new_request {
     set name ""
-    if {![empty_string_p [ad_conn locale]]} {
+    if { [ad_conn locale] ne ""} {
 	set language [ad_conn locale]
     } else {
 	set language [parameter::get -parameter DefaultLocale -default en_US]
