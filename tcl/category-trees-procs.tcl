@@ -360,7 +360,7 @@ namespace eval category_tree {
             }
             set tree_id_old $tree_id
             lappend tree [list $category_id [ad_decode "$invalid_p$deprecated_p" "" f t] $cur_level]
-            if { [expr {$right_ind - $left_ind}] > 1} {
+            if { $right_ind - $left_ind > 1} {
                 incr cur_level 1
                 set invalid_p "$invalid_p$deprecated_p"
                 set stack [linsert $stack 0 [list $right_ind $invalid_p]]
