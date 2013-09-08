@@ -6,7 +6,7 @@ if { ![info exists change_locale] } {
     set change_locale t
 }
 
-if {![exists_and_not_null locale]} {
+if {(![info exists locale] || $locale eq "")} {
     #set locale [parameter::get -parameter DefaultLocale -default en_US]
     set locale [ad_conn locale]
 }
