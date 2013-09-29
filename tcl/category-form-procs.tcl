@@ -27,7 +27,7 @@ ad_proc -public category::ad_form::add_widgets {
     set category_trees [category_tree::get_mapped_trees $container_object_id]
     
     foreach tree $category_trees {
-	util_unlist $tree tree_id name subtree_id assign_single_p require_category_p widget
+	lassign $tree tree_id name subtree_id assign_single_p require_category_p widget
         if {[lsearch -exact $excluded_trees $tree_id] > -1} { 
             continue
         } 
@@ -67,7 +67,7 @@ ad_proc -public category::ad_form::get_categories {
     set category_trees [category_tree::get_mapped_trees $container_object_id]
     set category_ids [list]
     foreach tree $category_trees {
-	util_unlist $tree tree_id name subtree_id assign_single_p require_category_p widget
+	lassign $tree tree_id name subtree_id assign_single_p require_category_p widget
         upvar #[template::adp_level] \
           __category__ad_form__$element_name\_${tree_id} my_category_ids
         if {[info exists my_category_ids]} { 

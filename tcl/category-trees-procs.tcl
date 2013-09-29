@@ -22,7 +22,7 @@ namespace eval category_tree {
     } {
         db_1row get_tree_data "" -column_array tree
 
-        util_unlist [get_translation $tree_id $locale] tree(tree_name) tree(description)
+        lassign [get_translation $tree_id $locale] tree(tree_name) tree(description)
         return [array get tree]
     }
 
@@ -302,7 +302,7 @@ namespace eval category_tree {
         set result ""
         if {$subtree_id eq ""} {
             foreach category $tree {
-                util_unlist $category category_id deprecated_p level
+                lassign $category category_id deprecated_p level
                 if {$all_p || $deprecated_p == "f"} {
                     lappend result [list $category_id [category::get_name $category_id $locale] $deprecated_p $level]
                 }
@@ -311,7 +311,7 @@ namespace eval category_tree {
             set in_subtree_p 0
             set subtree_level 0
             foreach category $tree {
-                util_unlist $category category_id deprecated_p level
+                lassign $category category_id deprecated_p level
                 if {$level <= $subtree_level} {
                     set in_subtree_p 0
                 }

@@ -38,7 +38,7 @@ lappend context_bar [list [export_vars -no_empty -base tree-copy { {tree_id $tar
 template::multirow create tree category_name deprecated_p level left_indent
 
 foreach category [category_tree::get_tree -all $tree_id $locale] {
-    util_unlist $category category_id category_name deprecated_p level
+    lassign $category category_id category_name deprecated_p level
 
     template::multirow append tree $category_name $deprecated_p $level [string repeat "&nbsp;" [expr ($level-1)*5]]
 }

@@ -48,7 +48,7 @@ db_foreach get_linked_categories "" {
 template::multirow create tree link_category_name link_category_id forward_exists_p backward_exists_p left_indent view_url link_add_url bilink_add_url
 
 foreach category [category_tree::get_tree -all $link_tree_id $locale] {
-    util_unlist $category link_category_id link_category_name deprecated_p level
+    lassign $category link_category_id link_category_name deprecated_p level
     set forward_exists_p [info exists forward_links($link_category_id)]
     set backward_exists_p [info exists backward_links($link_category_id)]
 

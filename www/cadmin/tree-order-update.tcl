@@ -66,7 +66,7 @@ db_transaction {
         db_dml reset_category_index ""
 
         foreach category $done_list {
-            util_unlist $category category_id left_ind right_ind
+            lassign $category category_id left_ind right_ind
             db_dml update_category_index ""
         }
     }

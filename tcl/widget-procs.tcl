@@ -125,7 +125,7 @@ ad_proc -public template::widget::category {
     }
 
     foreach mapped_tree $mapped_trees {
-	util_unlist $mapped_tree tree_id tree_name subtree_id assign_single_p require_category_p widget
+	lassign $mapped_tree tree_id tree_name subtree_id assign_single_p require_category_p widget
 	set tree_name [ad_quotehtml [lang::util::localize $tree_name]]
 	set one_tree [list]
 
@@ -136,7 +136,7 @@ ad_proc -public template::widget::category {
         }
 
 	foreach category [category_tree::get_tree -subtree_id $subtree_id $tree_id] {
-	    util_unlist $category category_id category_name deprecated_p level
+	    lassign $category category_id category_name deprecated_p level
 	    set category_name [ad_quotehtml [lang::util::localize $category_name]]
 	    if { $level>1 } {
 		set category_name "[string repeat "&nbsp;" [expr {2*$level -4}]]..$category_name"
@@ -250,7 +250,7 @@ ad_proc -public template::data::transform::category { element_ref } {
     if { $tree_id eq "" } {
 	set trees [list]
         foreach tree [category_tree::get_mapped_trees $package_id] {
-	    util_unlist $tree tree_id tree_name subtree_id assign_single_p require_category_p
+	    lassign $tree tree_id tree_name subtree_id assign_single_p require_category_p
 	    if {$require_category_p == "t" || ![info exists element(optional)]} {
 		lappend trees [list $tree_id $subtree_id]
 	    }
@@ -265,7 +265,7 @@ ad_proc -public template::data::transform::category { element_ref } {
 
     set trees_without_category [list]
     foreach tree $trees {
-	util_unlist $tree tree_id subtree_id
+	lassign $tree tree_id subtree_id
 	# get categories of every tree requiring a categorization
 	foreach category [category_tree::get_tree -all -subtree_id $subtree_id $tree_id] {
 	    set tree_categories([lindex $category 0]) 1
