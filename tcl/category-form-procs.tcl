@@ -28,7 +28,7 @@ ad_proc -public category::ad_form::add_widgets {
     
     foreach tree $category_trees {
 	lassign $tree tree_id name subtree_id assign_single_p require_category_p widget
-        if {[lsearch -exact $excluded_trees $tree_id] > -1} { 
+        if {$tree_id in $excluded_trees} { 
             continue
         } 
 	set options ""
@@ -71,7 +71,7 @@ ad_proc -public category::ad_form::get_categories {
         upvar #[template::adp_level] \
           __category__ad_form__$element_name\_${tree_id} my_category_ids
         if {[info exists my_category_ids]} { 
-            eval lappend category_ids $my_category_ids
+            lappend category_ids {*}$my_category_ids
         } else { 
             ns_log Warning "category::ad_form::get_categories: __category__ad_form__$element_name\_${tree_id} for tree $tree_id not found"
         }

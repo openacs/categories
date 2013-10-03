@@ -53,7 +53,7 @@ foreach category [category_tree::get_tree -all $link_tree_id $locale] {
     set backward_exists_p [info exists backward_links($link_category_id)]
 
     template::multirow append tree $link_category_name $link_category_id $forward_exists_p $backward_exists_p \
-	[string repeat "&nbsp;" [expr ($level-1)*5]] \
+	[string repeat "&nbsp;" [expr {($level-1)*5]}] \
 	[export_vars -no_empty -base category-links-view {{category_id $link_category_id} {tree_id $link_tree_id} locale object_id  ctx_id}] \
 	[export_vars -no_empty -base category-link-add-3 {link_category_id category_id tree_id locale object_id ctx_id}] \
 	[export_vars -no_empty -base category-link-add-4 {link_category_id category_id tree_id locale object_id ctx_id}]

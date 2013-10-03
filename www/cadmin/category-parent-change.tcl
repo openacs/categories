@@ -38,11 +38,13 @@ foreach category [category_tree::get_tree -all $tree_id $locale] {
     lassign $category parent_id category_name deprecated_p level
 
     if { [lsearch $subtree_categories_list $parent_id]==-1 } {
-	set parent_url [export_vars -no_empty -base category-parent-change-2 { parent_id tree_id category_id locale object_id ctx_id }]
+	set parent_url [export_vars -no_empty -base category-parent-change-2 \
+			    { parent_id tree_id category_id locale object_id ctx_id }]
     } else {
 	set parent_url ""
     }
-    template::multirow append tree $category_name $category_id $deprecated_p $level [string repeat "&nbsp;" [expr ($level-1)*5]] $parent_url
+    template::multirow append tree $category_name $category_id $deprecated_p $level \
+	[string repeat "&nbsp;" [expr {($level-1)*5]}] $parent_url
 }
 
 

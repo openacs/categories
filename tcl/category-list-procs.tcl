@@ -306,7 +306,7 @@ ad_proc -public category::list::prepare_display {
 	    }
 	    foreach category_id $row($category_column) {
 		set tree_id [category::get_tree $category_id]
-		if {[lsearch -integer $valid_tree_ids $tree_id] > -1} {
+		if {$tree_id in $valid_tree_ids} {
 		    lappend tree_categories($tree_id) [list $category_id [category::get_name $category_id $locale]]
 		}
 	    }
@@ -364,7 +364,7 @@ ad_proc -public category::list::prepare_display {
 	    set valid_categories ""
 	    foreach category_id $row($category_column) {
 		set tree_id [category::get_tree $category_id]
-		if {[lsearch -integer $valid_tree_ids $tree_id] > -1} {
+		if {$tree_id in $valid_tree_ids} {
 		    lappend valid_categories $category_id
 		}
 	    }

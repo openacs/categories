@@ -45,7 +45,7 @@ ad_proc -private category::tagcloud::scale_weight {
 } {
     set denominator [expr {[lindex $extremes 1] - [lindex $extremes 0]}]
     if {$denominator != 0} {
-        set multiplier [expr ($weight * 1.0)/$denominator]
+        set multiplier [expr {($weight * 1.0)/$denominator}]
     } else {
         set multiplier 0
     }
