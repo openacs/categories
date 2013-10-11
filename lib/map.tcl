@@ -1,8 +1,8 @@
-if {![exists_and_not_null object_id]} {
+if {![info exists object_id] || $object_id eq ""} {
     ad_complain "You must specify an item to map"
 }
 
-if {![exists_and_not_null container_id]} {
+if {![info exists container_id] || $container_id eq ""} {
     ad_complain "You must specify a container to map the object to"
 }
 

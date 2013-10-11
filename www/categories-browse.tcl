@@ -110,7 +110,7 @@ if {[info exists package_id]} {
 set category_ids_length [llength $category_ids]
 if {$join eq "and"} {
     # combining categories with and
-    if {$subtree_p eq "t"} {
+    if {$subtree_p == "t"} {
 	# generate sql for exact categorizations plus subcategories
 	set subtree_sql [db_map include_subtree_and]
     } else {
@@ -119,7 +119,7 @@ if {$join eq "and"} {
     }
 } else {
     # combining categories with or
-    if {$subtree_p eq "t"} {
+    if {$subtree_p == "t"} {
 	# generate sql for exact categorizations plus subcategories
 	set subtree_sql [db_map include_subtree_or]
     } else {

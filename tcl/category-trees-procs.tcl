@@ -366,12 +366,12 @@ namespace eval category_tree {
                 set stack [linsert $stack 0 [list $right_ind $invalid_p]]
             } else {
                 incr right_ind 1
-                while {$right_ind == [lindex [lindex $stack 0] 0] && $cur_level > 0} {
+                while {$right_ind == [lindex $stack 0 0] && $cur_level > 0} {
                     incr cur_level -1
                     incr right_ind 1
                     set stack [lrange $stack 1 end]
                 }
-                set invalid_p [lindex [lindex $stack 0] 1]
+                set invalid_p [lindex $stack 0 1]
             }
         }
         if {$tree_id_old != 0} {
@@ -397,12 +397,12 @@ namespace eval category_tree {
                 set stack [linsert $stack 0 [list $right_ind $invalid_p]]
             } else {
                 incr right_ind 1
-                while {$right_ind == [lindex [lindex $stack 0] 0] && $cur_level > 0} {
+                while {$right_ind == [lindex $stack 0 0] && $cur_level > 0} {
                     incr cur_level -1
                     incr right_ind 1
                     set stack [lrange $stack 1 end]
                 }
-                set invalid_p [lindex [lindex $stack 0] 1]
+                set invalid_p [lindex $stack 0 1]
             }
         }
         if {[info exists category_id]} {
