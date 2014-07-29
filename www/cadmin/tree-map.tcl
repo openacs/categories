@@ -7,7 +7,7 @@ ad_page_contract {
 } {
     tree_id:integer
     {locale ""}
-    object_id:integer,notnull
+    object_id:naturalnum,notnull
     ctx_id:naturalnum,optional
 } -properties {
     page_title:onevalue
