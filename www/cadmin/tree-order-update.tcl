@@ -8,8 +8,8 @@ ad_page_contract {
     tree_id:integer
     sort_key:array
     {locale ""}
-    object_id:integer,optional
-    ctx_id:integer,optional
+    object_id:naturalnum,optional
+    ctx_id:naturalnum,optional
 }
 
 permission::require_permission -object_id $tree_id -privilege category_tree_write

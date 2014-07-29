@@ -8,7 +8,7 @@ ad_page_contract {
     category_id:integer
     tree_id:integer
     {locale ""}
-    object_id:integer,optional
+    object_id:naturalnum,optional
     {page:integer,optional 1}
     {orderby:optional object_name}
 } -properties {

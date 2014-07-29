@@ -5,7 +5,7 @@ ad_page_contract {
     @cvs-id $Id:
 } {
     tree_id:integer
-    object_id:integer,optional
+    object_id:naturalnum,optional
     {locale ""}
 } -properties {
     page_title:onevalue

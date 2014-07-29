@@ -8,9 +8,9 @@ ad_page_contract {
     category_id:integer,notnull
     tree_id:integer,notnull
     {locale ""}
-    object_id:integer,optional
+    object_id:naturalnum,optional
     orderby:optional
-    ctx_id:integer,optional
+    ctx_id:naturalnum,optional
 } -properties {
     page_title:onevalue
     context_bar:onevalue

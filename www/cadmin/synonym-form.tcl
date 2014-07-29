@@ -5,12 +5,12 @@ ad_page_contract {
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
-    synonym_id:integer,optional
+    synonym_id:naturalnum,optional
     category_id:integer,notnull
     tree_id:integer,notnull
     {locale ""}
-    object_id:integer,optional
-    ctx_id:integer,optional
+    object_id:naturalnum,optional
+    ctx_id:naturalnum,optional
 } -properties {
     context_bar:onevalue
     page_title:onevalue

@@ -5,11 +5,11 @@ ad_page_contract {
     @cvs-id $Id:
 } {
     tree_id:integer
-    category_id:integer,optional
-    {parent_id:integer,optional [db_null]}
+    category_id:naturalnum,optional
+    {parent_id:naturalnum,optional [db_null]}
     {locale ""}
-    object_id:integer,optional
-    ctx_id:integer,optional
+    object_id:naturalnum,optional
+    ctx_id:naturalnum,optional
 } -properties {
     context_bar:onevalue
     page_title:onevalue

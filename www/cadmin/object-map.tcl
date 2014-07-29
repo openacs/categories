@@ -8,7 +8,7 @@ ad_page_contract {
     @cvs-id $Id:
 } {
     object_id:integer,notnull
-    ctx_id:integer,optional
+    ctx_id:naturalnum,optional
     {locale ""}
 } -properties {
     page_title:onevalue

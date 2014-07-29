@@ -8,8 +8,8 @@ ad_page_contract {
     source_tree_id:integer
     target_tree_id:integer
     {locale ""}
-    object_id:integer,optional
-    ctx_id:integer,optional
+    object_id:naturalnum,optional
+    ctx_id:naturalnum,optional
 } -properties {
     page_title:onevalue
     context_bar:onevalue

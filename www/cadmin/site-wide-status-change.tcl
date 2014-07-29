@@ -7,7 +7,7 @@ ad_page_contract {
     tree_id:integer
     action:integer
     {locale ""}
-    object_id:integer,optional
+    object_id:naturalnum,optional
 }
 
 set user_id [auth::require_login]

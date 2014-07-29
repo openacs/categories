@@ -9,8 +9,8 @@ ad_page_contract {
     category_id:integer
     tree_id:integer
     {locale ""}
-    object_id:integer,optional
-    ctx_id:integer,optional
+    object_id:naturalnum,optional
+    ctx_id:naturalnum,optional
 }
 
 set user_id [auth::require_login]
