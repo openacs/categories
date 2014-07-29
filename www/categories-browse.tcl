@@ -14,7 +14,7 @@ ad_page_contract {
     {subtree_p:optional f}
     {letter:optional all}
     {join:optional or}
-    package_id:optional
+    package_id:naturalnum,optional
 } -properties {
     page_title:onevalue
     context_bar:onevalue
