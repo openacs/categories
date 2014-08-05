@@ -6,7 +6,7 @@ ad_page_contract {
 
 } {
     {locale ""}
-    tree_id:multiple
+    tree_id:naturalnum,multiple
 }
 
 set user_id [auth::require_login]

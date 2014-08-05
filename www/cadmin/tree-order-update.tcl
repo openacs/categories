@@ -5,7 +5,7 @@ ad_page_contract {
     @author Lars Pind (lars@collaboraid.biz)
     @cvs-id $Id:
 } {
-    tree_id:integer
+    tree_id:naturalnum,notnull
     sort_key:array
     {locale ""}
     object_id:naturalnum,optional

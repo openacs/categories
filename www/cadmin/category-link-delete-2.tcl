@@ -6,8 +6,8 @@ ad_page_contract {
     @cvs-id $Id:
 } {
     link_id:naturalnum,multiple
-    category_id:integer
-    tree_id:integer
+    category_id:naturalnum,notnull
+    tree_id:naturalnum,notnull
     {locale ""}
     object_id:naturalnum,optional
     ctx_id:naturalnum,optional

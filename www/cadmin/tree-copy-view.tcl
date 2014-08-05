@@ -5,8 +5,8 @@ ad_page_contract {
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
-    source_tree_id:integer
-    target_tree_id:integer
+    source_tree_id:naturalnum,notnull
+    target_tree_id:naturalnum,notnull
     {locale ""}
     object_id:naturalnum,optional
     ctx_id:naturalnum,optional
