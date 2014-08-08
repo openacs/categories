@@ -2,7 +2,7 @@ ad_page_contract {
 
     Multi-dimensional browsing of selected category trees.
     Shows a list of all objects mapped to selected categories
-    using ad_table, ad_dimensional and paginator.
+    using list template, ad_dimensional and paginator.
 
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
@@ -64,14 +64,35 @@ foreach tree_id $tree_ids {
     }
 }
 
-set table_def {
-    {object_name "Object Name" {upper(n.object_name) $order} {<td><a href="/o/$object_id">$object_name</a></td>}}
-    {instance_name "Package" {} {<td align=right><a href="/o/$package_id">$instance_name</a></td>}}
-    {package_type "Package Type" {} r}
-    {creation_date "Creation Date" {} r}
-}
+template::list::create -name items_list -multirow items \
+    -html {align center} \
+    -elements {
+	object_name {
+	    label "Object Name"
+	    display_template {
+		<a href="/o/@items.object_id@">@items.object_name@</a>
+	    }
+	    orderby {n.object_name}
+	}
+	instance_name {
+	    label "Package"
+	    display_template {
+		<a href="/o/@items.package_id@">@items.instance_name@</a>
+	    }
+	    html {align right}
+	}
+	package_type {
+	    label "Package Type"
+	    html {align right}
+	}
+	creation_date {
+	    label "Creation Date"
+	    html {align right}
+	}
+    } \
+    -filters {subtree_p {} letter {} tree_ids {}}
 
-set order_by_clause [ad_order_by_from_sort_spec $orderby $table_def]
+set order_by_clause [template::list::orderby_clause -orderby -name items_list]
 
 set dimensional_def {
     {subtree_p "Categorization" f {
@@ -145,7 +166,7 @@ db_transaction {
     set last_row [paginator get_row_last $p_name $page]
 
     # execute query to get the objects on current page
-    set items [ad_table -Torderby $orderby get_categorized_objects "" $table_def]
+    db_multirow items get_categorized_objects {} {}
 }
 db_dml delete_tmp_category_trees ""
 

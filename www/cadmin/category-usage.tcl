@@ -39,14 +39,35 @@ set url_vars [export_vars -no_empty {category_id tree_id locale object_id}]
 set context_bar [category::context_bar $tree_id $locale [value_if_exists object_id]]
 lappend context_bar "\"$category_name\" Usage"
 
-set table_def {
-    {object_name "Object Name" {upper(n.object_name) $order} {<td><a href="/o/$object_id">$object_name</a></td>}}
-    {instance_name "Package" {} {<td align=right><a href="/o/$package_id">$instance_name</a></td>}}
-    {package_type "Package Type" {} r}
-    {creation_date "Creation Date" {} r}
-}
+template::list::create -name items_list -multirow items \
+    -html {align center} \
+    -elements {
+	object_name {
+	    label "Object Name"
+	    display_template {
+		<a href="/o/@items.object_id@">@items.object_name@</a>
+	    }
+	    orderby {n.object_name}
+	}
+	instance_name {
+	    label "Package"
+	    display_template {
+		<a href="/o/@items.package_id@">@items.instance_name@</a>
+	    }
+	    html {align right}
+	}
+	package_type {
+	    label "Package Type"
+	    html {align right}
+	}
+	creation_date {
+	    label "Creation Date"
+	    html {align right}
+	}
+    } \
+    -filters {tree_id {} category_id {}}
 
-set order_by_clause [ad_order_by_from_sort_spec $orderby $table_def]
+set order_by_clause [template::list::orderby_clause -orderby -name items_list]
 
 set p_name "category-usage"
 request create
@@ -59,7 +80,7 @@ set first_row [paginator get_row $p_name $page]
 set last_row [paginator get_row_last $p_name $page]
 
 # execute query to get the objects on current page
-set items [ad_table -Torderby $orderby get_objects_using_category "" $table_def]
+db_multirow items get_objects_using_category {} {}
 
 paginator get_display_info $p_name info $page
 set group [paginator get_group $p_name $page]

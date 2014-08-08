@@ -53,5 +53,4 @@
 </table>
 @dimension_bar;noquote@
 <p>
-@items;noquote@
-
+<listtemplate name="items_list"></listtemplate>

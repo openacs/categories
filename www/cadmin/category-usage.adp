@@ -36,5 +36,4 @@
 </tr>
 </table>
 <p>
-@items;noquote@
-
+<listtemplate name="items_list"></listtemplate>
