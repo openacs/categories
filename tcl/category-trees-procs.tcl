@@ -554,10 +554,10 @@ ad_proc -public category_tree::get_multirow {
     </pre>
     
 
-    @parameter tree_id tree_id or container_id must be provided.
-    @parameter container_id returns all mapped trees for the given container_id
-    @parameter category_counts list of category_id and counts {catid count cat count ... }
-    @parameter datasource the name of the datasource to create.
+    @param tree_id tree_id or container_id must be provided.
+    @param container_id returns all mapped trees for the given container_id
+    @param category_counts list of category_id and counts {catid count cat count ... }
+    @param datasource the name of the datasource to create.
 
     @author Jeff Davis davis@xarg.net
 } {
