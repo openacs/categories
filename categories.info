@@ -18,7 +18,7 @@
         <maturity>1</maturity>
 
         <provides url="categories" version="1.1.3d2"/>
-	<requires url="acs-kernel" version="5.8.1b2"/>
+	<requires url="acs-kernel" version="5.8.1"/>
         
 
         <callbacks>
