@@ -22,7 +22,7 @@ namespace eval category_tree {
     } {
         db_1row get_tree_data "" -column_array tree
 
-        util_unlist [get_translation $tree_id $locale] tree(tree_name) tree(description)
+        lassign [get_translation $tree_id $locale] tree(tree_name) tree(description)
         return [array get tree]
     }
 
@@ -302,7 +302,7 @@ namespace eval category_tree {
         set result ""
         if {$subtree_id eq ""} {
             foreach category $tree {
-                util_unlist $category category_id deprecated_p level
+                lassign $category category_id deprecated_p level
                 if {$all_p || $deprecated_p == "f"} {
                     lappend result [list $category_id [category::get_name $category_id $locale] $deprecated_p $level]
                 }
@@ -311,7 +311,7 @@ namespace eval category_tree {
             set in_subtree_p 0
             set subtree_level 0
             foreach category $tree {
-                util_unlist $category category_id deprecated_p level
+                lassign $category category_id deprecated_p level
                 if {$level <= $subtree_level} {
                     set in_subtree_p 0
                 }
@@ -360,18 +360,18 @@ namespace eval category_tree {
             }
             set tree_id_old $tree_id
             lappend tree [list $category_id [ad_decode "$invalid_p$deprecated_p" "" f t] $cur_level]
-            if { [expr {$right_ind - $left_ind}] > 1} {
+            if { $right_ind - $left_ind > 1} {
                 incr cur_level 1
                 set invalid_p "$invalid_p$deprecated_p"
                 set stack [linsert $stack 0 [list $right_ind $invalid_p]]
             } else {
                 incr right_ind 1
-                while {$right_ind == [lindex [lindex $stack 0] 0] && $cur_level > 0} {
+                while {$right_ind == [lindex $stack 0 0] && $cur_level > 0} {
                     incr cur_level -1
                     incr right_ind 1
                     set stack [lrange $stack 1 end]
                 }
-                set invalid_p [lindex [lindex $stack 0] 1]
+                set invalid_p [lindex $stack 0 1]
             }
         }
         if {$tree_id_old != 0} {
@@ -391,18 +391,18 @@ namespace eval category_tree {
         set tree [list]
         db_foreach flush_cache "" {
             lappend tree [list $category_id [ad_decode "$invalid_p$deprecated_p" "" f t] $cur_level]
-            if { [expr {$right_ind - $left_ind}] > 1} {
+            if { $right_ind - $left_ind > 1} {
                 incr cur_level 1
                 set invalid_p "$invalid_p$deprecated_p"
                 set stack [linsert $stack 0 [list $right_ind $invalid_p]]
             } else {
                 incr right_ind 1
-                while {$right_ind == [lindex [lindex $stack 0] 0] && $cur_level > 0} {
+                while {$right_ind == [lindex $stack 0 0] && $cur_level > 0} {
                     incr cur_level -1
                     incr right_ind 1
                     set stack [lrange $stack 1 end]
                 }
-                set invalid_p [lindex [lindex $stack 0] 1]
+                set invalid_p [lindex $stack 0 1]
             }
         }
         if {[info exists category_id]} {
@@ -554,10 +554,10 @@ ad_proc -public category_tree::get_multirow {
     </pre>
     
 
-    @parameter tree_id tree_id or container_id must be provided.
-    @parameter container_id returns all mapped trees for the given container_id
-    @parameter category_counts list of category_id and counts {catid count cat count ... }
-    @parameter datasource the name of the datasource to create.
+    @param tree_id tree_id or container_id must be provided.
+    @param container_id returns all mapped trees for the given container_id
+    @param category_counts list of category_id and counts {catid count cat count ... }
+    @param datasource the name of the datasource to create.
 
     @author Jeff Davis davis@xarg.net
 } {
@@ -584,9 +584,9 @@ ad_proc -public category_tree::get_multirow {
 	template::multirow create $datasource tree_id tree_name category_id category_name level pad deprecated_p count child_sum
     }
     foreach mapped_tree $mapped_trees {
-        foreach {tree_id tree_name subtree_id assign_single_p require_category_p} $mapped_tree { break }
+        lassign $mapped_tree tree_id tree_name subtree_id assign_single_p require_category_p
         foreach category [category_tree::get_tree -subtree_id $subtree_id $tree_id] {
-            foreach {category_id category_name deprecated_p level} $category { break }
+            lassign $category category_id category_name deprecated_p level
             if { $level > 1 } {
                 set pad "[string repeat "&nbsp;" [expr {2 * $level - 4}]].."
             } else { 

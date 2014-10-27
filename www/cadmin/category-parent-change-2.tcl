@@ -5,12 +5,12 @@ ad_page_contract {
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
-    tree_id:integer
-    category_id:integer
-    {parent_id:integer,optional [db_null]}
+    tree_id:naturalnum,notnull
+    category_id:naturalnum,notnull
+    {parent_id:naturalnum,optional [db_null]}
     {locale ""}
-    object_id:integer,optional
-    ctx_id:integer,optional
+    object_id:naturalnum,optional
+    ctx_id:naturalnum,optional
 }
 
 permission::require_permission -object_id $tree_id -privilege category_tree_write

@@ -27,8 +27,8 @@ ad_proc -public category::ad_form::add_widgets {
     set category_trees [category_tree::get_mapped_trees $container_object_id]
     
     foreach tree $category_trees {
-	util_unlist $tree tree_id name subtree_id assign_single_p require_category_p widget
-        if {[lsearch -exact $excluded_trees $tree_id] > -1} { 
+	lassign $tree tree_id name subtree_id assign_single_p require_category_p widget
+        if {$tree_id in $excluded_trees} { 
             continue
         } 
 	set options ""
@@ -67,14 +67,43 @@ ad_proc -public category::ad_form::get_categories {
     set category_trees [category_tree::get_mapped_trees $container_object_id]
     set category_ids [list]
     foreach tree $category_trees {
-	util_unlist $tree tree_id name subtree_id assign_single_p require_category_p widget
+	lassign $tree tree_id name subtree_id assign_single_p require_category_p widget
         upvar #[template::adp_level] \
           __category__ad_form__$element_name\_${tree_id} my_category_ids
         if {[info exists my_category_ids]} { 
-            eval lappend category_ids $my_category_ids
+            lappend category_ids {*}$my_category_ids
         } else { 
             ns_log Warning "category::ad_form::get_categories: __category__ad_form__$element_name\_${tree_id} for tree $tree_id not found"
         }
     }
     return $category_ids
+}
+
+# Antonio Pisano 2014-10-15
+# This proc was added because, when editing an existing object, one should get 
+# its mapped categories and use their values to eventually fill the widget we 
+# have created by 'category::ad_form::add_widgets'.
+# Otherwise, we will always see an empty widget when editing, even when mappings exist.
+ad_proc -public category::ad_form::fill_widgets {
+    {-container_object_id:required}
+    {-categorized_object_id}
+    {-element_name "category_id"}
+} {
+
+    Reads mapped categories values from categorized object and sets them
+    into its auto-generated category form widgets. To be used in the 
+    -edit_request clause of ad_form.
+
+    @author Antonio Pisano (antonio@elettrotecnica.it)
+} {
+    # For each mapped tree...
+    foreach tree [category_tree::get_mapped_trees $container_object_id] {
+	lassign $tree tree_id name subtree_id assign_single_p require_category_p widget
+	# ...get reference to this tree's form widget...
+        upvar #[template::adp_level] \
+          __category__ad_form__$element_name\_${tree_id} my_category_ids
+	# ...and set its value to the categories mapped for this object.
+	set categories [category::get_mapped_categories -tree_id $tree_id $categorized_object_id]
+        set my_category_ids $categories
+    }
 }

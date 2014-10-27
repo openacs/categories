@@ -20,7 +20,7 @@ ad_proc -private category::tagcloud::get_minmax_tagweights {
     @author Matthew Burke (matt-oacs@bluedino.net)
 } {
     set max_weight 0
-    set min_weight [lindex [lindex $tag_list 0] 1]
+    set min_weight [lindex $tag_list 0 1]
     foreach tag $tag_list {
         set tag_weight [lindex $tag 1]
         if {$tag_weight < $min_weight} {
@@ -45,7 +45,7 @@ ad_proc -private category::tagcloud::scale_weight {
 } {
     set denominator [expr {[lindex $extremes 1] - [lindex $extremes 0]}]
     if {$denominator != 0} {
-        set multiplier [expr ($weight * 1.0)/$denominator]
+        set multiplier [expr {($weight * 1.0)/$denominator}]
     } else {
         set multiplier 0
     }

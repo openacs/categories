@@ -21,7 +21,7 @@ ad_form -name tree_form \
 } -edit_request {
     permission::require_permission -object_id $tree_id -privilege category_tree_write
     set action Edit
-    util_unlist [category_tree::get_translation $tree_id $locale] tree_name description
+    lassign [category_tree::get_translation $tree_id $locale] tree_name description
     set language $locale
 } -on_submit {
     set description [util_close_html_tags $description 4000]

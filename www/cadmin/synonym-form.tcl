@@ -5,12 +5,12 @@ ad_page_contract {
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
-    synonym_id:integer,optional
-    category_id:integer,notnull
-    tree_id:integer,notnull
+    synonym_id:naturalnum,optional
+    category_id:naturalnum,notnull
+    tree_id:naturalnum,notnull
     {locale ""}
-    object_id:integer,optional
-    ctx_id:integer,optional
+    object_id:naturalnum,optional
+    ctx_id:naturalnum,optional
 } -properties {
     context_bar:onevalue
     page_title:onevalue
@@ -44,7 +44,7 @@ ad_form -name synonym_form -action synonym-form -export { category_id tree_id lo
     {language:text(select) {label "Language"} {options $languages}}
 } -new_request {
     set name ""
-    if {![empty_string_p [ad_conn locale]]} {
+    if { [ad_conn locale] ne ""} {
 	set language [ad_conn locale]
     } else {
 	set language [parameter::get -parameter DefaultLocale -default en_US]

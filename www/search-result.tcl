@@ -5,7 +5,7 @@ ad_page_contract {
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
-    query_id:integer,notnull
+    query_id:naturalnum,notnull
 } -properties {
     page_title:onevalue
     context_bar:onevalue

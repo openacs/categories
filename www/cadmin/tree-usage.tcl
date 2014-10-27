@@ -5,10 +5,10 @@ ad_page_contract {
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
-    tree_id:integer,notnull
+    tree_id:naturalnum,notnull
     {locale ""}
-    object_id:integer,optional
-    ctx_id:integer,optional
+    object_id:naturalnum,optional
+    ctx_id:naturalnum,optional
 } -properties {
     page_title:onevalue
     context_bar:onevalue
@@ -42,7 +42,7 @@ set instance_list [category_tree::usage $tree_id]
 
 set instances_without_permission 0
 foreach instance $instance_list {
-    util_unlist $instance package object_id object_name package_id instance_name read_p
+    lassign $instance package object_id object_name package_id instance_name read_p
     set unmap_url [export_vars -no_empty -base tree-unmap {tree_id object_id ctx_id}]
 
     if {$read_p == "t"} {

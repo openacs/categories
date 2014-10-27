@@ -5,11 +5,11 @@ ad_page_contract {
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
-    tree_id:integer
-    category_id:integer
+    tree_id:naturalnum,notnull
+    category_id:naturalnum,notnull
     {locale ""}
-    object_id:integer,optional
-    ctx_id:integer,optional
+    object_id:naturalnum,optional
+    ctx_id:naturalnum,optional
 } -properties {
     page_title:onevalue
     context_bar:onevalue
@@ -35,14 +35,16 @@ template::multirow append tree "Root Level" 0 f 0 "" \
     [export_vars -no_empty -base category-parent-change-2 {tree_id category_id locale object_id ctx_id}]
 
 foreach category [category_tree::get_tree -all $tree_id $locale] {
-    util_unlist $category parent_id category_name deprecated_p level
+    lassign $category parent_id category_name deprecated_p level
 
     if { [lsearch $subtree_categories_list $parent_id]==-1 } {
-	set parent_url [export_vars -no_empty -base category-parent-change-2 { parent_id tree_id category_id locale object_id ctx_id }]
+	set parent_url [export_vars -no_empty -base category-parent-change-2 \
+			    { parent_id tree_id category_id locale object_id ctx_id }]
     } else {
 	set parent_url ""
     }
-    template::multirow append tree $category_name $category_id $deprecated_p $level [string repeat "&nbsp;" [expr ($level-1)*5]] $parent_url
+    template::multirow append tree $category_name $category_id $deprecated_p $level \
+	[string repeat "&nbsp;" [expr {($level-1)*5]}] $parent_url
 }
 
 

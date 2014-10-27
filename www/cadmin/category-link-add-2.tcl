@@ -5,12 +5,12 @@ ad_page_contract {
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
-    link_tree_id:integer,notnull
-    category_id:integer,notnull
-    tree_id:integer,notnull
+    link_tree_id:naturalnum,notnull
+    category_id:naturalnum,notnull
+    tree_id:naturalnum,notnull
     {locale ""}
-    object_id:integer,optional
-    ctx_id:integer,optional
+    object_id:naturalnum,optional
+    ctx_id:naturalnum,optional
 } -properties {
     page_title:onevalue
     context_bar:onevalue
@@ -48,12 +48,12 @@ db_foreach get_linked_categories "" {
 template::multirow create tree link_category_name link_category_id forward_exists_p backward_exists_p left_indent view_url link_add_url bilink_add_url
 
 foreach category [category_tree::get_tree -all $link_tree_id $locale] {
-    util_unlist $category link_category_id link_category_name deprecated_p level
+    lassign $category link_category_id link_category_name deprecated_p level
     set forward_exists_p [info exists forward_links($link_category_id)]
     set backward_exists_p [info exists backward_links($link_category_id)]
 
     template::multirow append tree $link_category_name $link_category_id $forward_exists_p $backward_exists_p \
-	[string repeat "&nbsp;" [expr ($level-1)*5]] \
+	[string repeat "&nbsp;" [expr {($level-1)*5]}] \
 	[export_vars -no_empty -base category-links-view {{category_id $link_category_id} {tree_id $link_tree_id} locale object_id  ctx_id}] \
 	[export_vars -no_empty -base category-link-add-3 {link_category_id category_id tree_id locale object_id ctx_id}] \
 	[export_vars -no_empty -base category-link-add-4 {link_category_id category_id tree_id locale object_id ctx_id}]

@@ -5,11 +5,11 @@ ad_page_contract {
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
-    source_tree_id:integer
-    target_tree_id:integer
+    source_tree_id:naturalnum,notnull
+    target_tree_id:naturalnum,notnull
     {locale ""}
-    object_id:integer,optional
-    ctx_id:integer,optional
+    object_id:naturalnum,optional
+    ctx_id:naturalnum,optional
 } -properties {
     page_title:onevalue
     context_bar:onevalue
@@ -33,14 +33,18 @@ set page_title [_ categories.Tree_view_title]
 set context_bar [category::context_bar $tree_id $locale \
                      [value_if_exists object_id] \
                      [value_if_exists ctx_id]]
-lappend context_bar [list [export_vars -no_empty -base tree-copy { {tree_id $target_tree_id} locale object_id ctx_id }] [_ categories.Action_copy_tree]] "View \"$tree_name\""
+lappend context_bar [list \
+			 [export_vars -no_empty -base tree-copy { {tree_id $target_tree_id} locale object_id ctx_id }] \
+			 [_ categories.Action_copy_tree]] \
+    "View \"$tree_name\""
 
 template::multirow create tree category_name deprecated_p level left_indent
 
 foreach category [category_tree::get_tree -all $tree_id $locale] {
-    util_unlist $category category_id category_name deprecated_p level
+    lassign $category category_id category_name deprecated_p level
 
-    template::multirow append tree $category_name $deprecated_p $level [string repeat "&nbsp;" [expr ($level-1)*5]]
+    template::multirow append tree $category_name $deprecated_p $level \
+	[string repeat "&nbsp;" [expr {($level-1)*5}]]
 }
 
 template::list::create \

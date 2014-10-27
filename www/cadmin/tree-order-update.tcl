@@ -5,11 +5,11 @@ ad_page_contract {
     @author Lars Pind (lars@collaboraid.biz)
     @cvs-id $Id:
 } {
-    tree_id:integer
+    tree_id:naturalnum,notnull
     sort_key:array
     {locale ""}
-    object_id:integer,optional
-    ctx_id:integer,optional
+    object_id:naturalnum,optional
+    ctx_id:naturalnum,optional
 }
 
 permission::require_permission -object_id $tree_id -privilege category_tree_write
@@ -66,7 +66,7 @@ db_transaction {
         db_dml reset_category_index ""
 
         foreach category $done_list {
-            util_unlist $category category_id left_ind right_ind
+            lassign $category category_id left_ind right_ind
             db_dml update_category_index ""
         }
     }

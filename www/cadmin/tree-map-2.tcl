@@ -9,12 +9,12 @@ ad_page_contract {
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
-    tree_id:integer,notnull
-    {category_id:integer,optional ""}
+    tree_id:naturalnum,notnull
+    {category_id:naturalnum,optional ""}
     {locale ""}
-    object_id:integer,notnull
+    object_id:naturalnum,notnull
     {edit_p 0}
-    ctx_id:integer,optional
+    ctx_id:naturalnum,optional
 }
 
 set user_id [auth::require_login]

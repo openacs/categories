@@ -146,7 +146,7 @@ ad_proc -public category::list::get_pretty_list {
     set result ""
     set old_tree_id 0
     foreach category $sorted_categories {
-	util_unlist $category category_id category_name tree_id tree_name
+	lassign $category category_id category_name tree_id tree_name
 
 	set category_name [ad_quotehtml $category_name]
 	if {$category_link_eval ne ""} {
@@ -306,7 +306,7 @@ ad_proc -public category::list::prepare_display {
 	    }
 	    foreach category_id $row($category_column) {
 		set tree_id [category::get_tree $category_id]
-		if {[lsearch -integer $valid_tree_ids $tree_id] > -1} {
+		if {$tree_id in $valid_tree_ids} {
 		    lappend tree_categories($tree_id) [list $category_id [category::get_name $category_id $locale]]
 		}
 	    }
@@ -317,7 +317,7 @@ ad_proc -public category::list::prepare_display {
 		set pretty_category_list ""
 
 		foreach category $tree_categories($tree_id) {
-		    util_unlist $category category_id category_name
+		    lassign $category category_id category_name
 		    set category_name [ad_quotehtml $category_name]
 		    if {$category_link_eval ne ""} {
 			set category_link [uplevel 1 concat $category_link_eval]
@@ -364,7 +364,7 @@ ad_proc -public category::list::prepare_display {
 	    set valid_categories ""
 	    foreach category_id $row($category_column) {
 		set tree_id [category::get_tree $category_id]
-		if {[lsearch -integer $valid_tree_ids $tree_id] > -1} {
+		if {$tree_id in $valid_tree_ids} {
 		    lappend valid_categories $category_id
 		}
 	    }
@@ -494,7 +494,7 @@ ad_proc -public category::list::elements {
 	# pretty list of category-names
 	set result ""
 	foreach tree $trees {
-	    util_unlist $tree tree_name tree_id
+	    lassign $tree tree_name tree_id
 	    append result "$categories_column\_$tree_id {
 		label \"$tree_name\"
 		display_template {[regsub -all "@$name\.$categories_column\(;noquote\)?@" $display_template "@$name\.$categories_column\_$tree_id\\1@"]}

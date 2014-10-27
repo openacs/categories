@@ -2,7 +2,7 @@ ad_page_contract {
 
     Multi-dimensional browsing of selected category trees.
     Shows a list of all objects mapped to selected categories
-    using ad_table, ad_dimensional and paginator.
+    using list template, ad_dimensional and paginator.
 
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
@@ -14,7 +14,7 @@ ad_page_contract {
     {subtree_p:optional f}
     {letter:optional all}
     {join:optional or}
-    package_id:optional
+    package_id:naturalnum,optional
 } -properties {
     page_title:onevalue
     context_bar:onevalue
@@ -36,8 +36,8 @@ set user_id [auth::require_login]
 set page_title "Browse categories"
 
 set context_bar [list "Browse categories"]
-set url_vars [export_url_vars tree_ids:multiple category_ids:multiple subtree_p letter join package_id]
-set form_vars [export_form_vars tree_ids:multiple orderby subtree_p letter package_id]
+set url_vars [export_vars -url {tree_ids:multiple category_ids:multiple subtree_p letter join package_id}]
+set form_vars [export_vars -form {tree_ids:multiple orderby subtree_p letter package_id}]
 
 db_transaction {
     # use temporary table to use only bind vars in queries
@@ -55,7 +55,7 @@ template::util::list_to_lookup $category_ids category_selected
 foreach tree_id $tree_ids {
     set tree_name [category_tree::get_name $tree_id]
     foreach category [category_tree::get_tree $tree_id] {
-	util_unlist $category category_id category_name deprecated_p level
+	lassign $category category_id category_name deprecated_p level
 	set indent ""
 	if {$level>1} {
 	    set indent "[string repeat "&nbsp;" [expr {2*$level -4}]].."
@@ -64,14 +64,35 @@ foreach tree_id $tree_ids {
     }
 }
 
-set table_def {
-    {object_name "Object Name" {upper(n.object_name) $order} {<td><a href="/o/$object_id">$object_name</a></td>}}
-    {instance_name "Package" {} {<td align=right><a href="/o/$package_id">$instance_name</a></td>}}
-    {package_type "Package Type" {} r}
-    {creation_date "Creation Date" {} r}
-}
+template::list::create -name items_list -multirow items \
+    -html {align center} \
+    -elements {
+	object_name {
+	    label "Object Name"
+	    display_template {
+		<a href="/o/@items.object_id@">@items.object_name@</a>
+	    }
+	    orderby {n.object_name}
+	}
+	instance_name {
+	    label "Package"
+	    display_template {
+		<a href="/o/@items.package_id@">@items.instance_name@</a>
+	    }
+	    html {align right}
+	}
+	package_type {
+	    label "Package Type"
+	    html {align right}
+	}
+	creation_date {
+	    label "Creation Date"
+	    html {align right}
+	}
+    } \
+    -filters {subtree_p {} letter {} tree_ids {}}
 
-set order_by_clause [ad_order_by_from_sort_spec $orderby $table_def]
+set order_by_clause [template::list::orderby_clause -orderby -name items_list]
 
 set dimensional_def {
     {subtree_p "Categorization" f {
@@ -110,7 +131,7 @@ if {[info exists package_id]} {
 set category_ids_length [llength $category_ids]
 if {$join eq "and"} {
     # combining categories with and
-    if {$subtree_p eq "t"} {
+    if {$subtree_p == "t"} {
 	# generate sql for exact categorizations plus subcategories
 	set subtree_sql [db_map include_subtree_and]
     } else {
@@ -119,7 +140,7 @@ if {$join eq "and"} {
     }
 } else {
     # combining categories with or
-    if {$subtree_p eq "t"} {
+    if {$subtree_p == "t"} {
 	# generate sql for exact categorizations plus subcategories
 	set subtree_sql [db_map include_subtree_or]
     } else {
@@ -145,7 +166,7 @@ db_transaction {
     set last_row [paginator get_row_last $p_name $page]
 
     # execute query to get the objects on current page
-    set items [ad_table -Torderby $orderby get_categorized_objects "" $table_def]
+    db_multirow items get_categorized_objects {} {}
 }
 db_dml delete_tmp_category_trees ""
 

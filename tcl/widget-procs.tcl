@@ -48,7 +48,6 @@ ad_proc -public template::widget::category {
         set display_widget $element(display_widget)
     }
     set ms_attributes(multiple) {}
-
     set all_single_p [info exists attributes(single)]
 
     # Determine the size automatically for a multiselect
@@ -65,30 +64,31 @@ ad_proc -public template::widget::category {
     set require_category_p f
     set widget {}
 
-    if { [exists_and_not_null element(value)] && [llength $element(value)] == 2 } {
+    if { [info exists element(value)] && $element(value) ne "" 
+	 && [llength $element(value)] == 2 
+     } {
         # Legacy method for passing parameters
-        set object_id [lindex $element(value) 0]
-        set package_id [lindex $element(value) 1]
+	lassign $element(value) object_id package_id
     } else {
-        if { [exists_and_not_null element(category_application_id)] } {
+        if { [info exists element(category_application_id)] && $element(category_application_id) ne "" } {
             set package_id $element(category_application_id)
         }
-        if { [exists_and_not_null element(category_object_id)] } {
+        if { [info exists element(category_object_id)] && $element(category_object_id) ne "" } {
             set object_id $element(category_object_id)
         }
-        if { [exists_and_not_null element(category_tree_id)] } {
+        if { [info exists element(category_tree_id)] && $element(category_tree_id) ne "" } {
             set tree_id $element(category_tree_id)
         }
-        if { [exists_and_not_null element(category_subtree_id)] } {
+        if { [info exists element(category_subtree_id)] && $element(category_subtree_id) ne "" } {
             set subtree_id $element(category_subtree_id)
         }
-        if { [exists_and_not_null element(category_assign_single_p)] } {
+        if { [info exists element(category_assign_single_p)] && $element(category_assign_single_p) ne "" } {
             set assign_single_p $element(category_assign_single_p)
         }
-        if { [exists_and_not_null element(category_require_category_p)] } {
+        if { [info exists element(category_require_category_p)] && $element(category_require_category_p) ne "" } {
             set require_category_p $element(category_require_category_p)
         }
-        if { [exists_and_not_null element(category_require_category_p)] } {
+        if { [info exists element(category_widget)] && $element(category_widget) ne "" } {
             set widget $element(category_widget)
         }
     }
@@ -125,7 +125,7 @@ ad_proc -public template::widget::category {
     }
 
     foreach mapped_tree $mapped_trees {
-	util_unlist $mapped_tree tree_id tree_name subtree_id assign_single_p require_category_p widget
+	lassign $mapped_tree tree_id tree_name subtree_id assign_single_p require_category_p widget
 	set tree_name [ad_quotehtml [lang::util::localize $tree_name]]
 	set one_tree [list]
 
@@ -136,7 +136,7 @@ ad_proc -public template::widget::category {
         }
 
 	foreach category [category_tree::get_tree -subtree_id $subtree_id $tree_id] {
-	    util_unlist $category category_id category_name deprecated_p level
+	    lassign $category category_id category_name deprecated_p level
 	    set category_name [ad_quotehtml [lang::util::localize $category_name]]
 	    if { $level>1 } {
 		set category_name "[string repeat "&nbsp;" [expr {2*$level -4}]]..$category_name"
@@ -226,20 +226,22 @@ ad_proc -public template::data::transform::category { element_ref } {
     set subtree_id {}
     set require_category_p f
 
-    if { [exists_and_not_null element(value)] && [llength $element(value)] == 2 } {
+    if { [info exists element(value)] && $element(value) ne "" 
+	 && [llength $element(value)] == 2 
+    } {
         # Legacy method for passing parameters
         set package_id [lindex $element(value) 1]
     } else {
-        if { [exists_and_not_null element(category_application_id)] } {
+        if { [info exists element(category_application_id)] && $element(category_application_id) ne "" } {
             set package_id $element(category_application_id)
         }
-        if { [exists_and_not_null element(category_tree_id)] } {
+        if { [info exists element(category_tree_id)] && $element(category_tree_id) ne "" } {
             set tree_id $element(category_tree_id)
         }
-        if { [exists_and_not_null element(category_subtree_id)] } {
+        if { [info exists element(category_subtree_id)] && $element(category_subtree_id) ne "" } {
             set subtree_id $element(category_subtree_id)
         }
-        if { [exists_and_not_null element(category_require_category_p)] } {
+        if { [info exists element(category_require_category_p)] && $element(category_require_category_p) ne "" } {
             set require_category_p $element(category_require_category_p)
         }
     }
@@ -250,7 +252,7 @@ ad_proc -public template::data::transform::category { element_ref } {
     if { $tree_id eq "" } {
 	set trees [list]
         foreach tree [category_tree::get_mapped_trees $package_id] {
-	    util_unlist $tree tree_id tree_name subtree_id assign_single_p require_category_p
+	    lassign $tree tree_id tree_name subtree_id assign_single_p require_category_p
 	    if {$require_category_p == "t" || ![info exists element(optional)]} {
 		lappend trees [list $tree_id $subtree_id]
 	    }
@@ -265,7 +267,7 @@ ad_proc -public template::data::transform::category { element_ref } {
 
     set trees_without_category [list]
     foreach tree $trees {
-	util_unlist $tree tree_id subtree_id
+	lassign $tree tree_id subtree_id
 	# get categories of every tree requiring a categorization
 	foreach category [category_tree::get_tree -all -subtree_id $subtree_id $tree_id] {
 	    set tree_categories([lindex $category 0]) 1

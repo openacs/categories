@@ -5,10 +5,10 @@ ad_page_contract {
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
 } {
-    tree_id:integer
+    tree_id:naturalnum,notnull
     {locale ""}
-    object_id:integer,notnull
-    ctx_id:integer,optional
+    object_id:naturalnum,notnull
+    ctx_id:naturalnum,optional
 } -properties {
     page_title:onevalue
     context_bar:onevalue
@@ -34,7 +34,7 @@ set context_bar [list \
 template::multirow create tree category_id category_name level left_indent map_url
 
 foreach category [category_tree::get_tree -all $tree_id $locale] {
-    util_unlist $category category_id category_name deprecated_p level
+    lassign $category category_id category_name deprecated_p level
 
     template::multirow append tree $category_id $category_name $level \
 	[string repeat "&nbsp;" [expr {($level-1)*5}]] \

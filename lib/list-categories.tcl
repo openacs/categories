@@ -1,8 +1,8 @@
-if {![exists_and_not_null cat]} {
-    set cat {}
+if {![info exists cat]} {
+    set cat ""
 }
 
-if {![exists_and_not_null orderby]} {
+if {(![info exists orderby] || $orderby eq "")} {
     set orderby "object_title"
 }
 set user_id [ad_conn user_id]
