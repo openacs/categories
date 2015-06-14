@@ -13,7 +13,7 @@ ad_page_contract {
     {category_id:naturalnum,optional ""}
     {locale ""}
     object_id:naturalnum,notnull
-    {edit_p 0}
+    {edit_p:boolean 0}
     ctx_id:naturalnum,optional
 }
 

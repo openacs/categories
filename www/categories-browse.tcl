@@ -11,7 +11,7 @@ ad_page_contract {
     {category_ids:integer,multiple,optional ""}
     {page:integer,optional 1}
     {orderby:optional object_name}
-    {subtree_p:optional f}
+    {subtree_p:boolean,optional f}
     {letter:optional all}
     {join:optional or}
     package_id:naturalnum,optional
