@@ -3,17 +3,17 @@
 <property name="context">@context_bar;noquote@</property>
 
 <form action="categories-browse">
-  #categories.lt_form_varsnoquote__Com# <input type=radio name=join value="and"<if @join@ eq "and"> #categories.checked#</if>#categories.AND__# <input type=radio name=join value="or"<if @join@ eq "or"> #categories.checked#</if>#categories.OR_#
+  #categories.lt_form_varsnoquote__Com# <input type="radio" name="join" value="and"<if @join@ eq "and"> #categories.checked#</if>#categories.AND__# <input type="radio" name="join" value="or"<if @join@ eq "or"> #categories.checked#</if>#categories.OR_#
   <br>
   <multiple name=trees>
     @trees.tree_name@:
-    <select name=category_ids multiple size=5>
+    <select name=category_ids multiple size="5">
     <group column=tree_id>
       <option value="@trees.category_id@"<if @trees.selected_p@ eq 1> #categories.selected#</if>>@trees.indent;noquote@@trees.category_name@
     </group>
     </select>
   </multiple>
-  <input type=submit name=button value="Show">
+  <input type="submit" name="button" value="Show">
 </form>
 
 #categories.lt_To_deselect_or_select#
@@ -25,16 +25,16 @@
 <tr>
   <td align="left" width="5%">
     <if @info.previous_group@ not nil>
-      <a href="categories-browse?page=@info.previous_group@&amp;@url_vars;noquote@&amp;orderby=@orderby@">&lt;&lt;</a>&nbsp;
+      <a href="categories-browse?page=@info.previous_group@&amp;@url_vars@&amp;orderby=@orderby@">&lt;&lt;</a>&nbsp;
     </if>
     <if @info.previous_page@ gt 0>
-      <a href="categories-browse?page=@info.previous_page@&amp;@url_vars;noquote@&amp;orderby=@orderby@">&lt;</a>&nbsp;
+      <a href="categories-browse?page=@info.previous_page@&amp;@url_vars@&amp;orderby=@orderby@">&lt;</a>&nbsp;
     </if>
   </td>
   <td align="center">
     <multiple name=pages>
       <if @page@ ne @pages.page@>
-        <a href="categories-browse?page=@pages.page@&amp;@url_vars;noquote@&amp;orderby=@orderby@">@pages.page@</a>
+        <a href="categories-browse?page=@pages.page@&amp;@url_vars@&amp;orderby=@orderby@">@pages.page@</a>
       </if>
       <else>
         @page@
@@ -43,10 +43,10 @@
   </td>
   <td align="right" width="5%">
     <if @info.next_page@ not nil>
-      &nbsp;<a href="categories-browse?page=@info.next_page@&amp;@url_vars;noquote@&amp;orderby=@orderby@">&gt;</a>
+      &nbsp;<a href="categories-browse?page=@info.next_page@&amp;@url_vars@&amp;orderby=@orderby@">&gt;</a>
     </if>
     <if @info.next_group@ not nil>
-      &nbsp;<a href="categories-browse?page=@info.next_group@&amp;@url_vars;noquote@&amp;orderby=@orderby@">&gt;&gt;</a>
+      &nbsp;<a href="categories-browse?page=@info.next_group@&amp;@url_varse@&amp;orderby=@orderby@">&gt;&gt;</a>
     </if>
   </td>
 </tr>

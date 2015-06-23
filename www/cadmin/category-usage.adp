@@ -9,16 +9,16 @@
 <tr>
   <td align="left" width="5%">
     <if @info.previous_group@ not nil>
-      <a href="category-usage?page=@info.previous_group@&amp;@url_vars;noquote@&amp;orderby=@orderby@">&lt;&lt;</a>&nbsp;
+      <a href="category-usage?page=@info.previous_group@&amp;@url_vars@&amp;orderby=@orderby@">&lt;&lt;</a>&nbsp;
     </if>
     <if @info.previous_page@ gt 0>
-      <a href="category-usage?page=@info.previous_page@&amp;@url_vars;noquote@&amp;orderby=@orderby@">&lt;</a>&nbsp;
+      <a href="category-usage?page=@info.previous_page@&amp;@url_vars@&amp;orderby=@orderby@">&lt;</a>&nbsp;
     </if>
   </td>
   <td align="center">
     <multiple name=pages>
       <if @page@ ne @pages.page@>
-        <a href="category-usage?page=@pages.page@&amp;@url_vars;noquote@&amp;orderby=@orderby@">@pages.page@</a>
+        <a href="category-usage?page=@pages.page@&amp;@url_vars@&amp;orderby=@orderby@">@pages.page@</a>
       </if>
       <else>
         @page@
@@ -27,10 +27,10 @@
   </td>
   <td align="right" width="5%">
     <if @info.next_page@ not nil>
-      &nbsp;<a href="category-usage?page=@info.next_page@&amp;@url_vars;noquote@&amp;orderby=@orderby@">&gt;</a>
+      &nbsp;<a href="category-usage?page=@info.next_page@&amp;@url_vars@&amp;orderby=@orderby@">&gt;</a>
     </if>
     <if @info.next_group@ not nil>
-      &nbsp;<a href="category-usage?page=@info.next_group@&amp;@url_vars;noquote@&amp;orderby=@orderby@">&gt;&gt;</a>
+      &nbsp;<a href="category-usage?page=@info.next_group@&amp;@url_vars@&amp;orderby=@orderby@">&gt;&gt;</a>
     </if>
   </td>
 </tr>
