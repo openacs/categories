@@ -34,7 +34,7 @@ set page_title [_ categories.Tree_view_title]
 if {[info exists object_id]} {
     set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base object-map {locale object_id ctx_id}] "[_ categories.cadmin]"] $tree_name]
 } else {
-    set context_bar [list [list ".?[export_vars -no_empty {locale ctx_id}]" "[_ categories.cadmin]"] $tree_name]
+    set context_bar [list [list [export_vars -base . -no_empty {locale ctx_id}] "[_ categories.cadmin]"] $tree_name]
 }
 
 set can_write_p [permission::permission_p -object_id $tree_id -privilege category_tree_write]

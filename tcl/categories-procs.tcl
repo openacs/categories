@@ -504,7 +504,7 @@ ad_proc -private category::context_bar { tree_id locale object_id {ctx_id ""}} {
     if {$object_id ne ""} {
 	set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base object-map {locale object_id ctx_id}] [_ categories.cadmin]]]
     } else {
-	set context_bar [list [list ".?[export_vars -no_empty {locale ctx_id}]" [_ categories.cadmin]]]
+	set context_bar [list [list [export_vars -base . -no_empty {locale ctx_id}] [_ categories.cadmin]]]
     }
     lappend context_bar [list [export_vars -no_empty -base tree-view {tree_id locale object_id ctx_id}] [category_tree::get_name $tree_id $locale]]
 

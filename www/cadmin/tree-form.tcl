@@ -28,7 +28,7 @@ if { [info exists object_id] } {
           [_ categories.cadmin]]]
 } else {
     set context_bar [list \
-          [list ".?[export_vars -no_empty {locale ctx_id}]" \
+          [list [export_vars -base . -no_empty {locale ctx_id}] \
           [_ categories.cadmin]]]
 }
 lappend context_bar $page_title

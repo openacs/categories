@@ -10,7 +10,7 @@ ad_page_contract {
     tree_ids:integer,multiple
     {category_ids:integer,multiple,optional ""}
     {page:integer,optional 1}
-    {orderby:optional object_name}
+    {orderby:token,optional object_name}
     {subtree_p:boolean,optional f}
     {letter:optional all}
     {join:optional or}
@@ -36,7 +36,7 @@ set user_id [auth::require_login]
 set page_title "Browse categories"
 
 set context_bar [list "Browse categories"]
-set url_vars [export_vars -url {tree_ids:multiple category_ids:multiple subtree_p letter join package_id}]
+set url_vars [export_vars {tree_ids:multiple category_ids:multiple subtree_p letter join package_id}]
 set form_vars [export_vars -form {tree_ids:multiple orderby subtree_p letter package_id}]
 
 db_transaction {

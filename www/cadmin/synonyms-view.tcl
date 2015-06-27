@@ -9,7 +9,7 @@ ad_page_contract {
     tree_id:naturalnum,notnull
     {locale ""}
     object_id:naturalnum,optional
-    orderby:optional
+    orderby:token,optional
     ctx_id:naturalnum,optional
 } -properties {
     page_title:onevalue

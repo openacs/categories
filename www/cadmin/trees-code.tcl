@@ -13,7 +13,7 @@ set user_id [auth::require_login]
 permission::require_permission -object_id [ad_conn package_id] -privilege admin
 
 set page_title "[_ categories.code_export]"
-set context_bar [list [list ".?[export_vars -no_empty {locale}]" "[_ categories.cadmin]"] $page_title]
+set context_bar [list [list [export_vars -base . -no_empty {locale}] "[_ categories.cadmin]"] $page_title]
 
 multirow create trees tree_id
 foreach tid $tree_id {

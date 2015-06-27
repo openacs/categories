@@ -10,7 +10,7 @@ ad_page_contract {
     {locale ""}
     object_id:naturalnum,optional
     {page:integer,optional 1}
-    {orderby:optional object_name}
+    {orderby:token,optional object_name}
 } -properties {
     page_title:onevalue
     context_bar:onevalue
