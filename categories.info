@@ -8,7 +8,7 @@
     <singleton-p>f</singleton-p>
     <auto-mount>categories</auto-mount>
 
-    <version name="1.1.3d2" url="http://openacs.org/repository/apm/packages/categories-1.1.3d2">
+    <version name="1.1.3d4" url="http://openacs.org/repository/apm/packages/categories-1.1.3d4">
         <owner url="mailto:timo@timohentschel.de">timo@timohentschel.de</owner>
         <summary>Manage categories in category trees and let users map objects to categories.</summary>
         <release-date>2013-09-08</release-date>
@@ -17,7 +17,7 @@
         <license>GPL</license>
         <maturity>1</maturity>
 
-        <provides url="categories" version="1.1.3d2"/>
+        <provides url="categories" version="1.1.3d4"/>
 	<requires url="acs-kernel" version="5.8.1"/>
         
 
