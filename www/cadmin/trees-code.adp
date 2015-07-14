@@ -7,6 +7,6 @@
 <pre style="border: 1px solid #CCC; background-color: #EEE; padding: 10px;">
 set default_locale [lang::system::site_wide_locale]
 <multiple name=trees>
-<include src="/packages/categories/lib/tree-code" tree_id="@trees.tree_id@">
+<include src="/packages/categories/lib/tree-code" tree_id="@trees.tree_id;literal@">
 </multiple>
 </pre>

@@ -16,6 +16,6 @@
       </multiple>
     </div>
     <div>
-      <if @cat@ not nil><include src="/packages/categories/lib/contributions" orderby="@orderby@" category="@cat@" root_node_id="@node_id@"></if>
+      <if @cat@ not nil><include src="/packages/categories/lib/contributions" orderby="@orderby;literal@" category="@cat;literal@" root_node_id="@node_id;literal@"></if>
     </div>
   </div>
