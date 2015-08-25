@@ -2,10 +2,12 @@
 <property name="context">{/doc/categories {Categories}} {Categories}</property>
 <property name="doc(title)">Categories</property>
 <master>
+<h2>Categories</h2>
+<a href="o">Object Names and IdHandler Service Contract</a>
+<h3>Functionality overview</h3>
 
-<body>
-<h2>Categories</h2><a href="o">Object Names and IdHandler Service Contract</a><h3>Functionality overview</h3>
 Categories are organized in separate category trees.<br>
+
 When a package admin clicks on an Administer Categories link, they
 are presented with a page that shows the following items:
 <ul>
@@ -14,10 +16,13 @@ will be usually a package instance)</li><li>list of trees that can be mapped to 
 are just the trees that the admin has the 'category_read'
 permission on</li><li>link to create and map a new category tree</li>
 </ul>
+
 Creating a new tree involves entering tree name and description.
 The name must be unique among all the trees.<br>
+
 Upon creation of a tree, the admin is granted the 'category_read'
 and 'category_write' permisssions.<br>
+
 Normally, the category_write permission should not be shared with
 anybody else, in the rare cases when granting this permission to
 another party is needed, site-wide admin intervention will be
@@ -31,7 +36,8 @@ category the user selected - the category itself will not be
 included. Note that the mapped subtree will not be a new tree.
 Therefore this option should be used only if an admin plans to use
 the subtree 'as is' and has no intention of making changes to
-it.</p><p>An alternative solution is available for admins who want to
+it.</p>
+<p>An alternative solution is available for admins who want to
 create a tree by copying one of the existing trees and subsequently
 playing around with it (moving/adding/deleting categories). To
 accomplish that, they would have to create a new tree, go to the
@@ -41,13 +47,19 @@ They will see a list of available trees to copy. Clicking on the
 categories from the source trees and placing them in the new
 tree.<br>
 This operation can be performed several times, each time the copied
-categories will be placed as toplevel categories of the tree.</p><p>As far as unmapping is concerned, this operation doesn't delete
-the mapping between categories and objects.</p><p><b>Permissions</b></p><p>The creator of the category tree is granted the
+categories will be placed as toplevel categories of the tree.</p>
+<p>As far as unmapping is concerned, this operation doesn't delete
+the mapping between categories and objects.</p>
+<p><b>Permissions</b></p>
+<p>The creator of the category tree is granted the
 category_tree_read, category_tree_write and
 category_tree_grant_permissions privileges.<br>
-</p><p><b>The operations one can perform on categories are:</b></p><ul>
+</p>
+<p><b>The operations one can perform on categories are:</b></p>
+<ul>
 <li>(a) changing of a parent</li><li>(b) adding childen</li><li>(c) deleting</li><li>(d) editing</li><li>(e) phasing in/out</li><li>(f) changing sort key</li>
-</ul><p>ad (d) You cannot delete a category that has children. Also, you
+</ul>
+<p>ad (d) You cannot delete a category that has children. Also, you
 cannot delete a category that has objects mapped to it (do we want
 it or not?)<br>
 ad (e) The effect of phasing out a category is that users no longer
@@ -57,8 +69,12 @@ Deletions and phasing it/out can be performed as bulk
 operations.<br>
 ad (f) sort key is used to order children of the same parent
 category, that is the elements of the tree are sorted first by
-parent, then by the sort key.</p><hr><b>Datamodel</b><p>This table actually stores the information whether the tree is
-side-wide or not.</p><pre>
+parent, then by the sort key.</p>
+<hr>
+<b>Datamodel</b>
+<p>This table actually stores the information whether the tree is
+side-wide or not.</p>
+<pre>
 create table category_trees (
        tree_id                  integer primary key
                                 constraint cat_trees_tree_id_fk
@@ -67,8 +83,10 @@ create table category_trees (
                                 constraint cat_trees_site_wide_p_ck
                                 check (site_wide_p in ('t','f'))
 );
-</pre><p>Here the tree's name and description is stored in different
-translations.</p><pre>
+</pre>
+<p>Here the tree's name and description is stored in different
+translations.</p>
+<pre>
 create table category_tree_translations (
        tree_id                  integer
                                 constraint cat_tree_trans_tree_id_fk
@@ -80,12 +98,14 @@ create table category_tree_translations (
        description              varchar2(1000),
        primary key (tree_id, locale)
 );
-</pre><p>This table stores the tree hierarchy by holding the information
+</pre>
+<p>This table stores the tree hierarchy by holding the information
 about the parent category. The tree is ordered by a nested index
 (left_ind, right_ind). Sorting is thus accomplished by means of a
 nested set. You can read a <a href="http://www.intelligententerprise.com/001020/celko.jhtml?_requestid=49180">
 description of how nested sets work</a>. This also <i>describes how
-to write queries that sort correctly when using categories</i>.</p><pre>
+to write queries that sort correctly when using categories</i>.</p>
+<pre>
 create table categories (
        category_id                  integer primary key
                                     constraint cat_category_id_fk
@@ -102,8 +122,10 @@ create table categories (
        left_ind                     integer,
        right_ind                    integer
 );
-</pre><p>Here the actual categories are stored together with different
-translations.</p><pre>
+</pre>
+<p>Here the actual categories are stored together with different
+translations.</p>
+<pre>
 create table category_translations (
        category_id          integer
                             constraint cat_trans_category_id_fk
@@ -115,7 +137,9 @@ create table category_translations (
        description          varchar2(4000),
        primary key (category_id, locale)
 );
-</pre><p>This table contains mapping between categories and objects</p><pre>
+</pre>
+<p>This table contains mapping between categories and objects</p>
+<pre>
 create table category_object_map (
        category_id                   integer
                                      constraint cat_object_map_category_id_fk
@@ -125,9 +149,11 @@ create table category_object_map (
                                      references acs_objects on delete cascade,
        primary key (object_id, category_id)
 ) organization index;
-</pre><p>This is the table for the relation of trees and objects.
+</pre>
+<p>This is the table for the relation of trees and objects.
 subtree_category_id comes to play in situations when you map a
-subtree of an existing tree to an object.</p><pre>
+subtree of an existing tree to an object.</p>
+<pre>
 create table category_tree_map (
         tree_id                 integer
                                 constraint cat_tree_map_tree_id_fk
@@ -140,30 +166,42 @@ create table category_tree_map (
                                 references categories,
         primary key (object_id, tree_id)
 ) organization index;
-</pre><hr><p><b>Known Limitations</b></p><ul>
+</pre>
+<hr>
+<p><b>Known Limitations</b></p>
+<ul>
 <li>The tree order is the same for all translations.</li><li>You can map a tree only once to a package (or other
 object).</li><li>The number of objects mapped to a category is not shown yet.
 These results should be cached.</li><li>When browsing categories all mapped categories should be shown
 for each object.</li><li>There should be browsing widget easily used by other packages
 to let the user browse through all categorized objects.</li>
-</ul><hr><p><b>Integration with other packages</b></p><p>Here are the changes needed to be made to integrate with other
-packages.</p><p>
+</ul>
+<hr>
+<p><b>Integration with other packages</b></p>
+<p>Here are the changes needed to be made to integrate with other
+packages.</p>
+<p>
 <b>index.adp</b><br>
 Provide an admin-link to
 /categories/cadmin/one-object?object_id=\@package_id\@ to let admins
-map trees to the package instance.</p><p>
+map trees to the package instance.</p>
+<p>
 <b>form-page.tcl</b><br>
 Use this in ad_form to display all mapped category trees and
-selected categories (if editing an object):</p><pre>
+selected categories (if editing an object):</p>
+<pre>
     {category_ids:integer(category),multiple,optional {label "Categories"}
        {html {size 4}} {value {$object_id $package_id}}}
 </pre>
+
 Alternatively, you can include the following in your adp:
 <pre>
   &lt;include src="/packages/categories/www/include/widget" object_id=\@object_id\@ package_id=\@package_id\@&gt;
 </pre>
+
 In the processing part of ad_form use:
 <pre>
 category::map_object -remove_old -object_id $object_id $category_ids
-</pre><hr><address><a href="mailto:timo\@studio-k4.de">timo\@studio-k4.de</a></address>
-</body>
+</pre>
+<hr>
+<address><a href="mailto:timo\@studio-k4.de">timo\@studio-k4.de</a></address>
