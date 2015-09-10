@@ -91,3 +91,9 @@ set object_count [paginator get_row_count $p_name]
 set page_count [paginator get_page_count $p_name]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

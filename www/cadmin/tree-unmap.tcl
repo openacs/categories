@@ -39,3 +39,9 @@ set tree_name $tree(tree_name)
 set context_bar [list $object_context [list [export_vars -no_empty -base object-map {locale object_id ctx_id}] [_ categories.cadmin]] "Unmap \"$tree_name\""]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

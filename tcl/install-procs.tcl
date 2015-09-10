@@ -85,3 +85,9 @@ ad_proc -public install::xml::action::map-category-tree { node } {
         }
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

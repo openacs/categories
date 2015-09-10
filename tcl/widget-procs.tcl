@@ -293,3 +293,9 @@ ad_proc -public template::data::transform::category { element_ref } {
 
     return $values
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

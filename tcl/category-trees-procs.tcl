@@ -700,3 +700,9 @@ ad_proc -public category_tree::import {
 
     return $tree_id
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

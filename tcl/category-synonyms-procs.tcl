@@ -101,3 +101,9 @@ ad_proc -private category_synonym::search_sweeper {
 } {
     db_dml delete_old_searches ""
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

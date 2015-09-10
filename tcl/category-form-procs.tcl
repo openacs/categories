@@ -107,3 +107,9 @@ ad_proc -public category::ad_form::fill_widgets {
         set my_category_ids $categories
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

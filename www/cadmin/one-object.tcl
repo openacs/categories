@@ -10,3 +10,9 @@ ad_page_contract {
 }
 
 ad_returnredirect [export_vars -no_empty -base object-map { locale object_id }]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

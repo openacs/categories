@@ -21,3 +21,9 @@ db_transaction {
 category_tree::flush_cache $tree_id
 
 ad_returnredirect [export_vars -no_empty -base tree-view { tree_id locale object_id ctx_id}]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

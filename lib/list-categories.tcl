@@ -28,3 +28,9 @@ db_foreach category_count "
 }
 
 category_tree::get_multirow -datasource categories -container_id [ad_conn subsite_id] -category_counts $counts
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

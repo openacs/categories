@@ -31,3 +31,9 @@ set admin_p [permission::permission_p -object_id $package_id -privilege category
 set sw_tree_p [ad_decode $tree(site_wide_p) f 0 1]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

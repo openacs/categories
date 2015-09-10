@@ -34,3 +34,9 @@ ad_proc -public category_link::delete { link_id } {
 } {
     db_exec_plsql delete_category_link ""
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

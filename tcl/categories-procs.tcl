@@ -547,3 +547,9 @@ ad_proc -private category::before_uninstall {} {
     acs_sc::impl::delete -contract_name AcsObject -impl_name category_idhandler
     acs_sc::impl::delete -contract_name AcsObject -impl_name category_tree_idhandler
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

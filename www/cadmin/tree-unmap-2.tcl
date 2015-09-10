@@ -22,3 +22,9 @@ if {$tree(site_wide_p) == "f"} {
 category_tree::unmap -tree_id $tree_id -object_id $object_id
 
 ad_returnredirect [export_vars -no_empty -base object-map {locale object_id ctx_id}]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

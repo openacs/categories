@@ -125,3 +125,9 @@ ad_proc -private ::category_tree::xml::add_category {
         add_category -tree_id $tree_id -parent_id $category_id $child
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -77,3 +77,9 @@ aa_register_case category_delete {
             aa_equals "category was deleted succesfully" $success_p 1
         }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

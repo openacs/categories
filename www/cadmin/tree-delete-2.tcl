@@ -28,3 +28,9 @@ if {![info exists object_id]} {
 } else {
     ad_returnredirect [export_vars -no_empty -base object-map {locale object_id ctx_id}]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
