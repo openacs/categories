@@ -148,7 +148,7 @@ ad_proc -public category::list::get_pretty_list {
     foreach category $sorted_categories {
 	lassign $category category_id category_name tree_id tree_name
 
-	set category_name [ad_quotehtml $category_name]
+	set category_name [ns_quotehtml $category_name]
 	if {$category_link_eval ne ""} {
 	    set category_link [uplevel $uplevel concat $category_link_eval]
 	}
@@ -167,7 +167,7 @@ ad_proc -public category::list::get_pretty_list {
 	    if {$result ne ""} {
 		append result $tree_delimiter
 	    }
-	    set tree_name [ad_quotehtml $tree_name]
+	    set tree_name [ns_quotehtml $tree_name]
 	    if {$tree_link_eval ne ""} {
 		set tree_link [uplevel $uplevel concat $tree_link_eval]
 	    }
@@ -318,7 +318,7 @@ ad_proc -public category::list::prepare_display {
 
 		foreach category $tree_categories($tree_id) {
 		    lassign $category category_id category_name
-		    set category_name [ad_quotehtml $category_name]
+		    set category_name [ns_quotehtml $category_name]
 		    if {$category_link_eval ne ""} {
 			set category_link [uplevel 1 concat $category_link_eval]
 		    }
