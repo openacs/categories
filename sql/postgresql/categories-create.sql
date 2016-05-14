@@ -36,9 +36,7 @@ create table category_trees (
        tree_id			integer primary key 
                                 constraint cat_trees_tree_id_fk 
                                 references acs_objects on delete cascade,
-       site_wide_p		char(1) default 't' 
-                                constraint cat_trees_site_wide_p_ck
-                                check (site_wide_p in ('t','f'))
+       site_wide_p		boolean default true
 );
 
 comment on table category_trees is '
@@ -91,9 +89,7 @@ create table categories (
                                 on delete cascade,
        parent_id		integer constraint cat_parent_id_fk 
                                 references categories,
-       deprecated_p		char(1) default 'f' 
-                                constraint cat_deprecated_p_ck 
-                                check (deprecated_p in ('t','f')),
+       deprecated_p		boolean default false,
        left_ind			integer,
        right_ind		integer
 );
@@ -166,12 +162,8 @@ create table category_tree_map (
                                 default null 
                                 constraint cat_tree_map_subtree_id_fk 
                                 references categories,
-	assign_single_p		char(1) default 'f'
-				constraint cat_tree_map_single_p_ck
-				check (assign_single_p in ('t','f')),
-	require_category_p	char(1) default 'f'
-				constraint cat_tree_map_categ_p_ck
-				check (require_category_p in ('t','f')),
+	assign_single_p		boolean default false,
+	require_category_p	boolean default false,
         widget                  varchar(20),
 	primary key (object_id, tree_id)
 );
@@ -300,9 +292,7 @@ create table category_synonyms (
 			constraint category_synonyms_locale_fk
 			references ad_locales on delete cascade,
 	name		varchar(100) not null,
-	synonym_p	char(1) default 't'
-			constraint category_synonyms_synonym_p_ck
-			check (synonym_p in ('t','f'))
+	synonym_p	boolean default true
 );
 
 -- to get all synonyms in given locale

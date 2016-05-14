@@ -262,8 +262,8 @@ CREATE OR REPLACE FUNCTION category_tree__map(
    p_object_id integer,
    p_tree_id integer,
    p_subtree_category_id integer,
-   p_assign_single_p char,
-   p_require_category_p char,
+   p_assign_single_p boolean,
+   p_require_category_p boolean,
    p_widget varchar
 ) RETURNS integer AS $$
 DECLARE
