@@ -50,12 +50,12 @@ This operation can be performed several times, each time the copied
 categories will be placed as toplevel categories of the tree.</p>
 <p>As far as unmapping is concerned, this operation doesn't delete
 the mapping between categories and objects.</p>
-<p><b>Permissions</b></p>
+<p><strong>Permissions</strong></p>
 <p>The creator of the category tree is granted the
 category_tree_read, category_tree_write and
 category_tree_grant_permissions privileges.<br>
 </p>
-<p><b>The operations one can perform on categories are:</b></p>
+<p><strong>The operations one can perform on categories are:</strong></p>
 <ul>
 <li>(a) changing of a parent</li><li>(b) adding childen</li><li>(c) deleting</li><li>(d) editing</li><li>(e) phasing in/out</li><li>(f) changing sort key</li>
 </ul>
@@ -71,7 +71,7 @@ ad (f) sort key is used to order children of the same parent
 category, that is the elements of the tree are sorted first by
 parent, then by the sort key.</p>
 <hr>
-<b>Datamodel</b>
+<strong>Datamodel</strong>
 <p>This table actually stores the information whether the tree is
 side-wide or not.</p>
 <pre>
@@ -103,8 +103,8 @@ create table category_tree_translations (
 about the parent category. The tree is ordered by a nested index
 (left_ind, right_ind). Sorting is thus accomplished by means of a
 nested set. You can read a <a href="http://www.intelligententerprise.com/001020/celko.jhtml?_requestid=49180">
-description of how nested sets work</a>. This also <i>describes how
-to write queries that sort correctly when using categories</i>.</p>
+description of how nested sets work</a>. This also <em>describes how
+to write queries that sort correctly when using categories</em>.</p>
 <pre>
 create table categories (
        category_id                  integer primary key
@@ -168,7 +168,7 @@ create table category_tree_map (
 ) organization index;
 </pre>
 <hr>
-<p><b>Known Limitations</b></p>
+<p><strong>Known Limitations</strong></p>
 <ul>
 <li>The tree order is the same for all translations.</li><li>You can map a tree only once to a package (or other
 object).</li><li>The number of objects mapped to a category is not shown yet.
@@ -177,16 +177,16 @@ for each object.</li><li>There should be browsing widget easily used by other pa
 to let the user browse through all categorized objects.</li>
 </ul>
 <hr>
-<p><b>Integration with other packages</b></p>
+<p><strong>Integration with other packages</strong></p>
 <p>Here are the changes needed to be made to integrate with other
 packages.</p>
 <p>
-<b>index.adp</b><br>
+<strong>index.adp</strong><br>
 Provide an admin-link to
 /categories/cadmin/one-object?object_id=\@package_id\@ to let admins
 map trees to the package instance.</p>
 <p>
-<b>form-page.tcl</b><br>
+<strong>form-page.tcl</strong><br>
 Use this in ad_form to display all mapped category trees and
 selected categories (if editing an object):</p>
 <pre>
