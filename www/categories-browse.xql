@@ -15,20 +15,6 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="check_permissions_on_trees">
-    <querytext>
-      select t.tree_id
-      from category_trees t, category_temp tmp
-      where (t.site_wide_p = 't'
-      or exists (select 1
-                 from acs_object_party_privilege_map oppm
-                 where oppm.object_id = t.tree_id
-                 and oppm.party_id = :user_id
-                 and oppm.privilege = 'category_tree_read'))
-      and t.tree_id = tmp.category_id
-    </querytext>
-  </fullquery>
-
   <partialquery name="other_letter">
     <querytext>
       and (upper(n.object_name) < 'A' or upper(n.object_name) > 'Z')
@@ -96,21 +82,6 @@
     <querytext>
       insert into category_temp
       values (:category_id)
-    </querytext>
-  </fullquery>
-
-  <fullquery name="get_categorized_object_count">
-    <querytext>
-      select n.object_id
-      from acs_named_objects n, ($subtree_sql) s
-      where n.object_id = s.object_id
-      and exists (select 1
-                  from acs_object_party_privilege_map oppm
-                  where oppm.object_id = n.object_id
-                  and oppm.party_id = :user_id
-                  and oppm.privilege = 'read')
-      $letter_sql
-      $package_sql
     </querytext>
   </fullquery>
 
