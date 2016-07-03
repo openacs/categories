@@ -22,7 +22,7 @@ The name must be unique among all the trees.<br>
 
 Upon creation of a tree, the admin is granted the
 'category_read' and 'category_write'
-permisssions.<br>
+permissions.<br>
 
 Normally, the category_write permission should not be shared with
 anybody else, in the rare cases when granting this permission to
@@ -59,7 +59,7 @@ category_tree_grant_permissions privileges.<br>
 <p><strong>The operations one can perform on categories
 are:</strong></p>
 <ul>
-<li>(a) changing of a parent</li><li>(b) adding childen</li><li>(c) deleting</li><li>(d) editing</li><li>(e) phasing in/out</li><li>(f) changing sort key</li>
+<li>(a) changing of a parent</li><li>(b) adding children</li><li>(c) deleting</li><li>(d) editing</li><li>(e) phasing in/out</li><li>(f) changing sort key</li>
 </ul>
 <p>ad (d) You cannot delete a category that has children. Also, you
 cannot delete a category that has objects mapped to it (do we want
