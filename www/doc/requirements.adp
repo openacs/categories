@@ -60,7 +60,7 @@ solution.)</td>
 <span class="emphasis"><em>enabled trees</em></span>) to an
 object.</td>
 </tr><tr>
-<td>3.2</td><td>partial</td><td>A</td><td>A GUI to see an object's categories.</td>
+<td>3.2</td><td>partial</td><td>A</td><td>A GUI to see an object&#39;s categories.</td>
 </tr><tr>
 <td>3.2.1</td><td> </td><td>A</td><td>All of the categories which an object belongs to can be
 displayed via an includelet on an object view page. (<tt class="computeroutput">/categories/www/widget</tt>)</td>
