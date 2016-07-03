@@ -10,7 +10,8 @@
 	   natural left join category_object_map com
 	   natural join category_trees
            natural join category_translations trans
-        where tree_id = :tree_id and trans.locale = :default_locale
+        where tree_id = :tree_id
+	  and trans.locale = :default_locale
           and acs_permission__permission_p(com.object_id, :user_id, 'read')
         group by category_id
   </querytext>
