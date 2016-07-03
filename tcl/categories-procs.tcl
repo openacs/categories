@@ -371,7 +371,11 @@ ad_proc -public category::count_children {
 } {
     counts all direct sub categories
 } {
-    return [db_string select {}]
+    return [db_string count_children {
+        select count(*)
+        from categories
+        where parent_id=:category_id
+    }]
 }
                                              
 ad_proc -public category::get_parent {
