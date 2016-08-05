@@ -4,7 +4,7 @@
 <property name="locale">@locale;literal@</property>
 
 <p>
-  <b>#categories.lt_Are_you_sure_you_want_2#</b>
+  <strong>#categories.lt_Are_you_sure_you_want_2#</strong>
 </p>
 
 <listtemplate name="synonyms"></listtemplate>

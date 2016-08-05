@@ -16,7 +16,7 @@
 </if>
 
 <if @used_categories:rowcount@ gt 0>
-  <p><b>#categories.lt_Categories_still_used#</b>
+  <p><strong>#categories.lt_Categories_still_used#</strong>
   <listtemplate name="used_categories"></listtemplate>
   <p>
 </if>

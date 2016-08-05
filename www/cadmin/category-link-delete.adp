@@ -4,7 +4,7 @@
 <property name="locale">@locale;literal@</property>
 
 <p>
-  <b>#categories.lt_Are_you_sure_you_want_1#</b>
+  <strong>#categories.lt_Are_you_sure_you_want_1#</strong>
 </p>
 
 <listtemplate name="category_links"></listtemplate>

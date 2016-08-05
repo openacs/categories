@@ -11,7 +11,7 @@
 </p>
 
 <multiple name=modules>
-  <b>@modules.package@:</b><ul>
+  <strong>@modules.package@:</strong><ul>
   <group column=package>
     </ul><if @modules.object_name@ ne @modules.instance_name@>@modules.instance_name@</if><ul>
     <group column=package_id>
