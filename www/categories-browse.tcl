@@ -160,7 +160,12 @@ db_transaction {
     }
 
     # execute query to count objects and pages
-    paginator create get_categorized_object_count $p_name "" -pagesize 20 -groupsize 10 -contextual -timeout 0
+    # apisano: this particular statement contains $ variables, so it
+    # cannot be passed by name to the paginator, or such variables
+    # won't be resolved correctly insite the machinery.  Just compute
+    # the sql text here and pass it as is.    
+    set sql [db_map get_categorized_object_count]
+    paginator create -- $p_name $sql -pagesize 20 -groupsize 10 -contextual -timeout 0
 
     set first_row [paginator get_row $p_name $page]
     set last_row [paginator get_row_last $p_name $page]
