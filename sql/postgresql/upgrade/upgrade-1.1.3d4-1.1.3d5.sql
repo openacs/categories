@@ -151,6 +151,20 @@ $$ LANGUAGE plpgsql;
 --
 -- procedure category_tree__new/9
 --
+
+-- need to drop old version first, as arguments change type
+DROP FUNCTION IF EXISTS category_tree__new(
+   p_tree_id integer,
+   p_locale varchar,
+   p_tree_name varchar,
+   p_description varchar,
+   p_site_wide_p char,
+   p_creation_date timestamp with time zone,
+   p_creation_user integer,
+   p_creation_ip varchar,
+   p_context_id integer
+);
+
 CREATE OR REPLACE FUNCTION category_tree__new(
    p_tree_id integer,
    p_locale varchar,
