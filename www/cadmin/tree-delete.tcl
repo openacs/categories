@@ -28,7 +28,7 @@ array set tree [category_tree::get_data $tree_id $locale]
 set tree_name $tree(tree_name)
 set tree_description $tree(description)
 
-set page_title [_ categories.Delete_category_title]
+set page_title [_ categories.Delete_category_tree_title]
 set context_bar [category::context_bar $tree_id $locale \
                      [value_if_exists object_id] \
                      [value_if_exists ctx_id]]
