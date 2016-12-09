@@ -48,7 +48,7 @@
   <msg key="lt_Are_you_sure_you_want">Sind Sie sicher, dass Sie diese Kategorien löschen wollen:</msg>
   <msg key="lt_Are_you_sure_you_want_1">Sind Sie sicher, dass Sie diese Kategorien-Links löschen wollen:</msg>
   <msg key="lt_Are_you_sure_you_want_2">Sind Sie sicher, dass Sie diese Synonyme löschen wollen:</msg>
-  <msg key="lt_Are_you_sure_you_want_3">Sind Sie sicher, dass Sie den Kategorienbaum &quot;%tree_name%&quot; löschen wollen:</msg>
+  <msg key="lt_Are_you_sure_you_want_3">Sind Sie sicher, dass Sie den Kategorienbaum &quot;%tree_name%&quot; löschen wollen?</msg>
   <msg key="lt_Are_you_sure_you_want_4">Sind Sie sicher, dass Sie die Zuordnung des Kategorienbaums &quot;%tree_name%&quot; zum Wiki &quot;%object_name%&quot; aufheben wollen?</msg>
   <msg key="lt_Categories_still_used">Kategorien in Verwendung</msg>
   <msg key="lt_Category_Administrati">Kategorien verwalten</msg>
