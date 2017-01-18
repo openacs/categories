@@ -10,7 +10,7 @@
 </table>
 </p>
 
-<if @instances_using_p@ eq t>
+<if @instances_using_p;literal@ true>
   #categories.lt_This_tree_is_still_us#
   <a href="@usage_url@">#categories.here#</a>.
 </if>
