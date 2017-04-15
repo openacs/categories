@@ -96,5 +96,3 @@ object_id</a> and <a href="http://openacs.org/forums/message-view?message_id=158
 		    rightLink="" rightLabel="" rightTitle=""
 		    homeLink="index" homeLabel="Home" 
 		    upLink="index" upLabel="Up"> 
-		<center><a href="http://openacs.org/doc/requirements.html#comments">View comments
-on this page at openacs.org</a></center>
