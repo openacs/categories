@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="check_translation_existance">      
+<fullquery name="check_translation_existence">      
       <querytext>
       
 	select name, description

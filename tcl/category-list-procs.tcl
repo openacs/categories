@@ -94,15 +94,15 @@ ad_proc -public category::list::get_pretty_list {
     Accepts a list of category_ids and returns a pretty list of tree-names and
     category-names with optional links for each tree and category.
 
-    @param category_delimiter string that seperates the categories in the pretty list
+    @param category_delimiter string that separates the categories in the pretty list
     @param category_link optional link for every category-name
     @param category_link_eval optional command that returns the link for every category-name.
                               normaly this would be a export_vars command that could
                               contain __category_id and __tree_id which refer to
                               category_id and tree_id of the category-name the link will wrap.
     @param category_link_html optional list of key value pairs for additional html in a link.
-    @param tree_delimiter string that seperates the tree-names in the pretty list
-    @param tree_colon string that seperates a tree-name from the category-names in that tree.
+    @param tree_delimiter string that separates the tree-names in the pretty list
+    @param tree_colon string that separates a tree-name from the category-names in that tree.
     @param tree_link optional link for every tree-name
     @param tree_link_eval optional command that returns the link for every tree-name.
                           normaly this would be a export_vars command that could
@@ -210,15 +210,15 @@ ad_proc -public category::list::prepare_display {
     list of category-names. These extra column can then be used in the listbuilder
     to display a pretty list of categorized objects.
 
-    @param category_delimiter string that seperates the categories in the pretty list
+    @param category_delimiter string that separates the categories in the pretty list
     @param category_link optional link for every category-name
     @param category_link_eval optional command that returns the link for every category-name.
                               normaly this would be a export_vars command that could
                               contain __category_id and __tree_id which refer to
                               category_id and tree_id of the category-name the link will wrap.
     @param category_link_html optional list of key value pairs for additional html in a link.
-    @param tree_delimiter string that seperates the tree-names in the pretty list
-    @param tree_colon string that seperates a tree-name from the category-names in that tree.
+    @param tree_delimiter string that separates the tree-names in the pretty list
+    @param tree_colon string that separates a tree-name from the category-names in that tree.
     @param tree_link optional link for every tree-name
     @param tree_link_eval optional command that returns the link for every tree-name.
                           normaly this would be a export_vars command that could

@@ -10,8 +10,8 @@ if {![info exists user_id]} {
 if {![info exists category]} {
     set category {}
 }
-if {[info exists supress]} {
-    foreach key $supress { 
+if {[info exists suppress]} {
+    foreach key $suppress { 
         set hide($key) 1
     }
 }
