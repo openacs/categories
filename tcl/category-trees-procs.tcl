@@ -219,7 +219,7 @@ namespace eval category_tree {
 
         @param object_id object to get the mapped category trees.
         @param locale language in which to get the name. [ad_conn locale] used by default.
-        @return tcl list of lists: tree_id tree_name subtree_category_id
+        @return Tcl list of lists: tree_id tree_name subtree_category_id
                     assign_single_p require_category_p
         @author Timo Hentschel (timo@timohentschel.de)
     } {
@@ -235,7 +235,7 @@ namespace eval category_tree {
         Get the category trees mapped to an object.
 
         @param object_id object to get the mapped category trees.
-        @return tcl list of tree_ids
+        @return Tcl list of tree_ids
         @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
     } {
         set result [list]
@@ -268,7 +268,7 @@ namespace eval category_tree {
         
         @param object_id_list list of object to get the mapped category trees.
         @param locale language in which to get the name. [ad_conn locale] used by default.
-        @return tcl list of lists: tree_id tree_name subtree_category_id
+        @return Tcl list of lists: tree_id tree_name subtree_category_id
                     assign_single_p require_category_p widget
         @author Jade Rubick (jader@bread.com)
     } {
@@ -293,7 +293,7 @@ namespace eval category_tree {
         @option subtree_id Return only categories of the given subtree.
         @param tree_id category tree to get the categories of.
         @param locale language in which to get the categories. [ad_conn locale] used by default.
-        @return tcl list of lists: category_id category_name deprecated_p level
+        @return Tcl list of lists: category_id category_name deprecated_p level
         @author Timo Hentschel (timo@timohentschel.de)
     } {
         if {[catch {set tree [nsv_get category_trees $tree_id]}]} {
@@ -332,7 +332,7 @@ namespace eval category_tree {
         Gets all package instances using a category tree.
 
         @param tree_id category tree to get the using packages for.
-        @return tcl list of lists: package_pretty_plural object_id object_name package_id instance_name read_p
+        @return Tcl list of lists: package_pretty_plural object_id object_name package_id instance_name read_p
         @author Timo Hentschel (timo@timohentschel.de)  
     } {
         set user_id [ad_conn user_id]
