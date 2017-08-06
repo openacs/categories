@@ -96,3 +96,4 @@ object_id</a> and <a href="http://openacs.org/forums/message-view?message_id=158
 		    rightLink="" rightLabel="" rightTitle=""
 		    homeLink="index" homeLabel="Home" 
 		    upLink="index" upLabel="Up"> 
+		

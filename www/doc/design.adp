@@ -12,8 +12,8 @@ When a package admin clicks on an Administer Categories link, they
 are presented with a page that shows the following items:
 <ul>
 <li>list of trees currently mapped to the object (this
-"object" will be usually a package instance)</li><li>list of trees that can be mapped to the object, those trees
-are just the trees that the admin has the 'category_read'
+"object" will be usually a package instance)</li><li>list of trees that can be mapped to the object, those trees are
+just the trees that the admin has the 'category_read'
 permission on</li><li>link to create and map a new category tree</li>
 </ul>
 
