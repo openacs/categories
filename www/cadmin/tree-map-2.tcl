@@ -82,3 +82,9 @@ ad_form -name tree_map_form -action tree-map-2 -export { tree_id category_id loc
 }
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

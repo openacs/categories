@@ -7,3 +7,9 @@ foreach category [category_tree::get_tree -all $tree_id $default_locale] {
     lassign $category category_id category_name deprecated_p level
     multirow append categories $category_name $level [string repeat "&nbsp;" [expr {2 * $level - 2}]]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

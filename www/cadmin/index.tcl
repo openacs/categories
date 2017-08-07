@@ -75,3 +75,9 @@ list::create \
     -elements $elements
 
 set create_url [export_vars -no_empty -base tree-form { locale }]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

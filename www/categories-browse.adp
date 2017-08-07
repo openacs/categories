@@ -9,7 +9,7 @@
     @trees.tree_name@:
     <select name=category_ids multiple size="5">
     <group column=tree_id>
-      <option value="@trees.category_id@"<if @trees.selected_p@ eq 1> #categories.selected#</if>>@trees.indent;noquote@@trees.category_name@
+      <option value="@trees.category_id@"<if @trees.selected_p;literal@ true> #categories.selected#</if>>@trees.indent;noquote@@trees.category_name@
     </group>
     </select>
   </multiple>

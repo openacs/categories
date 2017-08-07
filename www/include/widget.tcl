@@ -30,3 +30,9 @@ foreach tree [category_tree::get_mapped_trees $package_id] {
 	template::multirow append trees $tree_id $tree_name $category_id $selected_p $category_name $indent $assign_single_p $require_category_p
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

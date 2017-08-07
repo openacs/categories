@@ -274,7 +274,7 @@ comment on column category_synonyms.synonym_id is '
   Primary key.
 ';
 comment on column category_synonyms.category_id is '
-  Category the synonyms are refering to.
+  Category the synonyms are referring to.
 ';
 comment on column category_synonyms.locale is '
   Language of the synonym.
@@ -305,7 +305,7 @@ comment on table category_synonym_index is '
   to be used in search.
 ';
 comment on column category_synonym_index.synonym_id is '
-  Id of the synonym refered to.
+  Id of the synonym referred to.
 ';
 comment on column category_synonym_index.trigram is '
   3 character part of the synonym.
@@ -366,7 +366,7 @@ comment on table category_search_index is '
   to be used in search.
 ';
 comment on column category_search_index.query_id is '
-  Id of the search text refered to.
+  Id of the search text referred to.
 ';
 comment on column category_search_index.trigram is '
   3 character part of the search text.

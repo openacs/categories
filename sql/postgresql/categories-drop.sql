@@ -76,10 +76,6 @@ drop function category__name (integer);
 
 -- delete privileges;
 -- this shouldn't be necessary
-begin;
-delete from acs_privilege_descendant_map where privilege like 'category%';
-end;
-
 select acs_privilege__remove_child('category_admin','category_tree_read');
 select acs_privilege__remove_child('category_admin','category_tree_write');
 select acs_privilege__remove_child('category_admin','category_tree_grant_permissions');

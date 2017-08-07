@@ -19,7 +19,7 @@ CREATE OR REPLACE FUNCTION category_tree__new(
    p_locale varchar,
    p_tree_name varchar,
    p_description varchar,
-   p_site_wide_p char,
+   p_site_wide_p boolean,
    p_creation_date timestamp with time zone,
    p_creation_user integer,
    p_creation_ip varchar,
@@ -154,7 +154,7 @@ CREATE OR REPLACE FUNCTION category_tree__edit(
    p_locale varchar,
    p_tree_name varchar,
    p_description varchar,
-   p_site_wide_p char,
+   p_site_wide_p boolean,
    p_modifying_date timestamp with time zone,
    p_modifying_user integer,
    p_modifying_ip varchar
@@ -262,8 +262,8 @@ CREATE OR REPLACE FUNCTION category_tree__map(
    p_object_id integer,
    p_tree_id integer,
    p_subtree_category_id integer,
-   p_assign_single_p char,
-   p_require_category_p char,
+   p_assign_single_p boolean,
+   p_require_category_p boolean,
    p_widget varchar
 ) RETURNS integer AS $$
 DECLARE

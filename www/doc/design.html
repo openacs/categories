@@ -17,7 +17,7 @@ a page that shows the following items:
 <ul>
 <li> list of trees currently mapped to the object (this "object" will be usually a package
     instance)
-<li> list of trees that can be mapped to the object ,
+<li> list of trees that can be mapped to the object,
     those trees are just the trees that the admin has the 'category_read' permission on
 <li> link to create and map a new category tree
 
@@ -25,7 +25,7 @@ a page that shows the following items:
 Creating a new tree involves entering tree name and description.
 The name must be unique among all the trees.
 <br>
-Upon creation of a tree, the admin is granted the 'category_read' and 'category_write' permisssions.
+Upon creation of a tree, the admin is granted the 'category_read' and 'category_write' permissions.
 <br>
 Normally, the category_write permission should not be shared with anybody else,
 in the rare cases when granting this permission to another party is needed,
@@ -57,7 +57,7 @@ doesn't delete the mapping between categories and objects.
 
 
 <p>
-<b>Permissions</b>
+<strong>Permissions</strong>
 <p>The creator of the category tree is granted the category_tree_read, category_tree_write
 and category_tree_grant_permissions privileges. 
 <br> 
@@ -65,10 +65,10 @@ and category_tree_grant_permissions privileges.
 
 <p>
 <p> 
-<b>The operations one can perform on categories are:</b>
+<strong>The operations one can perform on categories are:</strong>
 <ul>
 <li>(a) changing of a parent
-<li>(b) adding childen
+<li>(b) adding children
 <li>(c) deleting
 <li>(d) editing
 <li>(e) phasing in/out
@@ -91,7 +91,7 @@ by the sort key.
 
 
 <hr>
-<b>Datamodel</b>
+<strong>Datamodel</strong>
 
 <p>This table actually stores the information whether the tree is side-wide or not.
 <pre>
@@ -125,7 +125,7 @@ create table category_tree_translations (
 This table stores the tree hierarchy by holding the information about
 the parent category. The tree is ordered by a nested index (left_ind,
 right_ind). Sorting is thus accomplished by means of a nested set. You 
-can read a <a href="http://www.intelligententerprise.com/001020/celko.jhtml?_requestid=49180">description of how nested sets work</a>. This also <i>describes how to write queries that sort correctly when using categories</i>.
+can read a <a href="http://www.intelligententerprise.com/001020/celko.jhtml?_requestid=49180">description of how nested sets work</a>. This also <em>describes how to write queries that sort correctly when using categories</em>.
 
 
 <pre>
@@ -197,7 +197,7 @@ create table category_tree_map (
 </pre>
 
 <hr>
-<p><b>Known Limitations</b>
+<p><strong>Known Limitations</strong>
 <ul>
 <li>The tree order is the same for all translations.</li>
 <li>You can map a tree only once to a package (or other object).</li>
@@ -210,17 +210,17 @@ to let the user browse through all categorized objects.
 </ul>
 
 <hr>
-<p><b>Integration with other packages</b>
+<p><strong>Integration with other packages</strong>
 <p>Here are the changes needed to be made to integrate with other packages.
 <p>
 
-<b>index.adp</b>
+<strong>index.adp</strong>
 <br>Provide an admin-link to
 /categories/cadmin/one-object?object_id=@package_id@ to let admins
 map trees to the package instance.
 <p>
 
-<b>form-page.tcl</b>
+<strong>form-page.tcl</strong>
 <br>Use this in ad_form to display all mapped category trees and
 selected categories (if editing an object):
 <pre>

@@ -215,7 +215,7 @@ BEGIN
 
 	-- insert synonym data
 	insert into category_synonyms (synonym_id, category_id, locale, name, synonym_p)
-	values (v_synonym_id, p_category_id, p_locale, p_name, 't');
+	values (v_synonym_id, p_category_id, p_locale, p_name, true);
 
 	-- insert in synonym index and search results
 	PERFORM category_synonym__reindex (v_synonym_id, p_name, p_locale);
@@ -304,7 +304,7 @@ BEGIN
 
 	-- mark synonym as not editable for users
     update category_synonyms
-    set synonym_p = 'f'
+    set synonym_p = false
     where synonym_id = v_synonym_id;
 
     return new;
@@ -329,7 +329,7 @@ BEGIN
     where  category_id = OLD.category_id
            and name = OLD.name
            and locale = OLD.locale
-           and synonym_p = 'f';
+           and synonym_p = false;
 
 	-- update synonym
     PERFORM category_synonym__edit (v_synonym_id, NEW.name, NEW.locale);

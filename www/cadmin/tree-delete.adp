@@ -10,13 +10,13 @@
 </table>
 </p>
 
-<if @instances_using_p@ eq t>
+<if @instances_using_p;literal@ true>
   #categories.lt_This_tree_is_still_us#
   <a href="@usage_url@">#categories.here#</a>.
 </if>
 
 <if @used_categories:rowcount@ gt 0>
-  <p><b>#categories.lt_Categories_still_used#</b>
+  <p><strong>#categories.lt_Categories_still_used#</strong>
   <listtemplate name="used_categories"></listtemplate>
   <p>
 </if>

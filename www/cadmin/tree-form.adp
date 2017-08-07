@@ -4,4 +4,4 @@
 <property name="change_locale">f</property>
 <property name="focus">tree_form.tree_name</property>
 
-<include src="/packages/categories/lib/tree-form" &="tree_id" &="locale">
+<include src="/packages/categories/lib/tree-form" &="ctx_id" &="tree_id" &="locale">

@@ -93,3 +93,9 @@ ad_proc -private category::relation::get_meta_category_internal {
     db_1row get_categories {}
     return [list $object_id_one $object_id_two]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -31,3 +31,9 @@ ad_form -name locale_form -action [ad_conn url] \
     -form {
       {locale:text(select),optional {label "Language"} {value $locale} {options $languages}}
     }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

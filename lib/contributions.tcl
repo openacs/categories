@@ -10,8 +10,8 @@ if {![info exists user_id]} {
 if {![info exists category]} {
     set category {}
 }
-if {[info exists supress]} {
-    foreach key $supress { 
+if {[info exists suppress]} {
+    foreach key $suppress { 
         set hide($key) 1
     }
 }
@@ -150,3 +150,8 @@ db_multirow -extend {url_one user_url new} content content "
            set url_one $errorCode
        }
    }
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

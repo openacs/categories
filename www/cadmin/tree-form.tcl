@@ -32,3 +32,9 @@ if { [info exists object_id] } {
           [_ categories.cadmin]]]
 }
 lappend context_bar $page_title
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

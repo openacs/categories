@@ -126,7 +126,7 @@ ad_proc -public template::widget::category {
 
     foreach mapped_tree $mapped_trees {
 	lassign $mapped_tree tree_id tree_name subtree_id assign_single_p require_category_p widget
-	set tree_name [ad_quotehtml [lang::util::localize $tree_name]]
+	set tree_name [ns_quotehtml [lang::util::localize $tree_name]]
 	set one_tree [list]
 
         if { $require_category_p == "t" } { 
@@ -137,7 +137,7 @@ ad_proc -public template::widget::category {
 
 	foreach category [category_tree::get_tree -subtree_id $subtree_id $tree_id] {
 	    lassign $category category_id category_name deprecated_p level
-	    set category_name [ad_quotehtml [lang::util::localize $category_name]]
+	    set category_name [ns_quotehtml [lang::util::localize $category_name]]
 	    if { $level>1 } {
 		set category_name "[string repeat "&nbsp;" [expr {2*$level -4}]]..$category_name"
 	    }
@@ -293,3 +293,9 @@ ad_proc -public template::data::transform::category { element_ref } {
 
     return $values
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

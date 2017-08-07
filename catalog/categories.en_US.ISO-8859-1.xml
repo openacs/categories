@@ -90,7 +90,7 @@ also be made to the target category.</msg>
   <msg key="Ordering_update">Update ordering</msg>
   <msg key="Ordering_update_link_title">Update ordering from values in list</msg>
   <msg key="Permissions_manage">Manage Permissions</msg>
-  <msg key="Permissions_manage_title">Permissions Managment for tree &quot;%tree_name%&quot;</msg>
+  <msg key="Permissions_manage_title">Permissions Management for tree &quot;%tree_name%&quot;</msg>
   <msg key="required">required</msg>
   <msg key="Restore">Restore</msg>
   <msg key="Restore_category_link_title">Restore checked categories</msg>

@@ -61,3 +61,9 @@ ad_form -name synonym_form -action synonym-form -export { category_id tree_id lo
 }
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

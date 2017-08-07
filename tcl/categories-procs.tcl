@@ -371,7 +371,11 @@ ad_proc -public category::count_children {
 } {
     counts all direct sub categories
 } {
-    return [db_string select {}]
+    return [db_string count_children {
+        select count(*)
+        from categories
+        where parent_id=:category_id
+    }]
 }
                                              
 ad_proc -public category::get_parent {
@@ -547,3 +551,9 @@ ad_proc -private category::before_uninstall {} {
     acs_sc::impl::delete -contract_name AcsObject -impl_name category_idhandler
     acs_sc::impl::delete -contract_name AcsObject -impl_name category_tree_idhandler
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

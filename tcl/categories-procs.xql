@@ -1,13 +1,5 @@
 <?xml version="1.0"?>
 <queryset>
-<fullquery name="category::count_children.select">
-        <querytext>
-             select count(*)
-             from categories
-             where parent_id=:category_id
-        </querytext>
-</fullquery>
-
 
 <fullquery name="category::get_children.get_children_ids">
       <querytext>

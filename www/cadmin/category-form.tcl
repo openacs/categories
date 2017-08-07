@@ -43,7 +43,7 @@ ad_form -name category_form -action category-form \
     set name ""
     set description ""
 } -edit_request {
-    if {![db_0or1row check_translation_existance ""]} {
+    if {![db_0or1row check_translation_existence ""]} {
 	set default_locale [parameter::get -parameter DefaultLocale -default en_US]
 	db_1row get_default_translation ""
     }
@@ -59,3 +59,9 @@ ad_form -name category_form -action category-form \
 }
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

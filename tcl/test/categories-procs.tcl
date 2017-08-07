@@ -21,7 +21,7 @@ aa_register_case category_tree_add {
                 select 1 from category_trees where tree_id = :tree_id
             } -default "0"]
 
-            aa_equals "tree was created succesfully" $success_p 1
+            aa_equals "tree was created successfully" $success_p 1
         }
 }
 
@@ -46,7 +46,7 @@ aa_register_case category_add {
                 select 1 from categories where category_id = :category_id
             } -default "0"]
 
-            aa_equals "category was created succesfully" $success_p 1
+            aa_equals "category was created successfully" $success_p 1
         }
 }
 
@@ -74,6 +74,12 @@ aa_register_case category_delete {
                 select 0 from categories where category_id = :category_id
             } -default "1"]
 
-            aa_equals "category was deleted succesfully" $success_p 1
+            aa_equals "category was deleted successfully" $success_p 1
         }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

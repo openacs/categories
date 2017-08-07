@@ -20,7 +20,7 @@ CREATE OR REPLACE FUNCTION category__new(
    p_name varchar,
    p_description varchar,
    p_parent_id integer,
-   p_deprecated_p char,
+   p_deprecated_p boolean,
    p_creation_date timestamp with time zone,
    p_creation_user integer,
    p_creation_ip varchar
@@ -137,7 +137,7 @@ CREATE OR REPLACE FUNCTION category__phase_out(
 DECLARE
 BEGIN
        update categories
-       set deprecated_p = 't'
+       set deprecated_p = true
        where category_id = p_category_id;
 
        return 0;
@@ -159,7 +159,7 @@ CREATE OR REPLACE FUNCTION category__phase_in(
 DECLARE
 BEGIN
        update categories
-       set deprecated_p = 'f'
+       set deprecated_p = false
        where category_id = p_category_id;
 
        return 0;
