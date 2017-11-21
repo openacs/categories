@@ -41,11 +41,4 @@
       </querytext>
 </fullquery>
 
-<fullquery name="category_synonym::search_sweeper.delete_old_searches">
-      <querytext>
-		delete from category_search
-		where last_queried < current_timestamp - cast('1 days' as interval)
-      </querytext>
-</fullquery>
-
 </queryset>
