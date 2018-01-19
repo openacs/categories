@@ -26,6 +26,7 @@ db_transaction {
 }
 
 ad_returnredirect [export_vars -no_empty -base tree-view {tree_id locale object_id ctx_id}]
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

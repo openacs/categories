@@ -35,7 +35,7 @@ template::list::create \
 	synonym_name {
 	    label "Search Result"
 	    display_template {
-		@search_result.synonym_name@<if @search_result.synonym_p@ eq t> (@search_result.category_name@)</if>
+		@search_result.synonym_name@<if @search_result.synonym_p;literal@ true> (@search_result.category_name@)</if>
 	    }
 	}
     }

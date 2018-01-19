@@ -28,6 +28,8 @@ if {![info exists object_id]} {
 } else {
     ad_returnredirect [export_vars -no_empty -base object-map {locale object_id ctx_id}]
 }
+ad_script_abort
+
 
 # Local variables:
 #    mode: tcl

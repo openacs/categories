@@ -30,6 +30,7 @@ db_transaction {
 }
 
 ad_returnredirect [export_vars -no_empty -base category-links-view {category_id tree_id locale object_id ctx_id}]
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

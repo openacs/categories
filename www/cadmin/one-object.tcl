@@ -10,6 +10,7 @@ ad_page_contract {
 }
 
 ad_returnredirect [export_vars -no_empty -base object-map { locale object_id }]
+ad_script_abort
 
 # Local variables:
 #    mode: tcl

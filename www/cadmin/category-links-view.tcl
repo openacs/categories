@@ -63,7 +63,7 @@ template::list::create \
     -elements {
 	checkbox {
 	    display_template {
-		<if @category_links.write_p@ eq t><input type="checkbox" name="link_id" value="@category_links.link_id@" id="category_links,@category_links.link_id@" title="Check/uncheck this row, and select an action to perform below"></if>
+		<if @category_links.write_p;literal@ true><input type="checkbox" name="link_id" value="@category_links.link_id@" id="category_links,@category_links.link_id@" title="Check/uncheck this row, and select an action to perform below"></if>
 	    }
 	}
 	direction {

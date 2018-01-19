@@ -50,13 +50,13 @@ template::list::create \
 	category_name {
 	    label "Name"
 	    display_template {
-		<if @categories.objects_p@ true><a href="@categories.view_url@">@categories.category_name@</a></if>
+		<if @categories.objects_p;literal@ true><a href="@categories.view_url@">@categories.category_name@</a></if>
 		<else>@categories.category_name@</else>
 	    }
 	}
 	objects_p {
 	    display_template {
-		<if @categories.objects_p@ true>(Still mapped to objects)</if>
+		<if @categories.objects_p;literal@ true>(Still mapped to objects)</if>
 	    }
 	}
     }

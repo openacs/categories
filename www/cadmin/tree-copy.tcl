@@ -53,7 +53,7 @@ template::list::create \
 	}
 	site_wide_p {
 	    display_template {
-		<if @trees.site_wide_p@ eq t> (#categories.SiteWide_tree#) </if>
+		<if @trees.site_wide_p;literal@ true> (#categories.SiteWide_tree#) </if>
 	    }
 	}
 	copy {

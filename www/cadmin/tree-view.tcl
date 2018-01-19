@@ -92,7 +92,7 @@ lappend elements category_name {
     label "#categories.Category#"
     display_template {
 	@one_tree.left_indent;noquote@<a href="@one_tree.usage_url@" title="Show usage of this category">@one_tree.category_name@</a>
-	<if @one_tree.deprecated_p@ true>(#categories.Deprecated# - <a href="@one_tree.phase_in_url@">#categories.Restore#</a>)</if>
+	<if @one_tree.deprecated_p;literal@ true>(#categories.Deprecated# - <a href="@one_tree.phase_in_url@">#categories.Restore#</a>)</if>
     }
 }
 

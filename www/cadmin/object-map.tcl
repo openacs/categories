@@ -69,10 +69,10 @@ template::list::create \
 	}
         flags {
 	    display_template {
-		(<if @mapped_trees.site_wide_p@ eq t>#categories.#SiteWide_tree#, </if>
+		(<if @mapped_trees.site_wide_p;literal@ true>#categories.#SiteWide_tree#, </if>
                  <if @mapped_trees.widget@>@mapped_trees.widget@, </if>
-		 <if @mapped_trees.assign_single_p@ eq t>#categories.single#, </if><else>#categories.multiple#, </else>
-		 <if @mapped_trees.require_category_p@ eq t>#categories.required#) </if><else>#categories.optional#) </else>
+		 <if @mapped_trees.assign_single_p;literal@ true>#categories.single#, </if><else>#categories.multiple#, </else>
+		 <if @mapped_trees.require_category_p;literal@ true>#categories.required#) </if><else>#categories.optional#) </else>
 	    }
 	}
 	action {
@@ -94,7 +94,7 @@ template::list::create \
 	}
 	site_wide_p {
 	    display_template {
-		<if @unmapped_trees.site_wide_p@ eq t> (#categories.SiteWide_tree#) </if>
+		<if @unmapped_trees.site_wide_p;literal@ true> (#categories.SiteWide_tree#) </if>
 	    }
 	}
 	action {
