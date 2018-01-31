@@ -67,6 +67,37 @@ ad_proc -public category::add {
     return $category_id
 }
 
+ad_proc -public category::get {
+    -category_id:required
+    {-locale ""}
+} {
+    
+    Get name and description for a category_id in the given or
+    connection's locale. If for the combination of category and locale
+    no entry in category_translations exists, then empty is returned.
+
+    @option category_id category_id of the category to be queried.
+    @option locale locale of the language. [ad_conn locale] used by default.
+    @return list of attribute value pairs containing name and description
+} {
+    if {$locale eq ""} {
+        set locale [ad_conn locale]
+    }
+    
+    if {[db_0or1row category_get {
+        select name, description
+        from category_translations
+        where category_id = :category_id
+        and locale = :locale
+    }]} {
+        set result [list name $name description $description]
+    } else {
+        set result ""
+    }
+    return $result
+}
+
+
 ad_proc -public category::update {
     -category_id:required
     -name:required
