@@ -14,7 +14,7 @@ ad_proc -public category::relation::add_meta_category {
     -category_id_two:required
     {-user_id ""}
 } {
-    Creates a new meta category by creating a realtion between category_id_one 
+    Creates a new meta category by creating a relation between category_id_one 
     and category_id_two. This relation is also related to the user_id.
 
     @option user_id user that will be related to the meta category.
