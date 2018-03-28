@@ -24,7 +24,7 @@ set package_id [ad_conn package_id]
 permission::require_permission -object_id $package_id -privilege category_admin
 
 template::multirow create trees_with_write_permission tree_id tree_name site_wide_p description
-template::multirow create trees_with_read_permission tree_id tree_name site_wide_p descrption
+template::multirow create trees_with_read_permission tree_id tree_name site_wide_p description
 
 
 db_foreach trees {} {
