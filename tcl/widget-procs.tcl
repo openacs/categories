@@ -104,7 +104,7 @@ ad_proc -public template::widget::category {
 	set mapped_categories [ns_querygetall $element(id)]
 	# QUIRK: ns_querygetall returns a single-element list {{}} for no values
 	if { [string equal $mapped_categories {{}}] } {
-	    set mapped_categories [list]
+	    set mapped_categories {}
 	}
     }
     set output {}
@@ -184,7 +184,7 @@ ad_proc -public template::data::validate::category { value_ref message_ref } {
     # author: Timo Hentschel (timo@timohentschel.de)
 
     upvar 2 $message_ref message $value_ref values
-    set invalid_values [list]
+    set invalid_values {}
 
     foreach value $values {
 	if {![regexp {^[+-]?\d+$} $value]} {
@@ -261,11 +261,11 @@ ad_proc -public template::data::transform::category { element_ref } {
 	if {$require_category_p == "t"} {
 	    set trees [list [list $tree_id $subtree_id]]
 	} else {
-	    set trees [list]
+	    set trees {}
 	}
     }
 
-    set trees_without_category [list]
+    set trees_without_category {}
     foreach tree $trees {
 	lassign $tree tree_id subtree_id
 	# get categories of every tree requiring a categorization
