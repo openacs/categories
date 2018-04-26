@@ -75,7 +75,7 @@ multirow foreach one_tree {
     }
 }
 
-set elements [list]
+set elements {}
 
 if { $can_write_p } {
     lappend elements edit {
@@ -130,8 +130,8 @@ if { $can_write_p } {
     }
 }
 
-set actions [list]
-set bulk_actions [list]
+set actions {}
+set bulk_actions {}
 if { $can_write_p } {
     set bulk_actions {
 	"#categories.Delete#" "category-delete" "#categories.Delete_category_link_title#"

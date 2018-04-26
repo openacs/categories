@@ -127,7 +127,7 @@ ad_proc -public template::widget::category {
     foreach mapped_tree $mapped_trees {
 	lassign $mapped_tree tree_id tree_name subtree_id assign_single_p require_category_p widget
 	set tree_name [ns_quotehtml [lang::util::localize $tree_name]]
-	set one_tree [list]
+	set one_tree {}
 
         if { $require_category_p == "t" } { 
             set required_mark "<span class=\"form-required-mark\">*</span>"
@@ -213,7 +213,7 @@ ad_proc -public template::data::transform::category { element_ref } {
 
     # QUIRK: ns_querygetall returns a single-element list {{}} for no values
     if { [string equal $values {{}}] } {
-	set values [list]
+	set values {}
     }
 
     # to mark submission of form for rendering element in case of invalid data
@@ -250,7 +250,7 @@ ad_proc -public template::data::transform::category { element_ref } {
     }
 
     if { $tree_id eq "" } {
-	set trees [list]
+	set trees {}
         foreach tree [category_tree::get_mapped_trees $package_id] {
 	    lassign $tree tree_id tree_name subtree_id assign_single_p require_category_p
 	    if {$require_category_p == "t" || ![info exists element(optional)]} {
