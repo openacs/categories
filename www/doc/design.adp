@@ -199,8 +199,7 @@ selected categories (if editing an object):</p>
 
 Alternatively, you can include the following in your adp:
 <pre>
-  &lt;include src="/packages/categories/www/include/widget" object_id=\@object_id\@ package_id=\@package_id\@&gt;
-</pre>
+  &lt;include src="/packages/categories/www/include/widget" object_id=\@object_id\@ package_id=\@package_id\@&gt;</pre>
 
 In the processing part of ad_form use:
 <pre>

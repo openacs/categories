@@ -3,10 +3,10 @@
 <property name="doc(title)">Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="install" leftLabel="Prev"
-		    title=""
-		    rightLink="" rightLabel="">
-		<div class="sect1" lang="en">
+			leftLink="install" leftLabel="Prev"
+			title=""
+			rightLink="" rightLabel="">
+		    <div class="sect1" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="requirements" id="requirements"></a>Requirements</h2></div></div></div><div class="authorblurb">
 <p>by <a href="mailto:joel\@aufrecht.org" target="_top">Joel
@@ -92,8 +92,8 @@ object_id</a> and <a href="http://openacs.org/forums/message-view?message_id=158
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="install" leftLabel="Prev" leftTitle="Installation"
-		    rightLink="" rightLabel="" rightTitle=""
-		    homeLink="index" homeLabel="Home" 
-		    upLink="index" upLabel="Up"> 
-		
+			leftLink="install" leftLabel="Prev" leftTitle="Installation"
+			rightLink="" rightLabel="" rightTitle=""
+			homeLink="index" homeLabel="Home" 
+			upLink="index" upLabel="Up"> 
+		    
