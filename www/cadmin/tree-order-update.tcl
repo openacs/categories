@@ -52,7 +52,7 @@ db_transaction {
             ## put category and all children back on stack
             set next [lreplace $next 2 2 $count]
             set stack [linsert $stack 0 $next]
-            set stack [concat [lsort -integer -index 0 $child($act_category)] $stack]
+            set stack [linsert $stack 0 [lsort -integer -index 0 $child($act_category)]]
         } else {
             ## this category has no children, so it is done
             lappend done_list [list $act_category $count [expr {$count + 1}]]

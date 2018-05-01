@@ -113,15 +113,23 @@ ad_proc -public template::widget::category {
         set mapped_trees [category_tree::get_mapped_trees $package_id]
     } else {
         set mapped_trees {}
-        foreach one_tree $tree_id one_subtree $subtree_id assign_single $assign_single_p require_category $require_category_p widget $widget {
-            if {$assign_single eq ""} {
-                set assign_single f
+        foreach \
+            one_tree $tree_id \
+            one_subtree $subtree_id \
+            assign_single $assign_single_p \
+            require_category $require_category_p \
+            widget $widget {
+                if {$assign_single eq ""} {
+                    set assign_single f
+                }
+                if {$require_category eq ""} {
+                    set require_category f
+                }
+                lappend mapped_trees [list $one_tree \
+                                          [category_tree::get_name $one_tree] \
+                                          $one_subtree $assign_single \
+                                          $require_category $widget]
             }
-            if {$require_category eq ""} {
-                set require_category f
-            }
-            lappend mapped_trees [list $one_tree [category_tree::get_name $one_tree] $one_subtree $assign_single $require_category $widget]
-        }
     }
 
     foreach mapped_tree $mapped_trees {
@@ -139,7 +147,7 @@ ad_proc -public template::widget::category {
 	    lassign $category category_id category_name deprecated_p level
 	    set category_name [ns_quotehtml [lang::util::localize $category_name]]
 	    if { $level>1 } {
-		set category_name "[string repeat "&nbsp;" [expr {2*$level -4}]]..$category_name"
+		set category_name "[string repeat {&nbsp;} [expr {2*$level -4}]]..$category_name"
 	    }
 	    lappend one_tree [list $category_name $category_id]
 	}
@@ -151,25 +159,29 @@ ad_proc -public template::widget::category {
 	if {$assign_single_p == "t" || $all_single_p} {
 	    # single-select widget
             if { $require_category_p == "f" } {
-                set one_tree [concat [list [list "" ""]] $one_tree]
+                set one_tree [linsert $one_tree 0 [list "" ""]]
             }
 	    # we default to the select widget unless the valid option of radio was provided
 	    ns_log notice "template::widget::menu $element(name) $one_tree $mapped_categories [array get attributes] $element(mode) $widget $display_widget [info exists element(display_widget)]"
 
 	    if { $widget eq "radio" && ![info exists element(display_widget)] } {
 		# checkbox was specified at mapping and the display widget was not explicitly defined code
-		append output [template::widget::menu $element(name) $one_tree $mapped_categories attributes $element(mode) radio]
+		append output [template::widget::menu $element(name) $one_tree \
+                                   $mapped_categories attributes $element(mode) radio]
 	    } else {
-		append output [template::widget::menu $element(name) $one_tree $mapped_categories attributes $element(mode) $display_widget]
+		append output [template::widget::menu $element(name) $one_tree \
+                                   $mapped_categories attributes $element(mode) $display_widget]
 	    }
 	} else {
 	    ns_log notice "template::widget::menu $element(name) $one_tree $mapped_categories [array get ms_attributes] $element(mode) $widget $display_widget [info exists element(display_widget)]"
 	    # we default to the multiselect widget (if user didn't override with single option) or select checkbox
 	    if { $widget eq "checkbox" && ![info exists element(display_widget)] } {
 		# checkbox was specified at mapping and the display widget was not explicitly defined in code
-		append output [template::widget::menu $element(name) $one_tree $mapped_categories ms_attributes $element(mode) checkbox]
+		append output [template::widget::menu $element(name) $one_tree \
+                                   $mapped_categories ms_attributes $element(mode) checkbox]
 	    } else {
-		append output [template::widget::menu $element(name) $one_tree $mapped_categories ms_attributes $element(mode) $display_widget]
+		append output [template::widget::menu $element(name) $one_tree \
+                                   $mapped_categories ms_attributes $element(mode) $display_widget]
 	    }
 	}
 	if { [llength $mapped_trees] > 1 } {
