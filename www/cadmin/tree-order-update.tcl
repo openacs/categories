@@ -42,15 +42,14 @@ db_transaction {
     }
 
     while {[llength $stack] > 0} {
-        set next [lindex $stack 0]
+        set stack [lassign $stack next]
         set act_category [lindex $next 1]
-        set stack [lrange $stack 1 end]
         if {[lindex $next 2]>0} {
             ## the children of this parent are done, so this category is also done
             lappend done_list [list $act_category [lindex $next 2] $count]
         } elseif {[info exists child($act_category)]} {
             ## put category and all children back on stack
-            set next [lreplace $next 2 2 $count]
+            lset next 2 $count
             set stack [linsert $stack 0 $next]
             set stack [linsert $stack 0 [lsort -integer -index 0 $child($act_category)]]
         } else {
