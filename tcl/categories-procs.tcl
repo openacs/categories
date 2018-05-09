@@ -379,7 +379,7 @@ ad_proc -public category::get_names {
     @return list of names corresponding to the list of category_id's supplied.
     @author Timo Hentschel (timo@timohentschel.de)
 } {
-    set result {}
+    set result [list]
     foreach category_id $category_ids {
         lappend result [category::get_name $category_id $locale]
     }

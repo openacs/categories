@@ -32,7 +32,7 @@ namespace eval category_tree {
            returns the main categories of a given tree
     } {
 	   set locale [ad_conn locale]
-           set result {}
+           set result [list]
            set categories [db_list get_categories ""]
            foreach category_id $categories {
            	lappend result $category_id
@@ -223,7 +223,7 @@ namespace eval category_tree {
                     assign_single_p require_category_p
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        set result {}
+        set result [list]
 
         db_foreach get_mapped_trees "" {
             lappend result [list $tree_id [get_name $tree_id $locale] $subtree_category_id $assign_single_p $require_category_p $widget]
@@ -238,7 +238,7 @@ namespace eval category_tree {
         @return Tcl list of tree_ids
         @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
     } {
-        set result {}
+        set result [list]
 
         db_foreach get_trees "" {
             lappend result $tree_id
@@ -272,7 +272,7 @@ namespace eval category_tree {
                     assign_single_p require_category_p widget
         @author Jade Rubick (jader@bread.com)
     } {
-        set result {}
+        set result [list]
 
         db_foreach get_mapped_trees_from_object_list "" {
             lappend result [list $tree_id [get_name $tree_id $locale] $subtree_category_id $assign_single_p $require_category_p $widget]
@@ -347,16 +347,16 @@ namespace eval category_tree {
         catch {nsv_unset category_trees}
         set tree_id_old 0
         set cur_level 1
-        set stack {}
+        set stack [list]
         set invalid_p ""
-        set tree {}
+        set tree [list]
         db_foreach reset_cache "" {
             if {$tree_id != $tree_id_old && $tree_id_old != 0} {
                 nsv_set category_trees $tree_id_old $tree
                 set cur_level 1
-                set stack {}
+                set stack [list]
                 set invalid_p ""
-                set tree {}
+                set tree [list]
             }
             set tree_id_old $tree_id
             lappend tree [list $category_id [ad_decode "$invalid_p$deprecated_p" "" f t] $cur_level]
@@ -386,9 +386,9 @@ namespace eval category_tree {
         @author Timo Hentschel (timo@timohentschel.de)
     } {
         set cur_level 1
-        set stack {}
+        set stack [list]
         set invalid_p ""
-        set tree {}
+        set tree [list]
         db_foreach flush_cache "" {
             lappend tree [list $category_id [ad_decode "$invalid_p$deprecated_p" "" f t] $cur_level]
             if { $right_ind - $left_ind > 1} {
@@ -574,7 +574,7 @@ ad_proc -public category_tree::get_multirow {
          && [llength $category_counts] > 1} { 
         array set counts $category_counts
     } else { 
-        array set counts {}
+        array set counts [list]
     }
 
     # If we should append, then don't create the datasource if it already exists
@@ -611,12 +611,12 @@ ad_proc -public category_tree::get_multirow {
     # given level
 
     set size [template::multirow size $datasource]
-    set rollup {}
+    set rollup [list]
     for {set i $size} {$i > 0} {incr i -1} {
         set level [template::multirow get $datasource $i level]
         set count [template::multirow get $datasource $i count]
         set j 1
-        set nrollup {}
+        set nrollup [list]
         foreach r $rollup {
             if {$j < $level} {
                 lappend nrollup [expr {$r + $count}]

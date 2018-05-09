@@ -104,7 +104,7 @@ ad_proc -public template::widget::category {
 	set mapped_categories [ns_querygetall $element(id)]
 	# QUIRK: ns_querygetall returns a single-element list {{}} for no values
 	if { [string equal $mapped_categories {{}}] } {
-	    set mapped_categories {}
+	    set mapped_categories [list]
 	}
     }
     set output {}
@@ -135,7 +135,7 @@ ad_proc -public template::widget::category {
     foreach mapped_tree $mapped_trees {
 	lassign $mapped_tree tree_id tree_name subtree_id assign_single_p require_category_p widget
 	set tree_name [ns_quotehtml [lang::util::localize $tree_name]]
-	set one_tree {}
+	set one_tree [list]
 
         if { $require_category_p == "t" } { 
             set required_mark "<span class=\"form-required-mark\">*</span>"
@@ -196,7 +196,7 @@ ad_proc -public template::data::validate::category { value_ref message_ref } {
     # author: Timo Hentschel (timo@timohentschel.de)
 
     upvar 2 $message_ref message $value_ref values
-    set invalid_values {}
+    set invalid_values [list]
 
     foreach value $values {
 	if {![regexp {^[+-]?\d+$} $value]} {
@@ -225,7 +225,7 @@ ad_proc -public template::data::transform::category { element_ref } {
 
     # QUIRK: ns_querygetall returns a single-element list {{}} for no values
     if { [string equal $values {{}}] } {
-	set values {}
+	set values [list]
     }
 
     # to mark submission of form for rendering element in case of invalid data
@@ -262,7 +262,7 @@ ad_proc -public template::data::transform::category { element_ref } {
     }
 
     if { $tree_id eq "" } {
-	set trees {}
+	set trees [list]
         foreach tree [category_tree::get_mapped_trees $package_id] {
 	    lassign $tree tree_id tree_name subtree_id assign_single_p require_category_p
 	    if {$require_category_p == "t" || ![info exists element(optional)]} {
@@ -273,11 +273,11 @@ ad_proc -public template::data::transform::category { element_ref } {
 	if {$require_category_p == "t"} {
 	    set trees [list [list $tree_id $subtree_id]]
 	} else {
-	    set trees {}
+	    set trees [list]
 	}
     }
 
-    set trees_without_category {}
+    set trees_without_category [list]
     foreach tree $trees {
 	lassign $tree tree_id subtree_id
 	# get categories of every tree requiring a categorization

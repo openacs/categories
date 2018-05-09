@@ -34,8 +34,8 @@ db_transaction {
     set last_ind [expr {($count / 5) + 1}]
 
     set count 1
-    set stack {}
-    set done_list {}
+    set stack [list]
+    set done_list [list]
     # put toplevel categories on stack
     if {[info exists child(-1)]} {
         set stack [lsort -integer -index 0 $child(-1)]
