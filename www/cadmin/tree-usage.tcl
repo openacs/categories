@@ -1,6 +1,6 @@
 ad_page_contract {
 
-    This page shows all the package instanes mapped to a particular category tree.
+    This page shows all the package instances mapped to a particular category tree.
 
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id:
@@ -46,9 +46,9 @@ foreach instance $instance_list {
     set unmap_url [export_vars -no_empty -base tree-unmap {tree_id object_id ctx_id}]
 
     if {$read_p == "t"} {
-	template::multirow append modules $package $object_id $object_name $package_id $instance_name $read_p $unmap_url
+        template::multirow append modules $package $object_id $object_name $package_id $instance_name $read_p $unmap_url
     } else {
-	incr instances_without_permission
+        incr instances_without_permission
     }
 }
 
