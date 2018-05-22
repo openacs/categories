@@ -21,7 +21,7 @@
   <p>
 </if>
 
-<if @instances_using_p@ ne t>
+<if @instances_using_p;literal@ ne t>
   #categories.lt_Are_you_sure_you_want_3#
   <p>
     <a href="@delete_url@" class="button">#categories.Delete#</a>
