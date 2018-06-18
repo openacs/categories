@@ -125,12 +125,6 @@
 </fullquery>
 
  
-<fullquery name="category::get_object_context.object_name">      
-      <querytext>
-      select acs_object.name(:object_id) from dual
-      </querytext>
-</fullquery>
-
 <fullquery name="category::map_object.insert_mapped_categories">      
       <querytext>
       

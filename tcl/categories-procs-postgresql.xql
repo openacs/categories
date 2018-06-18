@@ -98,11 +98,4 @@
 </fullquery>
 
  
-<fullquery name="category::get_object_context.object_name">      
-      <querytext>
-            select acs_object__name(:object_id) 
-      </querytext>
-</fullquery>
-
- 
 </queryset>

@@ -507,8 +507,7 @@ ad_proc -public category::get_object_context { object_id } {
     @param object_id object_id to get the name of.
     @author Timo Hentschel (timo@timohentschel.de)
 } {
-    set object_name [db_string object_name ""]
-    return [list "/o/$object_id" $object_name]
+    return [list "/o/$object_id" [acs_object_name $object_id]]
 }
 
 ad_proc -deprecated category::indent_html { indent_width } {
