@@ -192,8 +192,12 @@ ad_proc -public template::widget::category {
     return [lang::util::localize $output]
 }
 
-ad_proc -public template::data::validate::category { value_ref message_ref } {
-    # author: Timo Hentschel (timo@timohentschel.de)
+ad_proc -public template::data::validate::category {
+    value_ref
+    message_ref
+} {
+    @author Timo Hentschel (timo@timohentschel.de)
+} {
 
     upvar 2 $message_ref message $value_ref values
     set invalid_values [list]
@@ -217,9 +221,11 @@ ad_proc -public template::data::validate::category { value_ref message_ref } {
     return $result 
 }
 
-ad_proc -public template::data::transform::category { element_ref } {
-    # author: Timo Hentschel (timo@timohentschel.de)
-
+ad_proc -public template::data::transform::category {
+    element_ref
+} {
+    @author Timo Hentschel (timo@timohentschel.de)
+} {
     upvar $element_ref element
     set values [ns_querygetall $element(id)]
 
