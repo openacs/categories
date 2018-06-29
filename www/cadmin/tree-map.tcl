@@ -3,7 +3,7 @@ ad_page_contract {
     Lets user select a category to map a subtree.
 
     @author Timo Hentschel (timo@timohentschel.de)
-    @cvs-id $Id:
+    @cvs-id $Id$
 } {
     tree_id:naturalnum,notnull
     {locale ""}

@@ -3,7 +3,7 @@ ad_page_contract {
     Changes the parent category of a category.
 
     @author Timo Hentschel (timo@timohentschel.de)
-    @cvs-id $Id:
+    @cvs-id $Id$
 } {
     tree_id:naturalnum,notnull
     category_id:naturalnum,notnull

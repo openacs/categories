@@ -3,7 +3,7 @@ ad_page_contract {
     Unmapping a category tree from an object.
 
     @author Timo Hentschel (timo@timohentschel.de)
-    @cvs-id $Id:
+    @cvs-id $Id$
 } {
     tree_id:naturalnum,notnull
     {locale ""}

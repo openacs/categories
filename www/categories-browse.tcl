@@ -5,7 +5,7 @@ ad_page_contract {
     using list template, ad_dimensional and paginator.
 
     @author Timo Hentschel (timo@timohentschel.de)
-    @cvs-id $Id:
+    @cvs-id $Id$
 } {
     tree_ids:integer,multiple
     {category_ids:integer,multiple,optional ""}

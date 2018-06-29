@@ -5,7 +5,7 @@ ad_page_contract {
     to contained objects. 
 
     @author Timo Hentschel (timo@timohentschel.de)
-    @cvs-id $Id:
+    @cvs-id $Id$
 } {
     object_id:naturalnum,notnull
     ctx_id:naturalnum,optional

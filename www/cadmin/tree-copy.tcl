@@ -3,7 +3,7 @@ ad_page_contract {
     Let the user select a category tree which will be copied into the current category tree
 
     @author Timo Hentschel (timo@timohentschel.de)
-    @cvs-id $Id:
+    @cvs-id $Id$
 } {
     tree_id:naturalnum,notnull
     {locale ""}

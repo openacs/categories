@@ -3,7 +3,7 @@ ad_page_contract {
     This page copies a category tree into another category tree
 
     @author Timo Hentschel (timo@timohentschel.de)
-    @cvs-id $Id:
+    @cvs-id $Id$
 } {
     target_tree_id:naturalnum,notnull
     source_tree_id:naturalnum,notnull

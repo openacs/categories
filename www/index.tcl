@@ -3,7 +3,7 @@ ad_page_contract {
     The index page to browse category trees.
 
     @author Timo Hentschel (timo@timohentschel.de)
-    @cvs-id $Id:
+    @cvs-id $Id$
 } {
     {search_text:optional ""}
 } -properties {

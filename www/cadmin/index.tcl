@@ -4,7 +4,7 @@ ad_page_contract {
     presenting a list of trees the person has a permission to see/modify
 
     @author Timo Hentschel (timo@timohentschel.de)
-    @cvs-id $Id:
+    @cvs-id $Id$
 } {
     {locale ""}
 } -properties {

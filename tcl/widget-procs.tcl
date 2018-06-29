@@ -30,7 +30,7 @@ ad_proc -public template::widget::category {
     <li>category_assign_single_p</li>
     <li>category_require_category_p</li>
     </ul>
-    @author: Timo Hentschel (timo@timohentschel.de)
+    @author Timo Hentschel (timo@timohentschel.de)
 } {
     upvar $element_reference element
 

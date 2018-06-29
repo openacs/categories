@@ -2,7 +2,7 @@ ad_page_contract {
     Let the user toggle the site-wide status of a category tree.
 
     @author Timo Hentschel (timo@timohentschel.de)
-    @cvs-id $Id:
+    @cvs-id $Id$
 } {
     tree_id:naturalnum,notnull
     object_id:naturalnum,optional

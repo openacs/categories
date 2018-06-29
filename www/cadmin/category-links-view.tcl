@@ -3,7 +3,7 @@ ad_page_contract {
     Display all linked categories for a category
 
     @author Timo Hentschel (timo@timohentschel.de)
-    @cvs-id $Id:
+    @cvs-id $Id$
 } {
     category_id:naturalnum,notnull
     tree_id:naturalnum,notnull

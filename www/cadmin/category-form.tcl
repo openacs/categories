@@ -2,7 +2,7 @@ ad_page_contract {
     Form to add/edit a category.
 
     @author Timo Hentschel (timo@timohentschel.de)
-    @cvs-id $Id:
+    @cvs-id $Id$
 } {
     tree_id:naturalnum,notnull
     category_id:naturalnum,optional

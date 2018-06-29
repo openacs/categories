@@ -3,7 +3,7 @@ ad_page_contract {
     This page shows all the package instances mapped to a particular category tree.
 
     @author Timo Hentschel (timo@timohentschel.de)
-    @cvs-id $Id:
+    @cvs-id $Id$
 } {
     tree_id:naturalnum,notnull
     {locale ""}

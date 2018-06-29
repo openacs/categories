@@ -3,7 +3,7 @@ ad_page_contract {
 
     @author Timo Hentschel (timo@timohentschel.de)
     @author Lars Pind (lars@collaboraid.biz)
-    @cvs-id $Id:
+    @cvs-id $Id$
 } {
     tree_id:naturalnum,notnull
     sort_key:array

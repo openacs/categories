@@ -7,7 +7,7 @@ ad_page_contract {
     Then assigns this subtree to the passed object (usually a package_id).
 
     @author Timo Hentschel (timo@timohentschel.de)
-    @cvs-id $Id:
+    @cvs-id $Id$
 } {
     tree_id:naturalnum,notnull
     {category_id:naturalnum,optional ""}

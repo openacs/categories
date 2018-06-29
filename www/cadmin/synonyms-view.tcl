@@ -3,7 +3,7 @@ ad_page_contract {
     Displays list of synonyms of a category.
 
     @author Timo Hentschel (timo@timohentschel.de)
-    @cvs-id $Id:
+    @cvs-id $Id$
 } {
     category_id:naturalnum,notnull
     tree_id:naturalnum,notnull

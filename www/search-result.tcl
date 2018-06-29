@@ -3,7 +3,7 @@ ad_page_contract {
     Displays matched synonyms for search string
 
     @author Timo Hentschel (timo@timohentschel.de)
-    @cvs-id $Id:
+    @cvs-id $Id$
 } {
     query_id:naturalnum,notnull
 } -properties {

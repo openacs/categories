@@ -3,7 +3,7 @@ ad_page_contract {
     Form to add/edit a synonym.
 
     @author Timo Hentschel (timo@timohentschel.de)
-    @cvs-id $Id:
+    @cvs-id $Id$
 } {
     synonym_id:naturalnum,optional
     category_id:naturalnum,notnull

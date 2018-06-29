@@ -3,7 +3,7 @@ ad_page_contract {
     This page checks whether the category tree can be deleted and deletes it.
 
     @author Timo Hentschel (timo@timohentschel.de)
-    @cvs-id $Id:
+    @cvs-id $Id$
 } {
     tree_id:naturalnum,notnull
     {locale ""}

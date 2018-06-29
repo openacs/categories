@@ -3,7 +3,7 @@ ad_page_contract {
     Deletes a category
 
     @author Timo Hentschel (timo@timohentschel.de)
-    @cvs-id $Id:
+    @cvs-id $Id$
 } {
     tree_id:naturalnum,notnull
     category_id:naturalnum,multiple

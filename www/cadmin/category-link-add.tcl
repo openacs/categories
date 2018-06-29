@@ -3,7 +3,7 @@ ad_page_contract {
     Let user decide from which category tree to add a category link.
 
     @author Timo Hentschel (timo@timohentschel.de)
-    @cvs-id $Id:
+    @cvs-id $Id$
 } {
     category_id:naturalnum,notnull
     tree_id:naturalnum,notnull
