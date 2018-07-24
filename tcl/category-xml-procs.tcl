@@ -53,7 +53,7 @@ ad_proc -public ::category_tree::xml::import {
                 set description {}
             }
             if {$tree_id} {
-                # tree initialised, add translation
+                # tree initialized, add translation
                 category_tree::update \
                     -tree_id $tree_id \
                     -name $name \

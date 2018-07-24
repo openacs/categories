@@ -161,14 +161,14 @@ end;
 The appropriate tcl-procs look like the following:
 <pre>
 ad_proc -public apm_pageurl { object_id } {
-    Service Contract Proc to resolve a url for a package_id
+    Service Contract Proc to resolve a URL for a package_id
 } {
     return
 }
 
 namespace eval acs_user {
     ad_proc -public pageurl { object_id } {
-        Service Contract Proc to resolve a url for a user_id
+        Service Contract Proc to resolve a URL for a user_id
     } {
         return "shared/community-member?user_id=$object_id"
     }
