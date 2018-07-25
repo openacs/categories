@@ -374,7 +374,7 @@ ad_proc -public category::get_names {
     Gets the category name in the specified language, if available.
     Use default language otherwise.
 
-    @param category_id  category_id or list of category_id's for which to get the name. 
+    @param category_ids category_id or list of category_id's for which to get the name. 
     @param locale       language in which to get the name. [ad_conn locale] used by default.
     @return list of names corresponding to the list of category_id's supplied.
     @author Timo Hentschel (timo@timohentschel.de)
