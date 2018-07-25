@@ -34,7 +34,7 @@ ad_proc -public category::add {
     @option parent_id id of the parent category. "" if top level category.
     @option user_id user that adds the category. [ad_conn user_id] used by default.
     @option creation_ip ip-address of the user that adds the category. [ad_conn peeraddr] used by default.
-    @option noflush defer calling category_tree::flush_cache (which if adding multiple categories to 
+    @option noflush defer calling category_tree::flush_cache (which if adding multiple categories to
                     a large tree can be very expensive).  note that if you set this flag you must
                     call category_tree::flush_cache once the adds are complete.
     @return category_id
@@ -71,7 +71,7 @@ ad_proc -public category::get {
     -category_id:required
     {-locale ""}
 } {
-    
+
     Get name and description for a category_id in the given or
     connection's locale. If for the combination of category and locale
     no entry in category_translations exists, then empty is returned.
@@ -83,7 +83,7 @@ ad_proc -public category::get {
     if {$locale eq ""} {
         set locale [ad_conn locale]
     }
-    
+
     if {[db_0or1row category_get {
         select name, description
         from category_translations
@@ -127,9 +127,9 @@ ad_proc -public category::update {
     }
     db_transaction {
         if {![db_0or1row check_category_existence ""]} {
-    	db_exec_plsql insert_category_translation ""
+            db_exec_plsql insert_category_translation ""
         } else {
-    	db_exec_plsql update_category_translation ""
+            db_exec_plsql update_category_translation ""
         }
         flush_translation_cache $category_id
     }
@@ -215,25 +215,25 @@ ad_proc -public category::map_object {
     db_transaction {
         # Remove any already mapped categories if we are updating
         if { $remove_old_p } {
-    	db_dml remove_mapped_categories ""
+            db_dml remove_mapped_categories ""
         }
 
         foreach category_id $category_id_list {
-	    if {$category_id ne ""} {
-		db_dml insert_mapped_categories ""
-	    }
+            if {$category_id ne ""} {
+            db_dml insert_mapped_categories ""
+            }
         }
 
-	# Adds categorizations to linked categories
-	db_dml insert_linked_categories ""
+        # Adds categorizations to linked categories
+        db_dml insert_linked_categories ""
     }
 }
 
-ad_proc -public category::get_mapped_categories { 
+ad_proc -public category::get_mapped_categories {
     {-tree_id {}}
-    object_id 
+    object_id
 } {
-    Gets the list of categories mapped to an object. If tree_id is provided 
+    Gets the list of categories mapped to an object. If tree_id is provided
     return only the categories mapped from the given tree.
 
     @param object_id object of which we want to know the mapped categories.
@@ -248,12 +248,12 @@ ad_proc -public category::get_mapped_categories {
 
     return $result
 }
-ad_proc -public category::get_mapped_categories_multirow { 
+ad_proc -public category::get_mapped_categories_multirow {
     {-locale ""}
     {-multirow mapped_categories}
-    object_id 
+    object_id
 } {
-    Returns multirow with: tree_id, tree_name, category_id, category_name 
+    Returns multirow with: tree_id, tree_name, category_id, category_name
 
     @param object_id object of which we want to know the mapped categories.
     @return multirow with tree and category information
@@ -264,7 +264,7 @@ ad_proc -public category::get_mapped_categories_multirow {
     db_multirow mapped_categories select {}
 }
 
-ad_proc -public category::get_id { 
+ad_proc -public category::get_id {
     name
     {locale en_US}
 } {
@@ -287,11 +287,11 @@ ad_proc -public category::reset_translation_cache { } {
     set tree_id_old 0
     db_foreach reset_translation_cache "" {
         if {$category_id != $category_id_old && $category_id_old != 0} {
-	    nsv_set categories $category_id_old [list $tree_id_old [array get cat_lang]]
-	    unset cat_lang
+            nsv_set categories $category_id_old [list $tree_id_old [array get cat_lang]]
+            unset cat_lang
         }
         set category_id_old $category_id
-	set tree_id_old $tree_id
+        set tree_id_old $tree_id
         set cat_lang($locale) $name
     }
     if {$category_id_old != 0} {
@@ -322,7 +322,7 @@ ad_proc -public category::get_name {
     Gets the category name in the specified language, if available.
     Use default language otherwise.
 
-    @param category_id  category_id or list of category_id's for which to get the name. 
+    @param category_id  category_id or list of category_id's for which to get the name.
     @param locale       language in which to get the name. [ad_conn locale] used by default.
     @return list of names corresponding to the list of category_id's supplied.
     @author Timo Hentschel (timo@timohentschel.de)
@@ -345,7 +345,7 @@ ad_proc -public category::get_name {
         # exact match: found name for this default language locale
         return $name
     }
-    
+
     # Trying system locale for package (or site-wide)
     set locale [lang::system::locale]
     if { ![catch { set name $cat_lang($locale) }] } {
@@ -361,7 +361,7 @@ ad_proc -public category::get_name {
     # Resort to en_US
     if { ![catch { set name $cat_lang([parameter::get -parameter DefaultLocale -default en_US]) }] } {
         return $name
-    } 
+    }
 
     # tried default locale, but nothing found
     return {}
@@ -374,7 +374,7 @@ ad_proc -public category::get_names {
     Gets the category name in the specified language, if available.
     Use default language otherwise.
 
-    @param category_ids category_id or list of category_id's for which to get the name. 
+    @param category_ids category_id or list of category_id's for which to get the name.
     @param locale       language in which to get the name. [ad_conn locale] used by default.
     @return list of names corresponding to the list of category_id's supplied.
     @author Timo Hentschel (timo@timohentschel.de)
@@ -390,12 +390,12 @@ ad_proc -public category::get_children {
 } {
     Returns the category ids of the direct children of the given category
 
-    @param category_id  category_id 
+    @param category_id  category_id
     @return list of category ids of the children of the supplied category_id
     @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
 } {
     return [db_list get_children_ids ""]
-}                
+}
 
 ad_proc -public category::count_children {
     {-category_id:required}
@@ -408,21 +408,21 @@ ad_proc -public category::count_children {
         where parent_id=:category_id
     }]
 }
-                                             
+
 ad_proc -public category::get_parent {
     -category_id:required
 } {
     Returns the category id of the parent category
 
-    @param category_id  category_id 
+    @param category_id  category_id
     @return category id of the parent category
     @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
 } {
     set result [db_list get_parent_id ""]
     if {$result eq "{}"} {set result 0}
     return $result
-}                
-    
+}
+
 ad_proc -public category::get_tree {
     category_id
 } {
@@ -433,7 +433,7 @@ ad_proc -public category::get_tree {
     @author Timo Hentschel (timo@timohentschel.de)
 } {
     if { [catch { set tree_id [lindex [nsv_get categories $category_id] 0] }] } {
-	# category not found
+        # category not found
         return {}
     }
     return $tree_id
@@ -453,25 +453,25 @@ ad_proc -public category::get_data {
 } {
     set tree_id [category::get_tree $category_id]
     if {$tree_id eq ""} {
-	# category not found
-	return
+        # category not found
+        return
     }
     return [list $category_id [category::get_name $category_id $locale] $tree_id [category_tree::get_name $tree_id $locale]]
 }
 
-ad_proc -public category::get_objects { 
+ad_proc -public category::get_objects {
     -category_id
     {-object_type ""}
     {-content_type ""}
     {-include_children:boolean}
 } {
     Returns a list of objects which are mapped to this category_id
-    
+
     @param category_id CategoryID of the category we want to get the objects for
     @param object_type Limit the search for objects of this object type
     @param content_type Limit the search for objects of this content_type
     @param include_children Include child categories' objects as well. Not yet implemented
-    
+
     @author malte ()
     @creation-date Wed May 30 06:28:25 CEST 2007
 } {
@@ -482,23 +482,23 @@ ad_proc -public category::get_objects {
         set where_clause "and i.item_id = com.object_id and i.content_type = :content_type"
     } elseif {$object_type ne ""} {
         set join_clause ", acs_objects o"
-        set where_clause "and o.object_id = com.object_id and o.object_type = :object_type"        
+        set where_clause "and o.object_id = com.object_id and o.object_type = :object_type"
     }
     return [db_list get_objects {}]
 }
 
 ad_proc -public category::get_id_by_object_title {
-	title
+    title
 } {
     Gets the id of a category given an object title (object_type=category).
     This is highly useful as the category object title will not change if you change the
     name (label) of the category, so you can access the category even if the label has changed
-    
+
     @param title object title of the category to retrieve
     @return the category id or empty string it no category was found
-	@author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
+    @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
 } {
-	return [db_string get_category_id {} -default ""]
+    return [db_string get_category_id {} -default ""]
 }
 
 ad_proc -public category::get_object_context { object_id } {
@@ -536,9 +536,9 @@ ad_proc -private category::context_bar { tree_id locale object_id {ctx_id ""}} {
 } {
     if {$ctx_id eq ""} {unset ctx_id}
     if {$object_id ne ""} {
-	set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base object-map {locale object_id ctx_id}] [_ categories.cadmin]]]
+        set context_bar [list [category::get_object_context $object_id] [list [export_vars -no_empty -base object-map {locale object_id ctx_id}] [_ categories.cadmin]]]
     } else {
-	set context_bar [list [list [export_vars -base . -no_empty {locale ctx_id}] [_ categories.cadmin]]]
+        set context_bar [list [list [export_vars -base . -no_empty {locale ctx_id}] [_ categories.cadmin]]]
     }
     lappend context_bar [list [export_vars -no_empty -base tree-view {tree_id locale object_id ctx_id}] [category_tree::get_name $tree_id $locale]]
 
