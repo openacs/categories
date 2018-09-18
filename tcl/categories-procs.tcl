@@ -272,7 +272,7 @@ ad_proc -public category::get_id {
 
     @param name the name of the category to retrieve
     @param locale the locale in which the name is supplied
-    @return the category id or empty string it no category was found
+    @return the category id or empty string if no category was found
     @author Lee Denison (lee@xarg.co.uk)
 } {
     return [db_list get_category_id {}]
@@ -495,7 +495,7 @@ ad_proc -public category::get_id_by_object_title {
     name (label) of the category, so you can access the category even if the label has changed
 
     @param title object title of the category to retrieve
-    @return the category id or empty string it no category was found
+    @return the category id or empty string if no category was found
     @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
 } {
     return [db_string get_category_id {} -default ""]

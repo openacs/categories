@@ -257,7 +257,7 @@ namespace eval category_tree {
         displayed and not all of them.
 
         @param title object title of the category to retrieve
-        @return the category_tree_id or empty string it no category was found
+        @return the category_tree_id or empty string if no category was found
     	@author Malte Sussdorff (malte.sussdorff@cognovis.de)
     } {
     	return [db_string get_tree_id {} -default ""]
@@ -509,7 +509,7 @@ namespace eval category_tree {
 
 	@param name the name of the category tree to retrieve
 	@param locale the locale in which the name is supplied
-	@return the tree id or empty string it no category tree was found
+	@return the tree id or empty string if no category tree was found
 	@author Timo Hentschel (timo@timohentschel.de)
     } {
 	return [db_list get_category_tree_id {}]
