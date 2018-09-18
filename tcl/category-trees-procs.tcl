@@ -27,20 +27,19 @@ namespace eval category_tree {
     }
 
     ad_proc -public get_categories {
-	   {-tree_id:required}
+        {-tree_id:required}
     } {
            returns the main categories of a given tree
     } {
-	   set locale [ad_conn locale]
-           set result [list]
-           set categories [db_list get_categories ""]
-           foreach category_id $categories {
-           	lappend result $category_id
-           }
-           return $result
-           
+        set locale [ad_conn locale]
+        set result [list]
+        set categories [db_list get_categories ""]
+        foreach category_id $categories {
+            lappend result $category_id
+        }
+        return $result
     }
-                                                                                
+
     ad_proc -public map {
         -tree_id:required
         -object_id:required
@@ -248,7 +247,7 @@ namespace eval category_tree {
     }
 
     ad_proc -public get_id_by_object_title {
-    	{-title}
+        {-title}
     } {
         Gets the id of a category_tree given an object title (object_type=category).
         This is highly useful as the category_tree object title will not change if you change the
@@ -258,14 +257,14 @@ namespace eval category_tree {
 
         @param title object title of the category to retrieve
         @return the category_tree_id or empty string if no category was found
-    	@author Malte Sussdorff (malte.sussdorff@cognovis.de)
+        @author Malte Sussdorff (malte.sussdorff@cognovis.de)
     } {
-    	return [db_string get_tree_id {} -default ""]
+        return [db_string get_tree_id {} -default ""]
     }
-    
+
     ad_proc -public get_mapped_trees_from_object_list { object_id_list {locale ""}} {
         Get the category trees mapped to a list of objects.
-        
+
         @param object_id_list list of object to get the mapped category trees.
         @param locale language in which to get the name. [ad_conn locale] used by default.
         @return Tcl list of lists: tree_id tree_name subtree_category_id
@@ -333,7 +332,7 @@ namespace eval category_tree {
 
         @param tree_id category tree to get the using packages for.
         @return Tcl list of lists: package_pretty_plural object_id object_name package_id instance_name read_p
-        @author Timo Hentschel (timo@timohentschel.de)  
+        @author Timo Hentschel (timo@timohentschel.de)
     } {
         set user_id [ad_conn user_id]
 
@@ -501,18 +500,18 @@ namespace eval category_tree {
         return "categories-browse?tree_ids=$object_id"
     }
 
-    ad_proc -public get_id { 
-	name
-	{locale en_US}
+    ad_proc -public get_id {
+        name
+        {locale en_US}
     } {
-	Gets the id of a category tree given a name.
+        Gets the id of a category tree given a name.
 
-	@param name the name of the category tree to retrieve
-	@param locale the locale in which the name is supplied
-	@return the tree id or empty string if no category tree was found
-	@author Timo Hentschel (timo@timohentschel.de)
+        @param name the name of the category tree to retrieve
+        @param locale the locale in which the name is supplied
+        @return the tree id or empty string if no category tree was found
+        @author Timo Hentschel (timo@timohentschel.de)
     } {
-	return [db_list get_category_tree_id {}]
+        return [db_list get_category_tree_id {}]
     }
 }
 
@@ -525,12 +524,12 @@ ad_proc -public category_tree::get_multirow {
     {-container_id {}}
     {-category_counts {}}
     -append:boolean
-    -datasource 
+    -datasource
 } {
-    get a multirow datasource for a given tree or for all trees mapped to a 
-    given container. datasource is: 
+    get a multirow datasource for a given tree or for all trees mapped to a
+    given container. datasource is:
 
-    tree_id tree_name category_id category_name level pad deprecated_p count child_sum 
+    tree_id tree_name category_id category_name level pad deprecated_p count child_sum
 
     where:
     <ul>
@@ -552,7 +551,7 @@ ad_proc -public category_tree::get_multirow {
       &lt;/group>
     &lt;/multiple>
     </pre>
-    
+
 
     @param tree_id tree_id or container_id must be provided.
     @param container_id returns all mapped trees for the given container_id
@@ -563,25 +562,25 @@ ad_proc -public category_tree::get_multirow {
 } {
 
     if { $tree_id eq "" } {
-        if { $container_id eq "" } { 
+        if { $container_id eq "" } {
             error "must provide either tree_id or container_id"
         }
         set mapped_trees [category_tree::get_mapped_trees $container_id]
     } else {
         set mapped_trees [list [list $tree_id [category_tree::get_name $tree_id] $subtree_id $assign_single_p $require_category_p]]
     }
-    if { $mapped_trees ne "" 
-         && [llength $category_counts] > 1} { 
+    if { $mapped_trees ne ""
+         && [llength $category_counts] > 1} {
         array set counts $category_counts
-    } else { 
+    } else {
         array set counts [list]
     }
 
     # If we should append, then don't create the datasource if it already exists
     if {$append_p && [template::multirow exists $datasource]} {
-	# do nothing
+        # do nothing
     } else {
-	template::multirow create $datasource tree_id tree_name category_id category_name level pad deprecated_p count child_sum
+        template::multirow create $datasource tree_id tree_name category_id category_name level pad deprecated_p count child_sum
     }
     foreach mapped_tree $mapped_trees {
         lassign $mapped_tree tree_id tree_name subtree_id assign_single_p require_category_p
@@ -589,12 +588,12 @@ ad_proc -public category_tree::get_multirow {
             lassign $category category_id category_name deprecated_p level
             if { $level > 1 } {
                 set pad "[string repeat "&nbsp;" [expr {2 * $level - 4}]].."
-            } else { 
+            } else {
                 set pad {}
             }
-            if {[info exists counts($category_id)]} { 
+            if {[info exists counts($category_id)]} {
                 set count $counts($category_id)
-            } else { 
+            } else {
                 set count 0
             }
 
@@ -602,12 +601,12 @@ ad_proc -public category_tree::get_multirow {
         }
     }
 
-    # Here we make the possibly incorrect assumption that the 
+    # Here we make the possibly incorrect assumption that the
     # trees are well formed and we walk the thing in reverse to find nodes
-    # with children categories that are mapped (so we can display a category 
+    # with children categories that are mapped (so we can display a category
     # and all its parent categories if mapped.
 
-    # all this stuff here is to maintain a list which has the count of children seen at or above a 
+    # all this stuff here is to maintain a list which has the count of children seen at or above a
     # given level
 
     set size [template::multirow size $datasource]
@@ -623,14 +622,14 @@ ad_proc -public category_tree::get_multirow {
             }
             if { $j == $level } {
                 if { $r > 0 } {
-                    template::multirow set $datasource $i child_sum $r 
+                    template::multirow set $datasource $i child_sum $r
                 }
                 break
             }
 
             incr j
         }
-        for {} {$j < $level} {incr j} { 
+        for {} {$j < $level} {incr j} {
             lappend nrollup $count
         }
         set rollup $nrollup
@@ -652,12 +651,12 @@ ad_proc -public category_tree::import {
     set tree_id [category_tree::import -name regions -description {regions and states} -categories {
     1 europe
     2 germany
-	2 {united kingdom}
+    2 {united kingdom}
     2 france
     1 asia
     2 china
-	1 {north america}
-	2 {united states}
+    1 {north america}
+    2 {united states}
     }]
     </pre>
 
