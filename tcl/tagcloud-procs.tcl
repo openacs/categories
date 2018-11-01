@@ -60,7 +60,7 @@ ad_proc -public category::tagcloud::tagcloud {
     Generate a tag cloud for the categories in the given category
     tree.
 
-    @option tree_id tree_id of the tree fro which to generate the cloud.
+    @option tree_id tree_id of the tree for which to generate the cloud.
     @return HTML fragment for the tag cloud.
     @author Matthew Burke (matt-oacs@bluedino.net)
 } {

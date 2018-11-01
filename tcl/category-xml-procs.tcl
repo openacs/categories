@@ -60,7 +60,7 @@ ad_proc -public ::category_tree::xml::import {
                     -description $description \
                     -locale $locale
             } else {
-                # initialise tree
+                # initialize tree
                 set tree_id [category_tree::add \
                                  -site_wide_p $site_wide_p \
                                  -name $name \
