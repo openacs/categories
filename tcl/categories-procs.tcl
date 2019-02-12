@@ -160,7 +160,7 @@ ad_proc -public category::delete {
 ad_proc -public category::change_parent {
     -category_id:required
     -tree_id:required
-    {-parent_id [db_null]}
+    {-parent_id ""}
 } {
     Changes parent category of a category.
     @option category_id category_id whose parent should change.

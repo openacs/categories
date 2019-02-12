@@ -6,7 +6,7 @@ ad_page_contract {
 } {
     tree_id:naturalnum,notnull
     category_id:naturalnum,optional
-    {parent_id:naturalnum,optional [db_null]}
+    {parent_id:naturalnum,optional ""}
     {locale ""}
     object_id:naturalnum,optional
     ctx_id:naturalnum,optional
