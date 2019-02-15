@@ -28,16 +28,32 @@ namespace eval category_tree {
 
     ad_proc -public get_categories {
         {-tree_id:required}
+        -locale
     } {
-           returns the main categories of a given tree
+        Return root categories of a given tree
+
+        @param locale sort results by name in specified locale. If a
+        translation in this locale is not available, the one in en_US
+        will be used. When missing, will default to locale of the
+        connection or en_US when we are outside a connection context.
+
+        @return list of category ids
     } {
-        set locale [ad_conn locale]
-        set result [list]
-        set categories [db_list get_categories ""]
-        foreach category_id $categories {
-            lappend result $category_id
+        if {![info exists locale]} {
+            set locale [expr {[ns_conn isconnected] ? [ad_conn locale] : "en_US"}]
         }
-        return $result
+        return [db_list get_categories {
+            select c.category_id
+            from categories c
+                 left join category_translations loct
+                    on c.category_id = loct.category_id and loct.locale = :locale,
+                 category_translations ent
+            where c.category_id = ent.category_id
+              and c.parent_id is null
+              and c.tree_id = :tree_id
+              and ent.locale = 'en_US'
+            order by coalesce(loct.name, ent.name)
+        }]
     }
 
     ad_proc -public map {
