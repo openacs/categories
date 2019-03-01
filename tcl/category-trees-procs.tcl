@@ -374,7 +374,7 @@ namespace eval category_tree {
                 set tree [list]
             }
             set tree_id_old $tree_id
-            lappend tree [list $category_id [ad_decode "$invalid_p$deprecated_p" "" f t] $cur_level]
+            lappend tree [list $category_id [expr {"$invalid_p$deprecated_p" eq "" ? f : t}] $cur_level]
             if { $right_ind - $left_ind > 1} {
                 incr cur_level 1
                 set invalid_p "$invalid_p$deprecated_p"
@@ -405,7 +405,7 @@ namespace eval category_tree {
         set invalid_p ""
         set tree [list]
         db_foreach flush_cache "" {
-            lappend tree [list $category_id [ad_decode "$invalid_p$deprecated_p" "" f t] $cur_level]
+            lappend tree [list $category_id [expr {"$invalid_p$deprecated_p" eq "" ? f : t}] $cur_level]
             if { $right_ind - $left_ind > 1} {
                 incr cur_level 1
                 set invalid_p "$invalid_p$deprecated_p"
