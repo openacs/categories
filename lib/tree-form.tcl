@@ -7,7 +7,7 @@ if {![info exists ctx_id]} {
 set languages [lang::system::get_locale_options]
 
 ad_form -name tree_form \
-    -mode [ad_decode [ad_form_new_p -key tree_id] 1 edit display] \
+    -mode [expr {[ad_form_new_p -key tree_id] ? "edit" : "display"}] \
     -action tree-form \
     -export { locale object_id ctx_id } \
     -form {
