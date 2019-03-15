@@ -21,28 +21,4 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="check_permissions_on_trees">
-    <querytext>
-      select t.tree_id
-      from category_trees t, category_temp tmp
-      where (
-         t.site_wide_p = 't'
-         or acs_permission__permission_p(t.tree_id, :user_id, 'category_tree_read')
-      )
-      and t.tree_id = tmp.category_id
-    </querytext>
-  </fullquery>
-
-  <fullquery name="get_categorized_object_count">
-    <querytext>
-      select n.object_id
-      from acs_named_objects n, ($subtree_sql) s
-      where n.object_id = s.object_id
-      and   acs_permission__permission_p(n.object_id, :user_id, 'read')
-      $letter_sql
-      $package_sql
-    </querytext>
-  </fullquery>
-  
-  
 </queryset>

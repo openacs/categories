@@ -44,7 +44,15 @@ db_transaction {
     foreach tree_id $tree_ids {
 	db_dml insert_tmp_category_trees ""
     }
-    set tree_ids [db_list check_permissions_on_trees ""]
+    set tree_ids [db_list check_permissions_on_trees {
+      select t.tree_id
+      from category_trees t, category_temp tmp
+      where (
+         t.site_wide_p = 't'
+         or acs_permission.permission_p(t.tree_id, :user_id, 'category_tree_read')
+      )
+      and t.tree_id = tmp.category_id
+    }]
 }
 db_dml delete_tmp_category_trees ""
 
@@ -164,7 +172,14 @@ db_transaction {
     # cannot be passed by name to the paginator, or such variables
     # won't be resolved correctly insite the machinery.  Just compute
     # the sql text here and pass it as is.    
-    set sql [db_map get_categorized_object_count]
+    set sql [subst {
+      select n.object_id
+      from acs_named_objects n, ($subtree_sql) s
+      where n.object_id = s.object_id
+      and   acs_permission.permission_p(n.object_id, :user_id, 'read')
+      $letter_sql
+      $package_sql
+    }]
     paginator create -- $p_name $sql -pagesize 20 -groupsize 10 -contextual -timeout 0
 
     set first_row [paginator get_row $p_name $page]

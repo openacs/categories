@@ -27,7 +27,12 @@ template::multirow create trees_with_write_permission tree_id tree_name site_wid
 template::multirow create trees_with_read_permission tree_id tree_name site_wide_p description
 
 
-db_foreach trees {} {
+db_foreach trees {
+    select tree_id, site_wide_p,
+           acs_permission.permission_p(tree_id, :user_id, 'category_tree_write') as has_write_p,
+           acs_permission.permission_p(tree_id, :user_id, 'category_tree_read') as has_read_p
+      from category_trees
+} {
     array unset tree_array
     array set tree_array [category_tree::get_data $tree_id $locale]
 
