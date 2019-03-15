@@ -99,20 +99,4 @@
       </querytext>
 </fullquery>
 
- 
-<fullquery name="category_tree::usage.category_tree_usage">      
-      <querytext>
-	    select t.pretty_plural, n.object_id, n.title, p.package_id,
-	           p.instance_name,
-	           acs_permission__permission_p(n.object_id, :user_id, 'read') as read_p
-	    from category_tree_map m, acs_objects n,
-	         apm_packages p, apm_package_types t
-	    where m.tree_id = :tree_id
-	    and n.object_id = m.object_id
-	    and p.package_id = n.package_id
-	    and t.package_key = p.package_key
-      </querytext>
-</fullquery>
-
- 
 </queryset>
