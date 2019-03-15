@@ -2,6 +2,13 @@ ad_page_contract {
 
     Show all objects mapped to a category.
 
+    apisano 2019-03-15: note that objects will be correctly displayed
+    here only if one takes care of maintaining the corresponding
+    records in acs_named_objects, as explained in
+    /doc/tutorial-categories and /categories/doc/o. To my knowledge,
+    the only package where this actually happened is the FAQ... Why
+    was acs_objects.title not enough of a name?
+
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id$
 } {
