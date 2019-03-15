@@ -46,7 +46,15 @@ template::multirow sort mapped_trees -dictionary tree_name
 
 template::multirow create unmapped_trees tree_id tree_name site_wide_p view_url map_url subtree_url
 
-db_foreach get_unmapped_trees "" {
+db_foreach get_unmapped_trees {
+    select tree_id, site_wide_p,
+          acs_permission.permission_p(tree_id, :user_id, 'category_tree_read') as has_read_permission
+     from category_trees t
+    where not exists (select 1 from category_tree_map m
+                       where m.object_id = :object_id
+                         and m.tree_id = t.tree_id)
+    order by t.tree_id
+} {
     if { $has_read_permission == "t" || $site_wide_p == "t" } {
 	set tree_name [category_tree::get_name $tree_id $locale]
 

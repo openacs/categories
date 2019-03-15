@@ -31,7 +31,12 @@ lappend context_bar [_ categories.Tree_copy]
 
 template::multirow create trees tree_id tree_name site_wide_p view_url copy_url
 
-db_foreach trees_select "" {
+db_foreach trees_select {
+    select tree_id as source_tree_id, site_wide_p,
+           acs_permission.permission_p(tree_id, :user_id, 'category_tree_read') as has_read_p
+    from category_trees
+    where tree_id <> :tree_id
+} {
     if {$site_wide_p == "t" || $has_read_p == "t"} {
 	set source_tree_name [category_tree::get_name $source_tree_id $locale]
 
