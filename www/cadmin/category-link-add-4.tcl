@@ -17,11 +17,31 @@ set user_id [auth::require_login]
 permission::require_permission -object_id $tree_id -privilege category_tree_write
 
 db_transaction {
-    foreach forward_category_id [db_list check_link_forward_permissions ""] {
+    foreach forward_category_id [db_list check_link_forward_permissions [subst {
+        select c.category_id as link_category_id
+        from categories c
+        where c.category_id in ([join $link_category_id ,])
+        and acs_permission.permission_p(c.tree_id,:user_id,'category_tree_write') = 't'
+        and c.category_id <> :category_id
+        and not exists (select 1
+                        from category_links l
+                        where l.from_category_id = :category_id
+                        and l.to_category_id = c.category_id)
+    }]] {
 	category_link::add -from_category_id $category_id -to_category_id $forward_category_id
     }
 
-    foreach backward_category_id [db_list check_link_backward_permissions ""] {
+    foreach backward_category_id [db_list check_link_backward_permissions [subst {
+        select c.category_id as link_category_id
+        from categories c
+        where c.category_id in ([join $link_category_id ,])
+        and acs_permission.permission_p(c.tree_id,:user_id,'category_tree_write') = 't'
+        and c.category_id <> :category_id
+        and not exists (select 1
+                        from category_links l
+                        where l.from_category_id = c.category_id
+                        and l.to_category_id = :category_id)
+    }]] {
 	category_link::add -from_category_id $backward_category_id -to_category_id $category_id
     }
 } on_error {
