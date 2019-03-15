@@ -17,7 +17,14 @@ set user_id [auth::require_login]
 permission::require_permission -object_id $tree_id -privilege category_tree_write
 
 db_transaction {
-    foreach synonym_id [db_list check_synonyms_for_delete ""] {
+    foreach synonym_id [db_list check_synonyms_for_delete [subst {
+        select s.synonym_id
+        from category_synonyms s, categories c
+        where s.synonym_id in ([join $synonym_id ,])
+        and c.category_id = s.category_id
+        and acs_permission.permission_p(c.tree_id,:user_id,'category_tree_write') = 't'
+        and s.synonym_p = 't'
+    }]] {
 	category_synonym::delete $synonym_id
     }
 } on_error {
