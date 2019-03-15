@@ -3,16 +3,6 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-  <fullquery name="get_category_usages">
-    <querytext>
-      select n.object_id
-      from category_object_map m, acs_named_objects n
-      where acs_permission__permission_p(m.object_id, :user_id, 'read') = 't'
-      and m.category_id = :category_id
-      and n.object_id = m.object_id
-    </querytext>
-  </fullquery>
-
   <fullquery name="get_objects_using_category">
     <querytext>
       select n.object_id, n.object_name as object_name, o.creation_date,

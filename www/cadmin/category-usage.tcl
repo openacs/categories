@@ -74,7 +74,13 @@ request create
 request set_param page -datatype integer -value 1
 
 # execute query to count objects and pages
-paginator create get_category_usages $p_name "" -pagesize 20 -groupsize 10 -contextual -timeout 0
+paginator create get_category_usages $p_name {
+      select n.object_id
+      from category_object_map m, acs_named_objects n
+      where acs_permission.permission_p(m.object_id, :user_id, 'read') = 't'
+      and m.category_id = :category_id
+      and n.object_id = m.object_id
+} -pagesize 20 -groupsize 10 -contextual -timeout 0
 
 set first_row [paginator get_row $p_name $page]
 set last_row [paginator get_row_last $p_name $page]
