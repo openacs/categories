@@ -314,7 +314,7 @@ BEGIN
 	and left_ind > v_old_left_ind;
 
 	if (p_parent_id is null) then
-	   select 1, max(right_ind)+1 into v_new_left_ind, v_new_right_ind
+	   select 1, coalesce(max(right_ind)+1, 1) into v_new_left_ind, v_new_right_ind
 	   from categories
 	   where tree_id = p_tree_id;
 	else
