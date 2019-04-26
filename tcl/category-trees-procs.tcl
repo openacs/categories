@@ -477,7 +477,10 @@ namespace eval category_tree {
         Reloads all category tree translations in the cache.
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        catch {nsv_unset category_tree_translations}
+        if {[nsv_names category_tree_translations] ne ""} {
+            nsv_unset category_tree_translations
+        }
+
         set tree_id_old 0
         db_foreach reset_translation_cache {
 	    select tree_id, locale, name, description
