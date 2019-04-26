@@ -502,9 +502,10 @@ ad_proc -public category::get_tree {
     @return tree_id of the tree the category belongs to.
     @author Timo Hentschel (timo@timohentschel.de)
 } {
-    if { [catch { set tree_id [lindex [nsv_get categories $category_id] 0] }] } {
-        # category not found
-        return {}
+    if {[nsv_names categories] ne "" && [nsv_exists categories $category_id]} {
+        set tree_id [lindex [nsv_get categories $category_id] 0]
+    } else {
+        set tree_id ""
     }
     return $tree_id
 }
