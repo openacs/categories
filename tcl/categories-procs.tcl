@@ -385,44 +385,48 @@ ad_proc -public category::get_name {
     @return list of names corresponding to the list of category_id's supplied.
     @author Timo Hentschel (timo@timohentschel.de)
 } {
+    if {[nsv_names categories] eq "" ||
+        ![nsv_exists categories $category_id]} {
+        return [list]
+    }
+
+    set cat_lang [lindex [nsv_get categories $category_id] 1]
+
+    # Try specified locale or the one from the connection
     if {$locale eq ""} {
         set locale [ad_conn locale]
     }
-    if { [catch { array set cat_lang [lindex [nsv_get categories $category_id] 1] }] } {
-        return {}
-    }
-    if { ![catch { set name $cat_lang($locale) }] } {
-        # exact match: found name for this locale
-        return $name
+    if {[dict exists $cat_lang $locale]} {
+        return [dict get $cat_lang $locale]
     }
 
-    # try default locale for this language
+    # Try default locale for this language
     set language [lindex [split $locale "_"] 0]
     set locale [lang::util::default_locale_from_lang $language]
-    if { ![catch { set name $cat_lang($locale) }] } {
-        # exact match: found name for this default language locale
-        return $name
+    if {[dict exists $cat_lang $locale]} {
+        return [dict get $cat_lang $locale]
     }
 
-    # Trying system locale for package (or site-wide)
+    # Try system locale for package (or site-wide)
     set locale [lang::system::locale]
-    if { ![catch { set name $cat_lang($locale) }] } {
-        return $name
+    if {[dict exists $cat_lang $locale]} {
+        return [dict get $cat_lang $locale]
     }
 
-    # Trying site-wide system locale
+    # Try site-wide system locale
     set locale [lang::system::locale -site_wide]
-    if { ![catch { set name $cat_lang($locale) }] } {
-        return $name
+    if {[dict exists $cat_lang $locale]} {
+        return [dict get $cat_lang $locale]
     }
 
     # Resort to en_US
-    if { ![catch { set name $cat_lang([parameter::get -parameter DefaultLocale -default en_US]) }] } {
-        return $name
+    set locale [parameter::get -parameter DefaultLocale -default en_US]
+    if {[dict exists $cat_lang $locale]} {
+        return [dict get $cat_lang $locale]
     }
 
     # tried default locale, but nothing found
-    return {}
+    return [list]
 }
 
 ad_proc -public category::get_names {
