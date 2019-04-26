@@ -592,7 +592,7 @@ ad_proc -deprecated category::indent_html { indent_width } {
     @param indent_width width of the html indent.
     @author Timo Hentschel (timo@timohentschel.de)
 
-    use string repeat "&nbsp;" $i
+    @see string repeat "&nbsp;" $i
 } {
     set indent_string ""
     for { set i 0 } { $i < $indent_width } { incr i } {
