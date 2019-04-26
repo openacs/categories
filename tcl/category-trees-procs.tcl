@@ -391,7 +391,10 @@ namespace eval category_tree {
         Reloads all category tree hierarchies in the cache.
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        catch {nsv_unset category_trees}
+        if {[nsv_names category_trees] ne ""} {
+            nsv_unset category_trees
+        }
+
         set tree_id_old 0
         set cur_level 1
         set stack [list]
