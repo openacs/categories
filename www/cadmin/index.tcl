@@ -39,7 +39,7 @@ db_foreach trees {
     if {$has_write_p == "t"} {
 	template::multirow append trees_with_write_permission $tree_id $tree_array(tree_name) $site_wide_p $tree_array(description)
     } elseif { $has_read_p == "t" || $site_wide_p == "t" } {
-	template::multirow append trees_with_read_permission $tree_id $tree_name $site_wide_p $tree_array(description)
+	template::multirow append trees_with_read_permission  $tree_id $tree_name(tree_name) $site_wide_p $tree_array(description)
     }
 }
 
