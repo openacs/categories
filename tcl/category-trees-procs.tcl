@@ -317,7 +317,7 @@ namespace eval category_tree {
     ad_proc -public get_tree {
         -all:boolean
         {-subtree_id ""}
-        tree_id:required
+        tree_id
         {locale ""}
     } {
         Get all categories of a category tree from the cache.
