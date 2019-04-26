@@ -505,19 +505,16 @@ namespace eval category_tree {
         @param tree_id category tree to be flushed.
         @author Timo Hentschel (timo@timohentschel.de)
     } {
+        set translations [list]
         db_foreach flush_translation_cache {
 	    select locale, name, description
 	    from category_tree_translations
 	    where tree_id = :tree_id
 	    order by locale
         } {
-            set tree_lang($locale) [list $name $description]
+            lappend translations $locale [list $name $description]
         }
-        if {[info exists tree_lang]} {
-            nsv_set category_tree_translations $tree_id [array get tree_lang]
-        } else {
-            nsv_set category_tree_translations $tree_id ""
-        }
+        nsv_set category_tree_translations $tree_id $translations
     }
 
     ad_proc -public get_translation {
