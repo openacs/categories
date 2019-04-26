@@ -526,22 +526,30 @@ namespace eval category_tree {
         @return tcl-list: name description
         @author Timo Hentschel (timo@timohentschel.de)
     } {
+        if {[nsv_names category_tree_translations] eq "" ||
+            ![nsv_exists category_tree_translations $tree_id]} {
+            return [list]
+        }
+
+        set default_locale [parameter::get -parameter DefaultLocale -default en_US]
         if {$locale eq ""} {
-            set locale [ad_conn locale]
+            set locale [expr {[ns_conn isconnected] ? [ad_conn locale] : $default_locale}]
         }
-        if {[catch {array set tree_lang [nsv_get category_tree_translations $tree_id]}]} {
-            return
-        }
-        if {![catch {set names $tree_lang($locale)}]} {
+
+        set tree_lang [nsv_get category_tree_translations $tree_id]
+
+        if {[dict exists $tree_lang $locale]} {
             # exact match: found name for this locale
-            return $names
-        }
-        if {![catch {set names $tree_lang([parameter::get -parameter DefaultLocale -default en_US])}]} {
+            set names [dict get $tree_lang $locale]
+        } elseif {[dict exists $tree_lang $default_locale]} {
             # default locale found
-            return $names
+            set names [dict get $tree_lang $default_locale]
+        } else {
+            # tried default locale, but nothing found
+            set names ""
         }
-        # tried default locale, but nothing found
-        return
+
+        return $names
     }
 
     ad_proc -public get_name {
