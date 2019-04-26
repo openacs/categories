@@ -317,7 +317,7 @@ namespace eval category_tree {
     ad_proc -public get_tree {
         -all:boolean
         {-subtree_id ""}
-        tree_id
+        tree_id:required
         {locale ""}
     } {
         Get all categories of a category tree from the cache.
@@ -329,10 +329,14 @@ namespace eval category_tree {
         @return Tcl list of lists: category_id category_name deprecated_p level
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        if {[catch {set tree [nsv_get category_trees $tree_id]}]} {
-            return
+        if {[nsv_names category_trees] eq "" ||
+            ![nsv_exists category_trees $tree_id]} {
+            return [list]
         }
-        set result ""
+
+        set tree [nsv_get category_trees $tree_id]
+
+        set result [list]
         if {$subtree_id eq ""} {
             foreach category $tree {
                 lassign $category category_id deprecated_p level
