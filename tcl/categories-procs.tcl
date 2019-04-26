@@ -126,7 +126,12 @@ ad_proc -public category::update {
         set locale [ad_conn locale]
     }
     db_transaction {
-        if {![db_0or1row check_category_existence ""]} {
+        if {![db_0or1row check_category_existence {
+            select 1
+            from category_translations
+            where category_id = :category_id
+            and locale = :locale
+        }]} {
             db_exec_plsql insert_category_translation ""
         } else {
             db_exec_plsql update_category_translation ""
@@ -215,17 +220,37 @@ ad_proc -public category::map_object {
     db_transaction {
         # Remove any already mapped categories if we are updating
         if { $remove_old_p } {
-            db_dml remove_mapped_categories ""
+            db_dml remove_mapped_categories {
+                delete from category_object_map
+                where object_id = :object_id
+            }
         }
 
         foreach category_id $category_id_list {
             if {$category_id ne ""} {
-            db_dml insert_mapped_categories ""
+                db_dml insert_mapped_categories {
+                    insert into category_object_map (category_id, object_id)
+                    select :category_id, :object_id
+                    where not exists (select 1
+                                      from category_object_map
+                                      where category_id = :category_id
+                                        and object_id = :object_id);
+                }
             }
         }
 
         # Adds categorizations to linked categories
-        db_dml insert_linked_categories ""
+        db_dml insert_linked_categories {
+            insert into category_object_map (category_id, object_id)
+            (select l.to_category_id as category_id, m.object_id
+             from category_links l, category_object_map m
+             where l.from_category_id = m.category_id
+             and m.object_id = :object_id
+             and not exists (select 1
+                             from category_object_map m2
+                             where m2.object_id = :object_id
+                             and m2.category_id = l.to_category_id))
+        }
     }
 }
 
@@ -240,14 +265,15 @@ ad_proc -public category::get_mapped_categories {
     @return tcl-list of category_ids
     @author Timo Hentschel (timo@timohentschel.de)
 } {
-    if { $tree_id ne "" } {
-        set result [db_list get_filtered ""]
-    } else {
-        set result [db_list get_mapped_categories ""]
-    }
-
-    return $result
+    return [db_list get_mapped_categories {
+        select category_id from category_object_map
+        where object_id = :object_id
+        and (:tree_id is null or category_id in (select category_id
+                                                 from categories
+                                                 where tree_id = :tree_id))
+    }]
 }
+
 ad_proc -public category::get_mapped_categories_multirow {
     {-locale ""}
     {-multirow mapped_categories}
@@ -261,7 +287,21 @@ ad_proc -public category::get_mapped_categories_multirow {
 } {
     if { $locale eq ""} {set locale [ad_conn locale]}
     upvar $multirow mapped_categories
-    db_multirow mapped_categories select {}
+    db_multirow mapped_categories select {
+        select co.tree_id, aot.title, c.category_id, ao.title
+          from category_object_map_tree co,
+               categories c,
+               category_translations ct,
+               acs_objects ao,
+               acs_objects aot
+	    where co.object_id = :object_id
+	     and co.category_id = c.category_id
+	     and c.category_id = ao.object_id
+	     and c.category_id = ct.category_id
+	     and aot.object_id = co.tree_id
+	     and ct.locale = :locale
+	    order by aot.title, ao.title
+    }
 }
 
 ad_proc -public category::get_id {
@@ -275,7 +315,12 @@ ad_proc -public category::get_id {
     @return the category id or empty string if no category was found
     @author Lee Denison (lee@xarg.co.uk)
 } {
-    return [db_list get_category_id {}]
+    return [db_list get_category_id {
+        select object_id
+        from acs_objects
+        where title = :title
+        and object_type = 'category'
+    }]
 }
 
 ad_proc -public category::reset_translation_cache { } {
@@ -285,7 +330,12 @@ ad_proc -public category::reset_translation_cache { } {
     catch {nsv_unset categories}
     set category_id_old 0
     set tree_id_old 0
-    db_foreach reset_translation_cache "" {
+    db_foreach reset_translation_cache {
+        select t.category_id, c.tree_id, t.locale, t.name
+        from category_translations t, categories c
+        where t.category_id = c.category_id
+        order by t.category_id, t.locale
+    } {
         if {$category_id != $category_id_old && $category_id_old != 0} {
             nsv_set categories $category_id_old [list $tree_id_old [array get cat_lang]]
             unset cat_lang
@@ -305,7 +355,12 @@ ad_proc -public category::flush_translation_cache { category_id } {
     @param category_id category to be flushed.
     @author Timo Hentschel (timo@timohentschel.de)
 } {
-    db_foreach flush_translation_cache "" {
+    db_foreach flush_translation_cache {
+        select t.locale, t.name, c.tree_id
+        from category_translations t, categories c
+        where t.category_id = :category_id
+        and t.category_id = c.category_id
+    } {
         set cat_lang($locale) $name
     }
     if {[info exists cat_lang]} {
@@ -394,7 +449,13 @@ ad_proc -public category::get_children {
     @return list of category ids of the children of the supplied category_id
     @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
 } {
-    return [db_list get_children_ids ""]
+    return [db_list get_children_ids {
+		select category_id
+		from categories
+		where parent_id = :category_id
+        and deprecated_p = 'f'
+        order by tree_id, left_ind
+    }]
 }
 
 ad_proc -public category::count_children {
@@ -418,9 +479,11 @@ ad_proc -public category::get_parent {
     @return category id of the parent category
     @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
 } {
-    set result [db_list get_parent_id ""]
-    if {$result eq "{}"} {set result 0}
-    return $result
+    return [db_string get_parent {
+        select parent_id
+        from categories
+        where category_id = :category_id
+    } -default 0]
 }
 
 ad_proc -public category::get_tree {
@@ -460,7 +523,7 @@ ad_proc -public category::get_data {
 }
 
 ad_proc -public category::get_objects {
-    -category_id
+    -category_id:required
     {-object_type ""}
     {-content_type ""}
     {-include_children:boolean}
@@ -475,16 +538,19 @@ ad_proc -public category::get_objects {
     @author malte ()
     @creation-date Wed May 30 06:28:25 CEST 2007
 } {
-    set join_clause ""
-    set where_clause ""
-    if {$content_type ne ""} {
-        set join_clause ", cr_items i"
-        set where_clause "and i.item_id = com.object_id and i.content_type = :content_type"
-    } elseif {$object_type ne ""} {
-        set join_clause ", acs_objects o"
-        set where_clause "and o.object_id = com.object_id and o.object_type = :object_type"
-    }
-    return [db_list get_objects {}]
+    return [db_list get_objects {
+        SELECT com.object_id
+        FROM category_object_map com
+        WHERE com.category_id = :category_id
+        and (:object_type is null or
+             exists (select 1 from acs_objects
+                     where object_id = com.object_id
+                       and object_type = :object_type))
+        and (:content_type is null or
+             exists (select 1 from cr_items
+                     where item_id = com.object_id
+                       and content_type = :content_type))
+    }]
 }
 
 ad_proc -public category::get_id_by_object_title {
@@ -498,7 +564,12 @@ ad_proc -public category::get_id_by_object_title {
     @return the category id or empty string if no category was found
     @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
 } {
-    return [db_string get_category_id {} -default ""]
+    return [db_string get_category_id {
+        select category_id
+        from category_translations
+        where name = :name
+        and locale = :locale
+    } -default ""]
 }
 
 ad_proc -public category::get_object_context { object_id } {
@@ -552,7 +623,11 @@ ad_proc category::pageurl { object_id } {
     @param object_id category to be displayed.
     @author Timo Hentschel (timo@timohentschel.de)
 } {
-    db_1row get_tree_id_for_pageurl ""
+    set tree_id [db_string get_tree_id {
+        select tree_id
+        from categories
+        where category_id = :object_id
+    }]
     return "categories-browse?tree_ids=$tree_id&category_ids=$object_id"
 }
 
