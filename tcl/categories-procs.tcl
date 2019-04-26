@@ -327,7 +327,10 @@ ad_proc -public category::reset_translation_cache { } {
     Reloads all category translations in the cache.
     @author Timo Hentschel (timo@timohentschel.de)
 } {
-    catch {nsv_unset categories}
+    if {[nsv_names categories] ne ""} {
+        nsv_unset categories
+    }
+
     set category_id_old 0
     set tree_id_old 0
     db_foreach reset_translation_cache {
