@@ -20,8 +20,11 @@ namespace eval category_tree {
         @return array: tree_name description site_wide_p
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        db_1row get_tree_data "" -column_array tree
-
+        set tree(site_wide_p) [db_string get_site_wide_p {
+	    select site_wide_p
+	    from category_trees
+	    where tree_id = :tree_id
+        }]
         lassign [get_translation $tree_id $locale] tree(tree_name) tree(description)
         return [array get tree]
     }

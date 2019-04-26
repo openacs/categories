@@ -1,16 +1,6 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="category_tree::get_data.get_tree_data">      
-      <querytext>
-      
-	    select site_wide_p
-	    from category_trees
-	    where tree_id = :tree_id
-	
-      </querytext>
-</fullquery>
-
 <fullquery name="category_tree::edit_mapping.edit_mapping">
       <querytext>
       
