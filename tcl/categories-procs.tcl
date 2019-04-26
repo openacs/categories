@@ -358,19 +358,19 @@ ad_proc -public category::flush_translation_cache { category_id } {
     @param category_id category to be flushed.
     @author Timo Hentschel (timo@timohentschel.de)
 } {
+    set translations [list]
     db_foreach flush_translation_cache {
         select t.locale, t.name, c.tree_id
         from category_translations t, categories c
         where t.category_id = :category_id
         and t.category_id = c.category_id
     } {
-        set cat_lang($locale) $name
+        lappend translations $locale $name
     }
-    if {[info exists cat_lang]} {
-        nsv_set categories $category_id [list $tree_id [array get cat_lang]]
-    } else {
-        nsv_set categories $category_id ""
+    if {[llength $translations] > 0} {
+        set translations [list $tree_id $translations]
     }
+    nsv_set categories $category_id $translations
 }
 
 ad_proc -public category::get_name {
