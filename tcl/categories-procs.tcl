@@ -441,12 +441,9 @@ ad_proc -public category::get_names {
     @return list of names corresponding to the list of category_id's supplied.
     @author Timo Hentschel (timo@timohentschel.de)
 } {
-    set result [list]
-    foreach category_id $category_ids {
-        lappend result [category::get_name $category_id $locale]
-    }
-    return $result
+    return [lmap category_id $category_ids {category::get_name $category_id $locale}]
 }
+
 ad_proc -public category::get_children {
     -category_id:required
 } {
