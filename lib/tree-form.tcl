@@ -1,8 +1,15 @@
-if {![info exists ctx_id]} {
-  set package_id [ad_conn package_id]
-} else {
-  set package_id $ctx_id
+ad_include_contract {
+    Reusable form UI to create a new category tree. When 'object_id'
+    is specified, it will also map the new tree to corresponding
+    acs_object.
+} {
+    tree_id:naturalnum,optional
+    {locale ""}
+    object_id:naturalnum,optional
+    ctx_id:naturalnum,optional
 }
+
+set package_id [expr {[info exists ctx_id] ? $ctx_id : [ad_conn package_id]}]
 
 set languages [lang::system::get_locale_options]
 
