@@ -147,7 +147,7 @@ ad_proc -public template::widget::category {
 	    lassign $category category_id category_name deprecated_p level
 	    set category_name [ns_quotehtml [lang::util::localize $category_name]]
 	    if { $level>1 } {
-		set category_name "[string repeat {&nbsp;} [expr {2*$level -4}]]..$category_name"
+		set category_name "[string repeat . [expr {2*$level -4}]]..$category_name"
 	    }
 	    lappend one_tree [list $category_name $category_id]
 	}
