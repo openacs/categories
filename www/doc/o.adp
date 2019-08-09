@@ -63,7 +63,7 @@ should have an evtry in that extension of the acs_objects table.
 simply join the acs_named_objects table to get the names and
 package_ids in an easy and - more importantly - fast and scalable
 way.</p>
-<p>The only shortcomming of this solution is the disregard of
+<p>The only shortcoming of this solution is the disregard of
 internationalization, but in cases where there objects in more than
 one language, it should be the triggers / pl/sql procs task to make
 sure that acs_named_objects contains names in the default language
