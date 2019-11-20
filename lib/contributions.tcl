@@ -104,7 +104,7 @@ template::list::create \
         }
     }
 
-set now [clock_to_ansi [clock seconds]]
+set now [lc_clock_to_ansi [clock seconds]]
 
 set restrict {}
 
