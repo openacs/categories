@@ -3,36 +3,6 @@
 <queryset>
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="category_tree::map.map_tree">      
-      <querytext>
-      
-	    begin
-	    category_tree.map(
-			      object_id           => :object_id,
-			      subtree_category_id => :subtree_category_id,
-			      tree_id             => :tree_id,
-			      assign_single_p     => :assign_single_p,
-			      require_category_p  => :require_category_p,
-			      widget              => :widget);
-	    end;
-	
-      </querytext>
-</fullquery>
-
- 
-<fullquery name="category_tree::unmap.unmap_tree">      
-      <querytext>
-      
-	    begin
-	    category_tree.unmap(
-				object_id => :object_id,
-				tree_id   => :tree_id);
-	    end;
-	
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="category_tree::copy.copy_tree">      
       <querytext>
       

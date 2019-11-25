@@ -79,7 +79,15 @@ namespace eval category_tree {
                 category to objects.
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        db_exec_plsql map_tree ""
+        db_dml map_tree {
+            insert into category_tree_map
+                   (tree_id,  subtree_category_id,  object_id,  assign_single_p,  require_category_p,  widget)
+            select :tree_id, :subtree_category_id, :object_id, :assign_single_p, :require_category_p, :widget
+            from dual
+            where not exists (select 1 from category_tree_map
+                               where object_id = :object_id
+                                 and tree_id = :tree_id)
+        }
     }
 
     ad_proc -public unmap {
@@ -93,7 +101,11 @@ namespace eval category_tree {
         @option object_id object to unmap the category tree from.
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        db_exec_plsql unmap_tree ""
+        db_dml unmap_tree {
+            delete from category_tree_map
+             where object_id = :object_id
+               and tree_id = :tree_id
+        }
     }
 
     ad_proc -public edit_mapping {
