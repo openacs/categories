@@ -31,8 +31,8 @@ set tree_description $tree(description)
 set page_title [_ categories.Usage_title]
 
 set context_bar [category::context_bar $tree_id $locale \
-                     [value_if_exists object_id] \
-                     [value_if_exists ctx_id]]
+                     [expr {[info exists object_id] ? $object_id : ""}] \
+                     [expr {[info exists ctx_id] ? $ctx_id : ""}]]
 lappend context_bar [_ categories.Usage]
 
 

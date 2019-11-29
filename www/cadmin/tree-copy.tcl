@@ -25,8 +25,8 @@ set target_tree_id $tree_id
 set page_title [_ categories.Tree_copy_title]
 
 set context_bar [category::context_bar $tree_id $locale \
-                     [value_if_exists object_id] \
-                     [value_if_exists ctx_id]]
+                     [expr {[info exists object_id] ? $object_id : ""}] \
+                     [expr {[info exists ctx_id] ? $ctx_id : ""}]]
 lappend context_bar [_ categories.Tree_copy]
 
 template::multirow create trees tree_id tree_name site_wide_p view_url copy_url

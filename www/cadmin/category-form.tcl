@@ -26,8 +26,8 @@ if {[info exists category_id]} {
 }
 
 set context_bar [category::context_bar $tree_id $locale \
-                     [value_if_exists object_id] \
-                     [value_if_exists ctx_id]]
+                     [expr {[info exists object_id] ? $object_id : ""}] \
+                     [expr {[info exists ctx_id] ? $ctx_id : ""}]]
 lappend context_bar $page_title
 
 set languages [lang::system::get_locale_options]
