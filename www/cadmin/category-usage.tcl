@@ -36,7 +36,7 @@ set category_name [category::get_name $category_id $locale]
 set page_title "Objects using category \"$category_name\" of tree \"$tree_name\""
 set url_vars [export_vars -no_empty {category_id tree_id locale object_id}]
 
-set context_bar [category::context_bar $tree_id $locale [value_if_exists object_id]]
+set context_bar [category::context_bar $tree_id $locale [expr {[info exists object_id] ? $object_id : ""}]]
 lappend context_bar "\"$category_name\" Usage"
 
 template::list::create -name items_list -multirow items \

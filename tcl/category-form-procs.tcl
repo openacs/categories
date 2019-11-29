@@ -43,7 +43,7 @@ ad_proc -public category::ad_form::add_widgets {
                        {label $name} \
                        {category_tree_id $tree_id} \
                        {category_subtree_id $subtree_id} \
-                       {category_object_id {[value_if_exists categorized_object_id]}} \
+                       {category_object_id {[expr {[info exists categorized_object_id] ? $categorized_object_id : ""}]}} \
 		       {category_assign_single_p $assign_single_p} \
 		       {category_require_category_p $require_category_p} \
                        {category_widget $widget} \

@@ -31,8 +31,8 @@ set tree_name [category_tree::get_name $tree_id $locale]
 set page_title [_ categories.Tree_view_title]
 
 set context_bar [category::context_bar $tree_id $locale \
-                     [value_if_exists object_id] \
-                     [value_if_exists ctx_id]]
+                     [expr {[info exists object_id] ? $object_id : ""}] \
+                     [expr {[info exists ctx_id] ? $ctx_id : ""}]]
 lappend context_bar [list \
 			 [export_vars -no_empty -base tree-copy { {tree_id $target_tree_id} locale object_id ctx_id }] \
 			 [_ categories.Action_copy_tree]] \
