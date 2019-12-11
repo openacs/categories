@@ -24,7 +24,7 @@ ad_form -extend -name catass -on_submit {
         $category_ids
 }
 
-ad_returnredirect [get_referrer]
+ad_returnredirect [util::get_referrer]
 
 # Local variables:
 #    mode: tcl
