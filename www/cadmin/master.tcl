@@ -4,7 +4,7 @@ ad_page_contract {
 
 } {
     {change_locale:boolean "t"}
-    {locale:token "[ad_conn locale]"}
+    {locale:word "[ad_conn locale]"}
 }
 
 if {$locale eq ""} {

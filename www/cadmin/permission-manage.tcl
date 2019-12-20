@@ -6,7 +6,7 @@ ad_page_contract {
 } {
     tree_id:naturalnum,notnull
     object_id:naturalnum,optional
-    {locale ""}
+    {locale:word ""}
 } -properties {
     page_title:onevalue
     context_bar:onevalue

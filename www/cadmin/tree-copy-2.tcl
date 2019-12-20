@@ -7,7 +7,7 @@ ad_page_contract {
 } {
     target_tree_id:naturalnum,notnull
     source_tree_id:naturalnum,notnull
-    {locale ""}
+    {locale:word ""}
     object_id:naturalnum,optional
     ctx_id:naturalnum,optional
 }

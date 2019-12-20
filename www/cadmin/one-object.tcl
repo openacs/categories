@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     object_id:naturalnum,notnull
-    {locale ""}
+    {locale:word ""}
 }
 
 ad_returnredirect [export_vars -no_empty -base object-map { locale object_id }]

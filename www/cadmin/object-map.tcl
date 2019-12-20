@@ -9,7 +9,7 @@ ad_page_contract {
 } {
     object_id:naturalnum,notnull
     ctx_id:naturalnum,optional
-    {locale ""}
+    {locale:word ""}
 } -properties {
     page_title:onevalue
     context:onevalue

@@ -6,7 +6,7 @@ ad_page_contract {
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id$
 } {
-    {locale ""}
+    {locale:word ""}
 } -properties {
     page_title:onevalue
     context_bar:onevalue

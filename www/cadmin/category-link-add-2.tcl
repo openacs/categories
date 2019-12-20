@@ -8,7 +8,7 @@ ad_page_contract {
     link_tree_id:naturalnum,notnull
     category_id:naturalnum,notnull
     tree_id:naturalnum,notnull
-    {locale ""}
+    {locale:word ""}
     object_id:naturalnum,optional
     ctx_id:naturalnum,optional
 } -properties {

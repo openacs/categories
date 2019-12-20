@@ -5,7 +5,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     tree_id:naturalnum,optional
-    {locale ""}
+    {locale:word ""}
     object_id:naturalnum,optional
     ctx_id:naturalnum,optional
 } -properties {

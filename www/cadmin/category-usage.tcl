@@ -14,7 +14,7 @@ ad_page_contract {
 } {
     category_id:naturalnum,notnull
     tree_id:naturalnum,notnull
-    {locale ""}
+    {locale:word ""}
     object_id:naturalnum,optional
     {page:integer,optional 1}
     {orderby:token,optional object_name}
