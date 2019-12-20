@@ -1,12 +1,13 @@
-#
-# author: Timo Hentschel (timo@timohentschel.de)
-#
+ad_page_contract {
 
-if { ![info exists change_locale] } {
-    set change_locale t
+    @author Timo Hentschel (timo@timohentschel.de)
+
+} {
+    {change_locale:boolean "t"}
+    {locale:token "[ad_conn locale]"}
 }
 
-if {(![info exists locale] || $locale eq "")} {
+if {$locale eq ""} {
     #set locale [parameter::get -parameter DefaultLocale -default en_US]
     set locale [ad_conn locale]
 }
