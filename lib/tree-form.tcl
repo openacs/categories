@@ -34,17 +34,25 @@ ad_form -name tree_form \
     set description [util_close_html_tags $description 4000]
 } -new_data {
     db_transaction {
-	category_tree::add -tree_id $tree_id -name $tree_name -description $description -locale $language -context_id $package_id
-	if { [info exists object_id] } {
-	    category_tree::map -tree_id $tree_id -object_id $object_id
-	    set return_url [export_vars -base object-map { locale object_id ctx_id}]
-	} else {
-	    set return_url [export_vars -base tree-view { tree_id locale ctx_id}]
-	}
+
+        category_tree::add -tree_id $tree_id \
+            -name $tree_name \
+            -description $description \
+            -locale $language \
+            -context_id $package_id
+
+        if { [info exists object_id] } {
+            category_tree::map -tree_id $tree_id -object_id $object_id
+            set return_url [export_vars -base object-map { locale object_id ctx_id}]
+        } else {
+            set return_url [export_vars -base tree-view { tree_id locale ctx_id}]
+        }
+
     }
 } -edit_data {
     category_tree::update -tree_id $tree_id -name $tree_name -description $description -locale $language
     set return_url [export_vars -base tree-view { tree_id locale object_id ctx_id}]
+
 } -after_submit {
     ad_returnredirect $return_url
     ad_script_abort
