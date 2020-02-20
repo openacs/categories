@@ -76,7 +76,6 @@ also be made to the target category.</msg>
   <msg key="Map_subtree">Map subtree</msg>
   <msg key="Map_this_subtree">Map this subree</msg>
   <msg key="Map_tree">Map tree</msg>
-  <msg key="Mapiing_parameters_subtree_title"></msg>
   <msg key="Mapping_parameters">Mapping Parameters</msg>
   <msg key="Mapping_parameters_subtree_title">Parameters of mapping to subtree &quot;%tree_name% :: %category_name%&quot;</msg>
   <msg key="Mapping_parameters_tree_title">Parameters of mapping to tree &quot;%tree_name%&quot;</msg>

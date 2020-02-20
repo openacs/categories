@@ -71,7 +71,6 @@
   <msg key="Map_subtree">Mapear subárbol</msg>
   <msg key="Map_this_subtree">Mapear este subárbol</msg>
   <msg key="Map_tree">Mapear árbol</msg>
-  <msg key="Mapiing_parameters_subtree_title"></msg>
   <msg key="Mapping_parameters">Mapear parámetros</msg>
   <msg key="Mapping_parameters_subtree_title">Parámetros del mapeo al subárbol &#34;%tree_name% :: %category_name%&#34;</msg>
   <msg key="Mapping_parameters_tree_title">Parámetros del mapeo al árbol &#34;%tree_name%</msg>
