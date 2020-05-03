@@ -20,7 +20,7 @@ db_transaction {
     foreach link_category_id [db_list check_link_target_permissions [subst {
         select c.category_id as link_category_id
         from categories c
-        where c.category_id in ([join $link_category_id ,])
+        where c.category_id in ([ns_dbquotelist $link_category_id])
         and acs_permission.permission_p(c.tree_id,:user_id,'category_tree_write') = 't'
         and c.category_id <> :category_id
         and not exists (select 1

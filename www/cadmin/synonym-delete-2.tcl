@@ -20,7 +20,7 @@ db_transaction {
     foreach synonym_id [db_list check_synonyms_for_delete [subst {
         select s.synonym_id
         from category_synonyms s, categories c
-        where s.synonym_id in ([join $synonym_id ,])
+        where s.synonym_id in ([ns_dbquotelist $synonym_id])
         and c.category_id = s.category_id
         and acs_permission.permission_p(c.tree_id,:user_id,'category_tree_write') = 't'
         and s.synonym_p = 't'

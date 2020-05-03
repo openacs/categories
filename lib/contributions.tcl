@@ -117,7 +117,7 @@ if {$category ne ""} {
 }
 
 if {$packages ne ""} {
-    append restrict "\nand o.package_id in ([join $packages ,])"
+    append restrict "\nand o.package_id in ([ns_dbquotelist $packages])"
 }
 
 # JCDXXX: TODO: need to get the dimension to display, need to find the right CoP, permissions

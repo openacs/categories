@@ -318,7 +318,7 @@ namespace eval category_tree {
             select tree_id, subtree_category_id, assign_single_p,
                    require_category_p, widget
             from category_tree_map
-            where object_id in ([join $object_id_list ", "])
+            where object_id in ([ns_dbquotelist $object_id_list])
         }] {
             lappend result [list $tree_id [get_name $tree_id $locale] $subtree_category_id $assign_single_p $require_category_p $widget]
         }
