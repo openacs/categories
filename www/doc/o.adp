@@ -116,7 +116,7 @@ begin
             operation_name =&gt; 'PageUrl',
             operation_desc =&gt; 'Returns the package specific url to a page
 that displays an object',
-            operation_iscachable_p =&gt; 'f',
+            operation_iscacheable_p =&gt; 'f',
             operation_nargs =&gt; 1,
             operation_inputtype =&gt; 'AcsObject.PageUrl.InputType',
             operation_outputtype =&gt; 'AcsObject.PageUrl.OutputType'
