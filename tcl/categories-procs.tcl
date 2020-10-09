@@ -315,12 +315,12 @@ ad_proc -public category::get_id {
     @return the category id or empty string if no category was found
     @author Lee Denison (lee@xarg.co.uk)
 } {
-    return [db_list get_category_id {
-        select object_id
-        from acs_objects
-        where title = :name
-        and object_type = 'category'
-    }]
+    return [db_string get_category_id {
+        select category_id
+        from category_translations
+        where name = :name
+        and locale = :locale
+    } -default ""]
 }
 
 ad_proc -public category::reset_translation_cache { } {
@@ -570,11 +570,11 @@ ad_proc -public category::get_id_by_object_title {
     @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
 } {
     return [db_string get_category_id {
-        select category_id
-        from category_translations
-        where name = :name
-        and locale = :locale
-    } -default ""]
+        select object_id
+        from acs_objects
+        where title = :title
+        and object_type = 'category'
+    }]
 }
 
 ad_proc -public category::get_object_context { object_id } {
