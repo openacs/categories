@@ -6,10 +6,12 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case \
-    -procs {category_tree::add} \
-    category_tree_add {
-    Test the category_tree::add proc.
+aa_register_case -procs {
+        category_tree::add
+    } -cats {
+        api
+    } category_tree_add {
+        Test the category_tree::add proc.
 } {    
 
     aa_run_with_teardown \
@@ -27,13 +29,13 @@ aa_register_case \
         }
 }
 
-aa_register_case \
-    -procs {
+aa_register_case -procs {
         category_tree::add
         category::add
-    } \
-    category_add {
-    Test the category::add proc.
+    } -cats {
+        api
+    } category_add {
+        Test the category::add proc.
 } {    
 
     aa_run_with_teardown \
@@ -57,14 +59,14 @@ aa_register_case \
         }
 }
 
-aa_register_case \
-    -procs {
+aa_register_case -procs {
         category::add
         category::delete
         category_tree::add
-    } \
-    category_delete {
-    Test the category::delete proc.
+    } -cats {
+        api
+    } category_delete {
+        Test the category::delete proc.
 } {    
 
     aa_run_with_teardown \
