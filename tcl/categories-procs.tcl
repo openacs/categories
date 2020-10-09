@@ -382,7 +382,7 @@ ad_proc -public category::get_name {
 
     @param category_id  category_id or list of category_id's for which to get the name.
     @param locale       language in which to get the name. [ad_conn locale] used by default.
-    @return list of names corresponding to the list of category_id's supplied.
+    @return list of names corresponding to the supplied category_id.
     @author Timo Hentschel (timo@timohentschel.de)
 } {
     if {[nsv_names categories] eq "" ||
