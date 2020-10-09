@@ -294,13 +294,13 @@ ad_proc -public category::get_mapped_categories_multirow {
                category_translations ct,
                acs_objects ao,
                acs_objects aot
-	    where co.object_id = :object_id
-	     and co.category_id = c.category_id
-	     and c.category_id = ao.object_id
-	     and c.category_id = ct.category_id
-	     and aot.object_id = co.tree_id
-	     and ct.locale = :locale
-	    order by aot.title, ao.title
+         where co.object_id = :object_id
+           and co.category_id = c.category_id
+           and c.category_id = ao.object_id
+           and c.category_id = ct.category_id
+           and aot.object_id = co.tree_id
+           and ct.locale = :locale
+         order by aot.title, ao.title
     }
 }
 
@@ -454,11 +454,11 @@ ad_proc -public category::get_children {
     @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
 } {
     return [db_list get_children_ids {
-		select category_id
-		from categories
-		where parent_id = :category_id
-        and deprecated_p = 'f'
-        order by tree_id, left_ind
+        select category_id
+          from categories
+         where parent_id = :category_id
+           and deprecated_p = 'f'
+      order by tree_id, left_ind
     }]
 }
 
