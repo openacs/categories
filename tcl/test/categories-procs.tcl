@@ -181,7 +181,7 @@ aa_register_case -procs {
         dict for { name id } $children {
             aa_equals "Check category by id" "[category::get_name $id]" "$name"
         }
-        aa_equals "Chec categories by ids" \
+        aa_equals "Check categories by ids" \
             "[lsort [category::get_names [dict values $children]]]" \
             "[lsort [dict keys $children]]"
     }
