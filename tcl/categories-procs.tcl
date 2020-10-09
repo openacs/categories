@@ -318,7 +318,7 @@ ad_proc -public category::get_id {
     return [db_list get_category_id {
         select object_id
         from acs_objects
-        where title = :title
+        where title = :name
         and object_type = 'category'
     }]
 }
