@@ -12,12 +12,12 @@ aa_register_case -procs {
         api
     } category_tree_add {
         Test the category_tree::add proc.
-} {    
+} {
 
     aa_run_with_teardown \
         -rollback \
         -test_code {
-           
+
             #Create tree
             set tree_id [category_tree::add -name "foo"]
 
@@ -36,12 +36,12 @@ aa_register_case -procs {
         api
     } category_add {
         Test the category::add proc.
-} {    
+} {
 
     aa_run_with_teardown \
         -rollback \
         -test_code {
-           
+
             #Create tree
             set tree_id [category_tree::add -name "foo"]
 
@@ -67,12 +67,12 @@ aa_register_case -procs {
         api
     } category_delete {
         Test the category::delete proc.
-} {    
+} {
 
     aa_run_with_teardown \
         -rollback \
         -test_code {
- 
+
             #Create tree
             set tree_id [category_tree::add -name "foo"]
 
@@ -84,7 +84,7 @@ aa_register_case -procs {
 
             # Delete category
             category::delete -batch_mode $category_id
-            
+
             set success_p [db_string success_p {
                 select 0 from categories where category_id = :category_id
             } -default "1"]
