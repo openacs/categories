@@ -202,6 +202,176 @@ aa_register_case -procs {
     }
 }
 
+aa_register_case -procs {
+        category_tree::add
+        category_tree::get_name
+        category_tree::get_data
+        category_tree::get_id
+        category_tree::get_id_by_object_title
+        category_tree::get_categories
+        category_tree::map
+        category_tree::get_mapped_trees
+        category_tree::get_mapped_trees_from_object_list
+        category_tree::edit_mapping
+        category_tree::unmap
+        category_tree::copy
+        category_tree::update
+        category_tree::delete
+    } -cats {
+        api
+    } category_tree_procs {
+        Test different category_tree procs.
+} {
+    aa_run_with_teardown -rollback -test_code {
+        #
+        # Create tree
+        #
+        set tree_name foo
+        set tree_description "Just a dummy category tree"
+        set tree_site_wide_p f
+        set tree_id [category_tree::add \
+                        -description $tree_description \
+                        -site_wide_p  $tree_site_wide_p \
+                        -name $tree_name]
+        aa_log "Category tree: $tree_name $tree_id"
+        #
+        # Create root category
+        #
+        set root_category_id [category::add \
+                                 -tree_id $tree_id \
+                                 -parent_id "" \
+                                 -name $tree_name]
+        aa_log "Root category: $root_category_id"
+        #
+        # Create children categories
+        #
+        set children {bar1 "" bar2 "" bar3 ""}
+        dict for { name id } $children {
+            set category_id [category::add \
+                                -tree_id $tree_id \
+                                -parent_id $root_category_id \
+                                -description "My category $name" \
+                                -name $name]
+            dict set children $name $category_id
+            aa_log "New children category: $name $category_id"
+        }
+        #
+        # Create a couple of objects
+        #
+        set object_id_1 [package_instantiate_object acs_object]
+        set object_id_2 [package_instantiate_object acs_object]
+        set object_ids [list $object_id_1 $object_id_2]
+        aa_log "New objects: $object_id_1 $object_id_2"
+        #
+        # Get name
+        #
+        aa_equals "Check category tree name" \
+                    "[category_tree::get_name $tree_id]" $tree_name
+        #
+        # Get data
+        #
+        aa_equals "Check category tree data" \
+                    "[category_tree::get_data $tree_id]" \
+                    "description {$tree_description} tree_name $tree_name site_wide_p $tree_site_wide_p"
+        #
+        # Get ID by name/title
+        #
+        aa_equals "Check category tree ID by name" \
+                    "[category_tree::get_id $tree_name]" $tree_id
+        aa_equals "Check category tree ID by object title" \
+                    "[category_tree::get_id_by_object_title -title $tree_name]" \
+                    $tree_id
+        #
+        # Get root categories of a tree
+        #
+        aa_equals "Check root categories of a tree" \
+                    "[category_tree::get_categories -tree_id $tree_id]" \
+                    "$root_category_id"
+        #
+        # Map category tree to an object
+        #
+        category_tree::map -tree_id $tree_id -object_id $object_id_1
+        category_tree::map -tree_id $tree_id -object_id $object_id_2
+        aa_equals "Check mapped category trees of an object" \
+            "[lindex [category_tree::get_mapped_trees $object_id_1] 0 0]" \
+            "$tree_id"
+        foreach mapped_trees [category_tree::get_mapped_trees_from_object_list $object_ids] {
+            aa_equals "Check mapped category trees of an object list" \
+                "[lindex $mapped_trees 0 0]" "$tree_id"
+        }
+        #
+        # Edit mapping
+        #
+        category_tree::edit_mapping \
+            -tree_id $tree_id \
+            -object_id $object_id_1 \
+            -assign_single_p t \
+            -require_category_p t
+        set assign_single_p     [lindex [category_tree::get_mapped_trees $object_id_1] 0 3]
+        set require_category_p  [lindex [category_tree::get_mapped_trees $object_id_1] 0 4]
+        aa_equals "Check edited mapped category trees of an object" \
+            "assign_single_p: $assign_single_p require_category_p: $require_category_p" \
+            "assign_single_p: t require_category_p: t"
+        category_tree::edit_mapping \
+            -tree_id $tree_id \
+            -object_id $object_id_1 \
+            -assign_single_p f \
+            -require_category_p f
+        set assign_single_p     [lindex [category_tree::get_mapped_trees $object_id_1] 0 3]
+        set require_category_p  [lindex [category_tree::get_mapped_trees $object_id_1] 0 4]
+        aa_equals "Check edited mapped category trees of an object" \
+            "assign_single_p: $assign_single_p require_category_p: $require_category_p" \
+            "assign_single_p: f require_category_p: f"
+        #
+        # Unmap
+        #
+        category_tree::unmap -tree_id $tree_id -object_id $object_id_1
+        category_tree::unmap -tree_id $tree_id -object_id $object_id_2
+        aa_equals "Check unmapped category trees of an object" \
+            "[category_tree::get_mapped_trees $object_id_1]" ""
+        aa_equals "Check unmapped category trees of an object list" \
+            "[category_tree::get_mapped_trees_from_object_list $object_ids]" ""
+        #
+        # Copy
+        #
+        set copy_tree_name "bar"
+        set copy_tree_description "Copied tree"
+        set copy_tree_id [category_tree::add \
+                        -description $copy_tree_description \
+                        -site_wide_p f \
+                        -name $copy_tree_name]
+        aa_log "Category tree: $copy_tree_name $copy_tree_id"
+        category_tree::copy -source_tree $tree_id -dest_tree $copy_tree_id
+        set copy_root_category_id [category_tree::get_categories -tree_id $copy_tree_id]
+        aa_equals "Check copied category tree root name" \
+                    "[category::get_name $copy_root_category_id]" "$tree_name"
+        aa_equals "Check copied category children" \
+                     "[lsort [category::get_names [category::get_children \
+                                -category_id $copy_root_category_id]]]" \
+                     "[lsort [dict keys $children]]"
+        #
+        # Update
+        #
+        set new_description "The new description"
+        set new_name "The new name"
+        category_tree::update \
+            -tree_id $copy_tree_id \
+            -name $new_name \
+            -description $new_description
+        aa_equals "Check updated category tree data" \
+                    "[category_tree::get_data $copy_tree_id]" \
+                    "description {$new_description} tree_name {$new_name} site_wide_p f"
+        #
+        # Delete
+        #
+        aa_true "Check category tree before deletion" \
+            [category_tree::exists_p $copy_tree_id]
+        category_tree::delete $copy_tree_id
+        aa_false "Check category tree after deletion" \
+            [category_tree::exists_p $copy_tree_id]
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
