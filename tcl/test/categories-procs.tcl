@@ -2,8 +2,35 @@ ad_library {
     Automated tests.
 
     @author Simon Carstensen
+    @author Héctor Romojaro <hector.romojaro@gmail.com>
     @creation-date 15 November 2003
     @cvs-id $Id$
+}
+
+ad_proc -private category_tree::exists_p {
+    tree_id
+} {
+    Checks if category tree exists directly in the DB.
+
+    @param tree_id
+    @return 1 if exists, 0 if doesn't
+} {
+    return [db_0or1row tree_exists {
+        select 1 from category_trees where tree_id = :tree_id
+    }]
+}
+
+ad_proc -private category::exists_p {
+    category_id
+} {
+    Checks if category exists directly in the DB.
+
+    @param category_id
+    @return 1 if exists, 0 if doesn't
+} {
+    return [db_0or1row category_exists {
+        select 1 from categories where category_id = :category_id
+    }]
 }
 
 aa_register_case -procs {
@@ -20,12 +47,8 @@ aa_register_case -procs {
 
             #Create tree
             set tree_id [category_tree::add -name "foo"]
-
-            set success_p [db_string success_p {
-                select 1 from category_trees where tree_id = :tree_id
-            } -default "0"]
-
-            aa_equals "tree was created successfully" $success_p 1
+            aa_true "tree was created successfully" \
+                [category_tree::exists_p $tree_id]
         }
 }
 
@@ -50,12 +73,8 @@ aa_register_case -procs {
                                  -tree_id $tree_id \
                                  -parent_id "" \
                                  -name "foo"]
-
-            set success_p [db_string success_p {
-                select 1 from categories where category_id = :category_id
-            } -default "0"]
-
-            aa_equals "category was created successfully" $success_p 1
+            aa_true "category was created successfully" \
+                [category::exists_p $category_id]
         }
 }
 
@@ -84,12 +103,8 @@ aa_register_case -procs {
 
             # Delete category
             category::delete -batch_mode $category_id
-
-            set success_p [db_string success_p {
-                select 0 from categories where category_id = :category_id
-            } -default "1"]
-
-            aa_equals "category was deleted successfully" $success_p 1
+            aa_false "category was deleted successfully" \
+                [category::exists_p $category_id]
         }
 }
 
