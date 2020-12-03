@@ -15,12 +15,12 @@ ad_form -name catass -form {
     {container_id:integer(hidden)
         {value $container_id}
     }
-} 
+}
 category::ad_form::add_widgets -container_object_id $container_id -form_name catass
-ad_form -extend -name catass -on_submit { 
+ad_form -extend -name catass -on_submit {
     ns_log Notice "JCD: trees [category_tree::get_mapped_trees $container_id]"
     set category_ids [category::ad_form::get_categories -container_object_id $container_id]
-    ns_log Notice "JCD: mapping $category_ids" 
+    ns_log Notice "JCD: mapping $category_ids"
     category::map_object \
         -object_id $object_id \
         $category_ids
