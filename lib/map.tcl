@@ -1,9 +1,11 @@
-if {![info exists object_id] || $object_id eq ""} {
-    ad_complain "You must specify an item to map"
-}
-
-if {![info exists container_id] || $container_id eq ""} {
-    ad_complain "You must specify a container to map the object to"
+ad_include_contract {
+    UI to map an object to a container
+} {
+    object_id:integer,notnull
+    container_id:integer,notnull
+} -errors {
+    object_id {You must specify an item to map}
+    container_id {You must specify a container to map the object to}
 }
 
 ad_form -name catass -form {
