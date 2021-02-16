@@ -34,11 +34,12 @@ ad_proc -private category::exists_p {
 }
 
 aa_register_case -procs {
-        category_tree::add
-    } -cats {
-        api
-    } category_tree_add {
-        Test the category_tree::add proc.
+    category_tree::add
+    category_tree::exists_p
+} -cats {
+    api
+} category_tree_add {
+    Test the category_tree::add proc.
 } {
 
     aa_run_with_teardown \
@@ -53,12 +54,13 @@ aa_register_case -procs {
 }
 
 aa_register_case -procs {
-        category_tree::add
-        category::add
-    } -cats {
-        api
-    } category_add {
-        Test the category::add proc.
+    category_tree::add
+    category::add
+    category::exists_p
+} -cats {
+    api
+} category_add {
+    Test the category::add proc.
 } {
 
     aa_run_with_teardown \
@@ -79,13 +81,14 @@ aa_register_case -procs {
 }
 
 aa_register_case -procs {
-        category::add
-        category::delete
-        category_tree::add
-    } -cats {
-        api
-    } category_delete {
-        Test the category::delete proc.
+    category::add
+    category::delete
+    category_tree::add
+    category::exists_p
+} -cats {
+    api
+} category_delete {
+    Test the category::delete proc.
 } {
 
     aa_run_with_teardown \
@@ -203,24 +206,30 @@ aa_register_case -procs {
 }
 
 aa_register_case -procs {
-        category_tree::add
-        category_tree::get_name
-        category_tree::get_data
-        category_tree::get_id
-        category_tree::get_id_by_object_title
-        category_tree::get_categories
-        category_tree::map
-        category_tree::get_mapped_trees
-        category_tree::get_mapped_trees_from_object_list
-        category_tree::edit_mapping
-        category_tree::unmap
-        category_tree::copy
-        category_tree::update
-        category_tree::delete
-    } -cats {
-        api
-    } category_tree_procs {
-        Test different category_tree procs.
+    category_tree::add
+    category_tree::get_name
+    category_tree::get_data
+    category_tree::get_id
+    category_tree::get_id_by_object_title
+    category_tree::get_categories
+    category_tree::map
+    category_tree::get_mapped_trees
+    category_tree::get_mapped_trees_from_object_list
+    category_tree::edit_mapping
+    category_tree::unmap
+    category_tree::copy
+    category_tree::update
+    category_tree::delete
+    category::add
+    category::get_children
+    category::get_name
+    category::get_names
+    category_tree::exists_p
+    package_instantiate_object
+} -cats {
+    api
+} category_tree_procs {
+    Test different category_tree procs.
 } {
     aa_run_with_teardown -rollback -test_code {
         #
