@@ -19,7 +19,6 @@ ad_page_contract {
     page_title:onevalue
     context_bar:onevalue
     trees:multirow
-    url_vars:onevalue
     form_vars:onevalue
     object_count:onevalue
     page_count:onevalue
@@ -36,7 +35,6 @@ set user_id [auth::require_login]
 set page_title "Browse categories"
 
 set context_bar [list "Browse categories"]
-set url_vars [export_vars {tree_ids:multiple category_ids:multiple subtree_p letter join package_id}]
 set form_vars [export_vars -form {tree_ids:multiple orderby subtree_p letter package_id}]
 
 set tree_ids [db_list check_permissions_on_trees [subst {
@@ -61,7 +59,13 @@ foreach tree_id $tree_ids {
 	if {$level>1} {
 	    set indent "[string repeat "&nbsp;" [expr {2*$level -4}]].."
 	}
-	template::multirow append trees $tree_id $tree_name $category_id $category_name $indent [info exists category_selected($category_id)]
+	template::multirow append trees \
+            $tree_id \
+            $tree_name \
+            $category_id \
+            $category_name \
+            $indent \
+            [info exists category_selected($category_id)]
     }
 }
 
