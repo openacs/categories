@@ -14,7 +14,7 @@ ad_page_contract {
     {subtree_p:boolean,optional f}
     {letter:optional all}
     {join:optional or}
-    package_id:naturalnum,optional
+    {package_id:naturalnum,optional ""}
 } -properties {
     page_title:onevalue
     context_bar:onevalue
@@ -39,22 +39,15 @@ set context_bar [list "Browse categories"]
 set url_vars [export_vars {tree_ids:multiple category_ids:multiple subtree_p letter join package_id}]
 set form_vars [export_vars -form {tree_ids:multiple orderby subtree_p letter package_id}]
 
-db_transaction {
-    # use temporary table to use only bind vars in queries
-    foreach tree_id $tree_ids {
-	db_dml insert_tmp_category_trees ""
-    }
-    set tree_ids [db_list check_permissions_on_trees {
-      select t.tree_id
-      from category_trees t, category_temp tmp
-      where (
-         t.site_wide_p = 't'
-         or acs_permission.permission_p(t.tree_id, :user_id, 'category_tree_read')
-      )
-      and t.tree_id = tmp.category_id
-    }]
-}
-db_dml delete_tmp_category_trees ""
+set tree_ids [db_list check_permissions_on_trees [subst {
+  select t.tree_id
+  from category_trees t
+  where (
+     t.site_wide_p = 't'
+     or acs_permission.permission_p(t.tree_id, :user_id, 'category_tree_read')
+  )
+  and t.tree_id in ([ns_dbquotelist $tree_ids])
+}]]
 
 template::multirow create trees tree_id tree_name category_id category_name indent selected_p
 template::util::list_to_lookup $category_ids category_selected
@@ -72,35 +65,6 @@ foreach tree_id $tree_ids {
     }
 }
 
-template::list::create -name items_list -multirow items \
-    -html {align center} \
-    -elements {
-	object_name {
-	    label "Object Name"
-	    display_template {
-		<a href="/o/@items.object_id@">@items.object_name@</a>
-	    }
-	    orderby {n.object_name}
-	}
-	instance_name {
-	    label "Package"
-	    display_template {
-		<a href="/o/@items.package_id@">@items.instance_name@</a>
-	    }
-	    html {align right}
-	}
-	package_type {
-	    label "Package Type"
-	    html {align right}
-	}
-	creation_date {
-	    label "Creation Date"
-	    html {align right}
-	}
-    } \
-    -filters {subtree_p {} letter {} tree_ids {}}
-
-set order_by_clause [template::list::orderby_clause -orderby -name items_list]
 
 set dimensional_def {
     {subtree_p "Categorization" f {
@@ -144,27 +108,14 @@ ns_set delkey $form page
 ns_set delkey $form button
 set dimension_bar [ad_dimensional $dimensional_def categories-browse $form]
 
-# generate sql for selecting object names beginning with selected letter
-switch -exact $letter {
-    other {
-	set letter_sql [db_map other_letter]
-    }
-    all {
-	set letter_sql ""
-    }
-    default {
-	set bind_letter "$letter%"
-	set letter_sql [db_map regular_letter]
-    }
-}
-
-if {[info exists package_id]} {
-    set package_sql [db_map package_objects]
-} else {
-    set package_sql ""
-}
-
 set category_ids_length [llength $category_ids]
+if {$category_ids_length == 0} {
+    set category_clause "(select category_id from categories
+                           where tree_id in ([ns_dbquotelist $tree_ids]))"
+} else {
+    set category_clause ([ns_dbquotelist $category_ids])
+}
+
 if {$join eq "and"} {
     # combining categories with and
     if {$subtree_p == "t"} {
@@ -185,48 +136,76 @@ if {$join eq "and"} {
     }
 }
 
-set p_name "browse_categories"
-request create
-request set_param page -datatype integer -value 1
+set rows_per_page 20
 
-db_transaction {
-    # use temporary table to use only bind vars in queries
-    foreach category_id $category_ids {
-	db_dml insert_tmp_categories ""
-    }
+template::list::create \
+    -name items_list \
+    -multirow items \
+    -key object_id \
+    -page_size $rows_per_page \
+    -page_groupsize 10 \
+    -page_flush_p true \
+    -page_query {
+        select n.object_id
+          from acs_objects n, ($subtree_sql) s
+         where n.object_id = s.object_id
+           and acs_permission.permission_p(n.object_id, :user_id, 'read')
+           and (:package_id is null or n.package_id = :package_id)
+           and (:letter = 'all' or
+                (:letter = 'other' and (upper(n.title) < 'A' or upper(n.title) > 'Z')) or
+                upper(n.title) like :letter || '%'
+               )
+        [template::list::orderby_clause -orderby -name items_list]
+    } \
+    -elements {
+	object_name {
+	    label "Object Name"
+            link_url_col object_url
+	    orderby {n.title}
+	}
+	instance_name {
+	    label "Package"
+            link_url_col package_url
+	    html {align right}
+	}
+	package_type {
+	    label "Package Type"
+	    html {align right}
+	}
+	creation_date {
+	    label "Creation Date"
+	    html {align right}
+	}
+    } \
+    -filters {subtree_p {} letter {} tree_ids {}}
 
-    # execute query to count objects and pages
-    # apisano: this particular statement contains $ variables, so it
-    # cannot be passed by name to the paginator, or such variables
-    # won't be resolved correctly insite the machinery.  Just compute
-    # the sql text here and pass it as is.    
-    set sql [subst {
-      select n.object_id
-      from acs_named_objects n, ($subtree_sql) s
-      where n.object_id = s.object_id
-      and   acs_permission.permission_p(n.object_id, :user_id, 'read')
-      $letter_sql
-      $package_sql
-    }]
-    paginator create -- $p_name $sql -pagesize 20 -groupsize 10 -contextual -timeout 0
 
-    set first_row [paginator get_row $p_name $page]
-    set last_row [paginator get_row_last $p_name $page]
-
-    # execute query to get the objects on current page
-    db_multirow items get_categorized_objects {} {}
+# execute query to get the objects on current page
+db_multirow -extend {
+    object_url
+    package_url
+} items get_categorized_objects [subst {
+    select n.object_id,
+           n.title as object_name,
+           n.creation_date,
+           t.pretty_name as package_type,
+           n.package_id,
+           p.instance_name
+      from acs_objects n,
+           apm_packages p,
+           apm_package_types t
+     where p.package_id = n.package_id
+       and t.package_key = p.package_key
+       [template::list::page_where_clause -name items_list -and]
+       [template::list::orderby_clause -orderby -name items_list]
+}] {
+    set object_url /o/${object_id}
+    set package_url /o/${package_id}
 }
-db_dml delete_tmp_category_trees ""
 
-paginator get_display_info $p_name info $page
-set group [paginator get_group $p_name $page]
-paginator get_context $p_name pages [paginator get_pages $p_name $group]
-paginator get_context $p_name groups [paginator get_groups $p_name $group 10]
+set object_count [template::list::get_rowcount -name items_list]
+set page_count [expr {int($object_count / $rows_per_page) + 1}]
 
-set object_count [paginator get_row_count $p_name]
-set page_count [paginator get_page_count $p_name]
-
-ad_return_template
 
 # Local variables:
 #    mode: tcl
