@@ -221,6 +221,7 @@ aa_register_case -procs {
     category_tree::update
     category_tree::delete
     category::add
+    category::count_children
     category::get_children
     category::get_name
     category::get_names
@@ -358,6 +359,8 @@ aa_register_case -procs {
                      "[lsort [category::get_names [category::get_children \
                                 -category_id $copy_root_category_id]]]" \
                      "[lsort [dict keys $children]]"
+        aa_equals "Count category children" \
+            [category::count_children -category_id $copy_root_category_id] 3
         #
         # Update
         #
