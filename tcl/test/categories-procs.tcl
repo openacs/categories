@@ -222,6 +222,7 @@ aa_register_case -procs {
     category_tree::delete
     category::add
     category::count_children
+    category::change_parent
     category::get_children
     category::get_name
     category::get_names
@@ -361,6 +362,17 @@ aa_register_case -procs {
                      "[lsort [dict keys $children]]"
         aa_equals "Count category children" \
             [category::count_children -category_id $copy_root_category_id] 3
+        #
+        # Change parent (make bar1 parent of bar2)
+        #
+        set bar1_id [dict get $children bar1]
+        set bar2_id [dict get $children bar2]
+        category::change_parent \
+            -category_id $bar1_id \
+            -tree_id $copy_tree_id \
+            -parent_id $bar2_id
+        aa_equals "Check new parent category children" \
+                    "[category::get_children -category_id $bar2_id]" "$bar1_id"
         #
         # Update
         #
