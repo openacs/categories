@@ -226,8 +226,11 @@ aa_register_case -procs {
     category::get_children
     category::get_name
     category::get_names
+    category::relation::add_meta_category
+    category::relation::get_meta_categories
     category_tree::exists_p
     package_instantiate_object
+    relation::get_object_one
 } -cats {
     api
 } category_tree_procs {
@@ -373,6 +376,24 @@ aa_register_case -procs {
             -parent_id $bar2_id
         aa_equals "Check new parent category children" \
                     "[category::get_children -category_id $bar2_id]" "$bar1_id"
+        #
+        # Create a meta category from bar1 and bar2
+        #
+        set user_info [acs::test::user::create]
+        set user_id [dict get $user_info user_id]
+        set user_meta_category_id [category::relation::add_meta_category \
+            -category_id_one $bar1_id \
+            -category_id_two $bar2_id \
+            -user_id $user_id]
+        set meta_category_id [relation::get_object_one \
+                -rel_type "user_meta_category_rel" \
+                -object_id_two $user_id]
+        aa_log "New meta category $meta_category_id from $bar1_id and $bar2_id"
+        aa_equals "Check categories from a meta category" \
+            "[lsort [category::relation::get_meta_categories \
+                        -rel_id $meta_category_id]]" \
+            "[lsort [list $bar1_id $bar2_id]]"
+
         #
         # Update
         #
