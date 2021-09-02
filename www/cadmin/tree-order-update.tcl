@@ -22,7 +22,7 @@ db_transaction {
     db_foreach get_tree "" {
         incr count 10
         if {$parent_id eq ""} {
-            # need this as an anchor for toplevel categories
+            # need this as an anchor for top-level categories
             set parent_id -1
         }
         if {[info exists sort_key($category_id)]} {
@@ -36,7 +36,7 @@ db_transaction {
     set count 1
     set stack [list]
     set done_list [list]
-    # put toplevel categories on stack
+    # put top-level categories on stack
     if {[info exists child(-1)]} {
         set stack [lsort -integer -index 0 $child(-1)]
     }
