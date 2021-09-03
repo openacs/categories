@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/categories {Categories}} {Requirements}</property>
+<property name="context">{/doc/categories/ {Categories}} {Requirements}</property>
 <property name="doc(title)">Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

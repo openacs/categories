@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/categories {Categories}} {Categories}</property>
+<property name="context">{/doc/categories/ {Categories}} {Categories}</property>
 <property name="doc(title)">Categories</property>
 <master>
 <div class="article" lang="en">

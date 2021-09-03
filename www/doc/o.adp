@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/categories {Categories}} {IdHandler Service Contract}</property>
+<property name="context">{/doc/categories/ {Categories}} {IdHandler Service Contract}</property>
 <property name="doc(title)">IdHandler Service Contract</property>
 <master>
 <h2>IdHandler Service Contract</h2>
@@ -8,13 +8,13 @@ Besides displaying the names of objects, some pages also want to
 provide links to the objects. Unfortunately, there currently is no
 way to do so.
 <p>First, we need to know that package_id of the package
-responsible for the object, then we would need to figure out the url
-to that package instance. This can be done, but then we would need the
-local url to the page being able to display a certain object. Since
-a package may have more than one type of objects (i.e. file
-folders, files, file versions), we can not simply store additional
-package information about which page to call to display an
-object.</p>
+responsible for the object, then we would need to figure out the
+url to that package instance. This can be done, but even then we
+would need the local url to the page being able to display a
+certain object. Since a package may have more than one type of
+objects (i.e. file folders, files, file versions), we can not
+simply store additional package information about which page to
+call to display an object.</p>
 <p>The solution to this kind of problem is by not resolving the url
 at all during display-time, but doing so at the time the user
 actually wants to see an object. The links would simply direct to

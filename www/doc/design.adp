@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/categories {Categories}} {Categories}</property>
+<property name="context">{/doc/categories/ {Categories}} {Categories}</property>
 <property name="doc(title)">Categories</property>
 <master>
 <h2>Categories</h2>
@@ -36,8 +36,7 @@ The mapped subtree will consist of all subcategories of the
 category the user selected - the category itself will not be
 included. Note that the mapped subtree will not be a new tree.
 Therefore, this option should be used only if an admin plans to use
-the subtree as-is and has no intention of making changes
-to it.</p>
+the subtree as-is and has no intention of making changes to it.</p>
 <p>An alternative solution is available for admins who want to
 create a tree by copying one of the existing trees and subsequently
 playing around with it (moving/adding/deleting categories). To
