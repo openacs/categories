@@ -3,8 +3,11 @@ ad_page_contract {
     @author Timo Hentschel (timo@timohentschel.de)
 
 } {
-    {change_locale:boolean "t"}
     {locale:word "[ad_conn locale]"}
+}
+
+if {![info exists change_locale]} {
+    set change_locale t
 }
 
 if {$locale eq ""} {
