@@ -161,8 +161,13 @@ ad_proc -public template::widget::category {
             if { $require_category_p == "f" } {
                 set one_tree [linsert $one_tree 0 [list "" ""]]
             }
-	    # we default to the select widget unless the valid option of radio was provided
-	    ns_log notice "template::widget::menu $element(name) $one_tree $mapped_categories [array get attributes] $element(mode) $widget $display_widget [info exists element(display_widget)]"
+            #
+	    # We default to the select widget unless the valid option
+	    # of radio was provided.
+            #
+	    #ns_log notice "template::widget::menu $element(name) $one_tree $mapped_categories" \
+                "[array get attributes] $element(mode) $widget $display_widget" \
+                [info exists element(display_widget)]
 
 	    if { $widget eq "radio" && ![info exists element(display_widget)] } {
 		# checkbox was specified at mapping and the display widget was not explicitly defined code
