@@ -1,37 +1,27 @@
-# Display the site contributions
-# If user_id set it will be limited by that user otherwise all users.
-# if limit set then only limit items will be displayed.
-# if root_node_id exists then only return things under root node.
+ad_include_contract {
+    Display the site contributions
+    If user_id set it will be limited by that user otherwise all users.
+    If limit set then only limit items will be displayed.
+    If root_node_id exists then only return things under root node.
+} {
+    {user_id:integer ""}
+    {category:integer ""}
+    {suppress:multiple ""}
+    {limit:naturalnum ""}
+    {format:token table}
+}
+
 set root_node_id [ad_conn node_id]
 
-if {![info exists user_id]} {
-    set user_id {}
-}
-if {![info exists category]} {
-    set category {}
-}
-if {[info exists suppress]} {
-    foreach key $suppress { 
-        set hide($key) 1
-    }
+foreach key $suppress {
+    set hide($key) 1
 }
 
-if {[info exists limit]
-    && [regexp {^[0-9]+$} $limit]} { 
+if {$limit ne ""} {
     set limit " limit $limit"
-} else { 
-    set limit {}
 }
 
-if {![info exists format]} {
-    set format table
-}
-
-if {[info exists root_node_id]} {
-    set packages [subsite::util::packages -node_id $root_node_id]
-} else {
-    set packages {}
-}
+set packages [subsite::util::packages -node_id $root_node_id]
 
 lappend elements object_title {
     label {Title}
