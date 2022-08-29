@@ -23,7 +23,7 @@ ad_proc -public install::xml::action::load-categories { node } {
     switch -exact $format {
         simple {
             set tree_id [category_tree::xml::import_from_file \
-                -site_wide=[template::util::is_true $site_wide_p] \
+                -site_wide=[string is true -strict $site_wide_p] \
                 [acs_root_dir]$src]
         }
         default {

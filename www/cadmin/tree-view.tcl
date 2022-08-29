@@ -67,7 +67,7 @@ multirow foreach one_tree {
 	set parent_url [export_vars -no_empty -base category-parent-change { category_id tree_id locale object_id ctx_id}]
 	set links_view_url [export_vars -no_empty -base category-links-view { category_id tree_id locale object_id ctx_id}]
 	set synonyms_view_url [export_vars -no_empty -base synonyms-view { category_id tree_id locale object_id ctx_id}]
-	if { [template::util::is_true $deprecated_p] } {
+	if { [string is true -strict $deprecated_p] } {
 	    set phase_in_url [export_vars -no_empty -base category-phase-in { category_id tree_id locale object_id ctx_id}]
 	} else {
 	    set phase_out_url [export_vars -no_empty -base category-phase-out { category_id tree_id locale object_id ctx_id}]
