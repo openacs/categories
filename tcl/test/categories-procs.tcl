@@ -425,6 +425,93 @@ aa_register_case -procs {
     }
 }
 
+aa_register_case -procs {
+    category::map_object
+    category::get_mapped_categories
+    category::get_mapped_categories_multirow
+} -cats {
+    api smoke
+} category_object_mapping {
+    Test api to map a category to an object
+} {
+    aa_run_with_teardown -rollback -test_code {
+        set one_object_id [db_string q {select max(object_id) from acs_objects}]
+
+        aa_section "Create tree"
+        set tree_name foo
+        set tree_description "Just a dummy category tree"
+        set tree_site_wide_p f
+        set tree_id [category_tree::add \
+                        -description $tree_description \
+                        -site_wide_p  $tree_site_wide_p \
+                        -name $tree_name]
+        aa_log "Category tree: $tree_name $tree_id"
+        aa_section "Create root category"
+        set root_category_id [category::add \
+                                 -tree_id $tree_id \
+                                 -parent_id "" \
+                                  -name $tree_name]
+
+        aa_log "Root category: $root_category_id"
+        #
+        # Create children categories
+        #
+        set children {bar1 "" bar2 "" bar3 ""}
+        dict for { name id } $children {
+            set category_id [category::add \
+                                -tree_id $tree_id \
+                                -parent_id $root_category_id \
+                                -description "My category $name" \
+                                -name $name]
+            dict set children $name $category_id
+            aa_log "New children category: $name $category_id"
+        }
+
+        aa_section "Map categories"
+        set categories [list \
+                            $root_category_id \
+                            {*}[dict values $children]]
+        category::map_object \
+            -object_id $one_object_id \
+            $categories
+
+        set mapped_categories [category::get_mapped_categories $one_object_id]
+        aa_equals "Api retrieves the expected mapped categories" \
+            [lsort $categories] [lsort $mapped_categories]
+
+        set mapped_categories [category::get_mapped_categories -tree_id $tree_id $one_object_id]
+        aa_equals "Api retrieves the expected mapped categories also by tree" \
+            [lsort $categories] [lsort $mapped_categories]
+
+        category::get_mapped_categories_multirow -multirow __test_category_map $one_object_id
+        aa_true "The multirow was created" \
+            [template::multirow exists __test_category_map]
+        aa_equals "The multirow has the same size as the mapped categories" \
+            [template::multirow size __test_category_map] [llength $mapped_categories]
+        template::multirow sort __test_category_map category_id
+        set i 0
+        template::multirow foreach __test_category_map {
+            aa_equals "Category in the multirow corresponds to that from the list" \
+                $category_id [lindex $mapped_categories $i]
+            incr i
+        }
+
+        aa_section "Unmap categories"
+        category::map_object \
+            -remove_old \
+            -object_id $one_object_id \
+            {}
+
+        aa_equals "Mappings were deleted" \
+            [llength [category::get_mapped_categories $one_object_id]] 0
+        aa_equals "Mappings were deleted also by tree" \
+            [llength [category::get_mapped_categories -tree_id $tree_id $one_object_id]] 0
+        category::get_mapped_categories_multirow -multirow __test_category_map $one_object_id
+        aa_equals "The multirow has size 0" \
+            [template::multirow size __test_category_map] 0
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
