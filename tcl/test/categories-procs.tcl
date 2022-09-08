@@ -85,6 +85,7 @@ aa_register_case -procs {
     category::delete
     category_tree::add
     category::exists_p
+    category::flush_translation_cache
 } -cats {
     api
 } category_delete {
@@ -95,19 +96,26 @@ aa_register_case -procs {
         -rollback \
         -test_code {
 
-            #Create tree
+            aa_section "Create tree"
             set tree_id [category_tree::add -name "foo"]
 
-            # Create category
+            aa_section "Create category"
             set category_id [category::add \
                                  -tree_id $tree_id \
                                  -parent_id "" \
                                  -name "foo"]
 
-            # Delete category
+            aa_section "Delete category (batch)"
             category::delete -batch_mode $category_id
             aa_false "category was deleted successfully" \
                 [category::exists_p $category_id]
+            aa_true "Cache entry was not flushed" \
+                {[category::get_name $category_id] ne ""}
+
+            aa_section "Flush cache"
+            category::flush_translation_cache $category_id
+            aa_false "Cache entry was flushed" \
+                {[category::get_name $category_id] ne ""}
         }
 }
 
