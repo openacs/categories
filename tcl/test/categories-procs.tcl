@@ -454,6 +454,7 @@ aa_register_case -procs {
     category::get_mapped_categories
     category::get_mapped_categories_multirow
     category::get_objects
+    category::get_object_context
 } -cats {
     api smoke
 } category_object_mapping {
@@ -475,6 +476,10 @@ aa_register_case -procs {
                                -title "One Item" \
                                -content_type content_revision \
                                -text {some text}]
+
+        aa_equals "Object context for the object is as expected" \
+            [list "/o/$one_object_id" [acs_object_name $one_object_id]] \
+            [category::get_object_context $one_object_id]
 
         aa_section "Create tree"
         set tree_name foo
