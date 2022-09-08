@@ -286,8 +286,7 @@ ad_proc -public category::get_mapped_categories_multirow {
     @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
 } {
     if { $locale eq ""} {set locale [ad_conn locale]}
-    upvar $multirow mapped_categories
-    db_multirow mapped_categories select {
+    db_multirow $multirow select {
         select co.tree_id, aot.title, c.category_id, ao.title
           from category_object_map_tree co,
                categories c,
