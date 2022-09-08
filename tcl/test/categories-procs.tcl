@@ -429,13 +429,28 @@ aa_register_case -procs {
     category::map_object
     category::get_mapped_categories
     category::get_mapped_categories_multirow
+    category::get_objects
 } -cats {
     api smoke
 } category_object_mapping {
     Test api to map a category to an object
 } {
     aa_run_with_teardown -rollback -test_code {
-        set one_object_id [db_string q {select max(object_id) from acs_objects}]
+
+        #
+        # We need a content item to test category::get_objects later
+        #
+        set folder_id [content::folder::new \
+                           -label "One folder" \
+                           -name __category_object_mapping_folder]
+        content::folder::register_content_type \
+            -folder_id $folder_id  -content_type "content_revision"
+        set one_object_id [content::item::new \
+                               -name __category_object_mapping \
+                               -parent_id $folder_id \
+                               -title "One Item" \
+                               -content_type content_revision \
+                               -text {some text}]
 
         aa_section "Create tree"
         set tree_name foo
@@ -475,9 +490,15 @@ aa_register_case -procs {
             -object_id $one_object_id \
             $categories
 
+        aa_section "Check mappings"
+
         set mapped_categories [category::get_mapped_categories $one_object_id]
         aa_equals "Api retrieves the expected mapped categories" \
             [lsort $categories] [lsort $mapped_categories]
+
+        set mapped_categories [category::get_mapped_categories -tree_id $one_object_id $one_object_id]
+        aa_equals "Api retrieves 0 categories if the tree is wrong" \
+            [llength $mapped_categories] 0
 
         set mapped_categories [category::get_mapped_categories -tree_id $tree_id $one_object_id]
         aa_equals "Api retrieves the expected mapped categories also by tree" \
@@ -495,6 +516,26 @@ aa_register_case -procs {
                 $category_id [lindex $mapped_categories $i]
             incr i
         }
+
+        foreach category_id $categories {
+            set object_ids [category::get_objects -category_id $category_id]
+            aa_equals "Getting the object from one of the mapped categories '$category_id' returns our object" \
+                $object_ids $one_object_id
+            set object_ids [category::get_objects -category_id $category_id -content_type content_revision]
+            aa_equals "Getting the content_revision objects from one of the mapped categories '$category_id' returns our object" \
+                $object_ids $one_object_id
+            set object_ids [category::get_objects -category_id $category_id -object_type content_item]
+            aa_equals "Getting the content_item objects from one of the mapped categories '$category_id' returns our object" \
+                $object_ids $one_object_id
+
+            set object_ids [category::get_objects -category_id $category_id -content_type text/plain]
+            aa_equals "Getting the text/plain objects from one of the mapped categories '$category_id' returns nothing" \
+                [llength $object_ids] 0
+            set object_ids [category::get_objects -category_id $category_id -object_type user]
+            aa_equals "Getting the user objects from one of the mapped categories '$category_id' returns nothing" \
+                [llength $object_ids] 0
+        }
+
 
         aa_section "Unmap categories"
         category::map_object \
