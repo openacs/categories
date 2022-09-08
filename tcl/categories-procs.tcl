@@ -620,7 +620,7 @@ ad_proc -private category::context_bar { tree_id locale object_id {ctx_id ""}} {
     return $context_bar
 }
 
-ad_proc category::pageurl { object_id } {
+ad_proc -private category::pageurl { object_id } {
     Returns the page that displays a category.
     To be used by the AcsObject.PageUrl service contract.
 
