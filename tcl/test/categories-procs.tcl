@@ -82,40 +82,64 @@ aa_register_case -procs {
 
 aa_register_case -procs {
     category::add
+    category::get_name
+    category::get
+    category::update
     category::delete
     category_tree::add
     category::exists_p
     category::flush_translation_cache
 } -cats {
     api
-} category_delete {
-    Test the category::delete proc.
+} category_crud {
+    Test the CRUD operations on a category.
 } {
 
     aa_run_with_teardown \
         -rollback \
         -test_code {
 
+            set locale it_IT
+
             aa_section "Create tree"
-            set tree_id [category_tree::add -name "foo"]
+            set tree_id [category_tree::add \
+                             -name "foo" -locale $locale]
 
             aa_section "Create category"
             set category_id [category::add \
                                  -tree_id $tree_id \
                                  -parent_id "" \
+                                 -locale $locale \
                                  -name "foo"]
+
+            aa_equals "Name is right" \
+                [category::get_name $category_id $locale] foo
+
+            aa_section "Update category"
+            category::update \
+                -category_id $category_id \
+                -name boo \
+                -locale $locale \
+                -description something
+            set attrs [category::get \
+                           -category_id $category_id \
+                           -locale $locale]
+            aa_equals "name is as expected" \
+                [dict get $attrs name] boo
+            aa_equals "Description is as expected" \
+                [dict get $attrs description] something
 
             aa_section "Delete category (batch)"
             category::delete -batch_mode $category_id
             aa_false "category was deleted successfully" \
                 [category::exists_p $category_id]
-            aa_true "Cache entry was not flushed" \
-                {[category::get_name $category_id] ne ""}
+            aa_equals "Cache entry was not flushed" \
+                [category::get_name $category_id $locale] boo
 
             aa_section "Flush cache"
             category::flush_translation_cache $category_id
             aa_false "Cache entry was flushed" \
-                {[category::get_name $category_id] ne ""}
+                {[category::get_name $category_id $locale] ne ""}
         }
 }
 
