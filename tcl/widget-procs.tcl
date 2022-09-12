@@ -1,11 +1,12 @@
-# Category widgets for the ArsDigita Templating System
+ad_library {
+    Category widgets for the ArsDigita Templating System
 
-# Author: Timo Hentschel (timo@timohentschel.de)
-#
+    @author Timo Hentschel (timo@timohentschel.de)
 
-# This is free software distributed under the terms of the GNU Public
-# License.  Full text of the license is available from the GNU Project:
-# http://www.fsf.org/copyleft/gpl.html
+    This is free software distributed under the terms of the GNU Public
+    License.  Full text of the license is available from the GNU Project:
+    http://www.fsf.org/copyleft/gpl.html
+}
 
 namespace eval template {}
 namespace eval template::widget {}
@@ -200,6 +201,8 @@ ad_proc -public template::data::validate::category {
     value_ref
     message_ref
 } {
+    Validates the value of a category widget.
+
     @author Timo Hentschel (timo@timohentschel.de)
 } {
 
@@ -228,6 +231,9 @@ ad_proc -public template::data::validate::category {
 ad_proc -public template::data::transform::category {
     element_ref
 } {
+    Transform the value from the form request into the widget internal
+    representation.
+
     @author Timo Hentschel (timo@timohentschel.de)
 } {
     upvar $element_ref element
