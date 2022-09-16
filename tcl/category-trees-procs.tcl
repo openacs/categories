@@ -581,7 +581,7 @@ namespace eval category_tree {
         return [lindex [get_translation $tree_id $locale] 0]
     }
 
-    ad_proc pageurl { object_id } {
+    ad_proc -private pageurl { object_id } {
         Returns the page that displays a category tree
         To be used by the AcsObject.PageUrl service contract.
 

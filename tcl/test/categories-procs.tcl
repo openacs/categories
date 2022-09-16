@@ -582,6 +582,49 @@ aa_register_case -procs {
     }
 }
 
+aa_register_case -procs {
+    category::pageurl
+    category_tree::pageurl
+} -cats {
+    api smoke
+} AcsObject_service_contract_implementations {
+    Test api implementing the AcsObject service contract
+} {
+    aa_run_with_teardown -rollback -test_code {
+        aa_section "Create tree"
+        set tree_name foo
+        set tree_description "Just a dummy category tree"
+        set tree_site_wide_p f
+        set tree_id [category_tree::add \
+                         -description $tree_description \
+                         -site_wide_p $tree_site_wide_p \
+                         -name $tree_name]
+        aa_log "Category tree: $tree_name $tree_id"
+        aa_section "Create root category"
+        set category_id [category::add \
+                             -tree_id $tree_id \
+                             -parent_id "" \
+                             -name $tree_name]
+
+        set link [acs_sc::invoke \
+                      -contract AcsObject \
+                      -operation PageUrl \
+                      -impl category_idhandler \
+                      -call_args [list $category_id]]
+        aa_equals "category_idhandler.PageUrl"\
+            $link "categories-browse?tree_ids=$tree_id&category_ids=$category_id"
+
+        set link [acs_sc::invoke \
+                      -contract AcsObject \
+                      -operation PageUrl \
+                      -impl category_tree_idhandler \
+                      -call_args [list $tree_id]]
+        aa_equals "category_tree_idhandler.PageUrl" \
+            $link "categories-browse?tree_ids=$tree_id"
+    }
+}
+
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
