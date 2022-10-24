@@ -78,9 +78,7 @@ template::list::create \
 	}
 	delete {
 	    sub_class narrow
-	    display_template {
-		<img src="/resources/acs-subsite/Delete16.gif" height="16" width="16" alt="Delete" style="border:0">
-	    }
+	    display_template {<adp:icon name="trash" title="Delete">}
 	    link_url_col delete_url
 	    link_html { title "Delete synonym" }
 	}
