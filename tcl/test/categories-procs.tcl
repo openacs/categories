@@ -34,6 +34,144 @@ ad_proc -private category::exists_p {
 }
 
 aa_register_case -procs {
+    category_tree::import
+    category_tree::exists_p
+    category_tree::get_translation
+    category_tree::xml::import
+    category_tree::xml::import_from_file
+} -cats {
+    api
+} category_tree_import {
+    Test the import api
+} {
+
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+
+            aa_section "Tcl Import"
+
+            set tree_id [category_tree::import \
+                             -name regions \
+                             -description {regions and states} \
+                             -categories {
+                                 1 europe
+                                 2 germany
+                                 2 {united kingdom}
+                                 2 france
+                                 1 asia
+                                 2 china
+                                 1 {north america}
+                                 2 {united states}
+                             }]
+
+            aa_true "tree was created successfully" \
+                [category_tree::exists_p $tree_id]
+
+            aa_equals "category_tree::get_translation returns expected" \
+                [category_tree::get_translation $tree_id] \
+                {regions {regions and states}}
+
+            aa_true "Category 'europe' exists" [db_0or1row check {
+                select c.category_id as europe_category_id
+                from categories c, category_translations t
+                where c.category_id = t.category_id
+                  and c.parent_id is null
+                  and t.locale = 'en_US'
+                  and t.name = 'europe'
+            }]
+
+            aa_true "Category 'germany' is a child of 'europe'" [db_0or1row check {
+                select 1
+                from categories c, category_translations t
+                where c.category_id = t.category_id
+                  and c.parent_id = :europe_category_id
+                  and t.locale = 'en_US'
+                  and t.name = 'germany'
+            }]
+
+            aa_equals "Tree has 8 categories" \
+                [db_string count {
+                    select count(*) from categories
+                    where tree_id = :tree_id
+                }] \
+                8
+
+            aa_section "XML Import"
+
+            set xml {<?xml version="1.0"?>
+                <tree>
+                   <translation locale="en_US">
+                      <name>A tree</name>
+                      <description>I am a tree</description>
+                   </translation>
+                   <translation locale="it_IT">
+                      <name>Un albero</name>
+                      <description>Io sono un albero</description>
+                   </translation>
+                   <category>
+                      <translation locale="en_US">
+                         <name>A category</name>
+                         <description>I am a category</description>
+                      </translation>
+                      <translation locale="it_IT">
+                         <name>Una categoria</name>
+                         <description>Io sono una categoria</description>
+                      </translation>
+                   </category>
+                   <category>
+                      <translation locale="en_US">
+                         <name>Another category</name>
+                         <description>I am another category</description>
+                      </translation>
+                      <translation locale="it_IT">
+                         <name>Un'altra categoria</name>
+                         <description>Io sono un'altra categoria</description>
+                      </translation>
+                      <category>
+                         <translation locale="en_US">
+                            <name>A child category</name>
+                            <description>I am a child category</description>
+                         </translation>
+                         <translation locale="it_IT">
+                            <name>Una categoria figlia</name>
+                            <description>Io sono una categoria figlia</description>
+                         </translation>
+                      </category>
+                   </category>
+                </tree>
+            }
+
+            set wfd [ad_opentmpfile tmpfile]
+            puts -nonewline $wfd $xml
+            close $wfd
+
+            set tree_id [category_tree::xml::import_from_file -site_wide $tmpfile]
+
+            file delete -- $tmpfile
+
+            aa_true "tree was created successfully" \
+                [category_tree::exists_p $tree_id]
+
+            aa_equals "category_tree::get_translation returns expected" \
+                [category_tree::get_translation $tree_id en_US] \
+                {{A tree} {I am a tree}}
+
+            aa_equals "category_tree::get_translation returns expected" \
+                [category_tree::get_translation $tree_id it_IT] \
+                {{Un albero} {Io sono un albero}}
+
+            aa_equals "Tree has 3 categories" \
+                [db_string count {
+                    select count(*) from categories
+                    where tree_id = :tree_id
+                }] \
+                3
+
+        }
+}
+
+aa_register_case -procs {
     category_tree::add
     category_tree::exists_p
     category::add
