@@ -89,6 +89,9 @@ aa_register_case -procs {
     category_tree::add
     category::exists_p
     category::flush_translation_cache
+    category::phase_in
+    category::phase_out
+    category::get_children
 } -cats {
     api
 } category_crud {
@@ -128,6 +131,47 @@ aa_register_case -procs {
                 [dict get $attrs name] boo
             aa_equals "Description is as expected" \
                 [dict get $attrs description] something
+
+            set category_child_1 [category::add \
+                                      -tree_id $tree_id \
+                                      -parent_id $category_id \
+                                      -locale $locale \
+                                      -name "foo child 1"]
+            set category_child_2 [category::add \
+                                      -tree_id $tree_id \
+                                      -parent_id $category_id \
+                                      -locale $locale \
+                                      -name "foo child 2"]
+
+            aa_equals "Category '$category_id' has 2 visible children" \
+                [llength [category::get_children -category_id $category_id]] \
+                2
+
+            aa_log "Phase out child '$category_child_1'"
+            category::phase_out $category_child_1
+
+            aa_equals "Category '$category_id' has 1 visible child" \
+                [llength [category::get_children -category_id $category_id]] \
+                1
+
+            aa_log "Phase out child '$category_child_2'"
+            category::phase_out $category_child_2
+
+            aa_equals "Category '$category_id' has 0 visible children" \
+                [llength [category::get_children -category_id $category_id]] \
+                0
+
+            aa_log "Phase children back in"
+            category::phase_in $category_child_1
+            category::phase_in $category_child_2
+
+            aa_equals "Category '$category_id' has 2 visible children again" \
+                [llength [category::get_children -category_id $category_id]] \
+                2
+
+            aa_log "Delete children"
+            category::delete $category_child_1
+            category::delete $category_child_2
 
             aa_section "Delete category (batch)"
             category::delete -batch_mode $category_id
