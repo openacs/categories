@@ -465,6 +465,7 @@ aa_register_case -procs {
     category_tree::update
     category_tree::flush_translation_cache
     category_tree::delete
+    category_tree::usage
     category::add
     category::count_children
     category::change_parent
@@ -558,6 +559,22 @@ aa_register_case -procs {
             aa_equals "Check mapped category trees of an object list" \
                 "[lindex $mapped_trees 0 0]" "$tree_id"
         }
+
+        set user_id [ad_conn user_id]
+        aa_equals "category_tree::usage returns expected" \
+            [category_tree::usage $tree_id] \
+            [db_list_of_lists category_tree_usage {
+                select t.pretty_plural, n.object_id, n.title, p.package_id,
+                       p.instance_name,
+                       acs_permission.permission_p(n.object_id, :user_id, 'read') as read_p
+                from category_tree_map m, acs_objects n,
+                     apm_packages p, apm_package_types t
+                where m.tree_id = :tree_id
+                and n.object_id = m.object_id
+                and p.package_id = n.package_id
+                and t.package_key = p.package_key
+        }]
+
         #
         # Edit mapping
         #
