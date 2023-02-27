@@ -165,6 +165,10 @@ aa_register_case -procs {
     category::phase_in
     category::phase_out
     category::get_children
+    category_tree::update
+    category_tree::reset_cache
+    category_tree::get_tree
+    category_tree::get_translation
 } -cats {
     api
 } category_crud {
@@ -180,6 +184,15 @@ aa_register_case -procs {
             aa_section "Create tree"
             set tree_id [category_tree::add \
                              -name "foo" -locale $locale]
+
+            category_tree::update \
+                -tree_id $tree_id \
+                -locale de_DE \
+                -name föö \
+                -description Descriptiön
+            aa_equals "category_tree::get_translation returns expected" \
+                [category_tree::get_translation $tree_id de_DE] \
+                [list "föö" "Descriptiön"]
 
             aa_section "Create category"
             set category_id [category::add \
@@ -233,6 +246,25 @@ aa_register_case -procs {
             aa_equals "Category '$category_id' has 0 visible children" \
                 [llength [category::get_children -category_id $category_id]] \
                 0
+
+            aa_equals "category_tree::get_tree returns expected (pre-flush)" \
+                [category_tree::get_tree -all $tree_id] \
+                [list \
+                     [list $category_id foo f 1] \
+                     [list $category_child_1 {foo child 1} f 2] \
+                     [list $category_child_2 {foo child 2} f 2] \
+                    ]
+
+            aa_log "Flush cache"
+            category_tree::reset_cache
+
+            aa_equals "category_tree::get_tree returns expected (post-flush)" \
+                [category_tree::get_tree -all $tree_id] \
+                [list \
+                     [list $category_id foo f 1] \
+                     [list $category_child_1 {foo child 1} t 2] \
+                     [list $category_child_2 {foo child 2} t 2] \
+                    ]
 
             aa_log "Phase children back in"
             category::phase_in $category_child_1
