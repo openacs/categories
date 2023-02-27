@@ -169,6 +169,7 @@ aa_register_case -procs {
     category_tree::reset_cache
     category_tree::get_tree
     category_tree::get_translation
+    category_tree::get_multirow
 } -cats {
     api
 } category_crud {
@@ -233,6 +234,35 @@ aa_register_case -procs {
                 [llength [category::get_children -category_id $category_id]] \
                 2
 
+            category_tree::get_multirow \
+                -tree_id $tree_id \
+                -datasource __test_category_crud
+
+            aa_true "Multirow __test_category_crud exists" \
+                [::template::multirow exists __test_category_crud]
+            aa_equals "Multirow __test_category_crud has 3 rows" \
+                [::template::multirow size __test_category_crud] \
+                3
+            set result [list]
+            ::template::multirow -unclobber foreach __test_category_crud {
+                lappend result \
+                    $tree_id \
+                    $tree_name \
+                    $category_id \
+                    $category_name \
+                    $level \
+                    $pad \
+                    $deprecated_p \
+                    $count \
+                    $child_sum
+            }
+            aa_equals "Multirow returns expected" \
+                [list \
+                     $tree_id foo $category_id foo 1 {} f 0 0 \
+                     $tree_id foo $category_child_1 {foo child 1} 2 .. f 0 0 \
+                     $tree_id foo $category_child_2 {foo child 2} 2 .. f 0 0] \
+                $result
+
             aa_log "Phase out child '$category_child_1'"
             category::phase_out $category_child_1
 
@@ -265,6 +295,16 @@ aa_register_case -procs {
                      [list $category_child_1 {foo child 1} t 2] \
                      [list $category_child_2 {foo child 2} t 2] \
                     ]
+
+            category_tree::get_multirow \
+                -tree_id $tree_id \
+                -datasource __test_category_crud
+
+            aa_true "Multirow __test_category_crud exists" \
+                [::template::multirow exists __test_category_crud]
+            aa_equals "Multirow __test_category_crud has 1 row (phased out categories skipped)" \
+                [::template::multirow size __test_category_crud] \
+                1
 
             aa_log "Phase children back in"
             category::phase_in $category_child_1
