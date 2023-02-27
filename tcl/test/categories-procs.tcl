@@ -686,6 +686,8 @@ aa_register_case -procs {
     category::get_objects
     category::get_object_context
     category_tree::get_trees
+    category::tagcloud::get_tags
+    category::tagcloud::tagcloud
 } -cats {
     api smoke
 } category_object_mapping {
@@ -785,6 +787,24 @@ aa_register_case -procs {
         aa_equals "category_tree::get_trees returns expected" \
             [category_tree::get_trees $one_object_id] \
             [list $tree_id]
+
+        set cloud_tags [category::tagcloud::get_tags -tree_id $tree_id]
+        aa_equals "category::tagcloud::get_tags returns expected" \
+            [lsort -index 0 $cloud_tags] \
+            [list \
+                 [list $root_category_id 1 $tree_name] \
+                 [list [lindex $categories 1] 1 "bar1"] \
+                 [list [lindex $categories 2] 1 "bar2"] \
+                 [list [lindex $categories 3] 1 "bar3"] \
+                ]
+
+        set tag_cloud [category::tagcloud::tagcloud -tree_id $tree_id]
+        set rgxp <.*
+        foreach tag $cloud_tags {
+            append rgxp [join $tag .*].*
+        }
+        append rgxp >
+        aa_true "Tagcloud looks like '$rgxp'" [regexp $rgxp $tag_cloud]
 
         foreach category_id $categories {
             set object_ids [category::get_objects -category_id $category_id]
