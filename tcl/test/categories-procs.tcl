@@ -106,6 +106,54 @@ aa_register_case -procs {
 }
 
 aa_register_case -procs {
+    category_tree::add
+    category::add
+    category_link::add
+    category_link::delete
+} -cats {
+    api
+} category_link {
+    Test the category::link api
+} {
+    aa_run_with_teardown \
+        -rollback \
+        -test_code {
+
+            set tree_id_1 [category_tree::add -name "foo"]
+
+            set category_id_1 [category::add \
+                                   -tree_id $tree_id_1 \
+                                   -parent_id "" \
+                                   -name "foo cat"]
+
+            set tree_id_2 [category_tree::add -name "bar"]
+
+            set category_id_2 [category::add \
+                                 -tree_id $tree_id_2 \
+                                   -parent_id "" \
+                                   -name "bar cat"]
+
+            set link_id [category_link::add \
+                             -from_category_id $category_id_1 \
+                             -to_category_id $category_id_2]
+
+            aa_true "Link was created" [db_0or1row check {
+                select 1 from category_links
+                where link_id = :link_id
+                and from_category_id = :category_id_1
+                and to_category_id = :category_id_2
+            }]
+
+            category_link::delete $link_id
+
+            aa_false "Link was deleted" [db_0or1row check {
+                select 1 from category_links
+                where link_id = :link_id
+            }]
+        }
+}
+
+aa_register_case -procs {
     category::add
     category::get_name
     category::get
