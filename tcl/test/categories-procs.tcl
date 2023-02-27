@@ -36,31 +36,16 @@ ad_proc -private category::exists_p {
 aa_register_case -procs {
     category_tree::add
     category_tree::exists_p
-} -cats {
-    api
-} category_tree_add {
-    Test the category_tree::add proc.
-} {
-
-    aa_run_with_teardown \
-        -rollback \
-        -test_code {
-
-            #Create tree
-            set tree_id [category_tree::add -name "foo"]
-            aa_true "tree was created successfully" \
-                [category_tree::exists_p $tree_id]
-        }
-}
-
-aa_register_case -procs {
-    category_tree::add
     category::add
     category::exists_p
+    category_synonym::add
+    category_synonym::search
+    category_synonym::edit
+    category_synonym::delete
 } -cats {
     api
-} category_add {
-    Test the category::add proc.
+} category_synonyms {
+    Test the category::synonym api
 } {
 
     aa_run_with_teardown \
@@ -69,14 +54,54 @@ aa_register_case -procs {
 
             #Create tree
             set tree_id [category_tree::add -name "foo"]
+
+            aa_true "tree was created successfully" \
+                [category_tree::exists_p $tree_id]
 
             # Create category
             set category_id [category::add \
                                  -tree_id $tree_id \
                                  -parent_id "" \
                                  -name "foo"]
+
             aa_true "category was created successfully" \
                 [category::exists_p $category_id]
+
+            set synonym_id [category_synonym::add \
+                                -name foobar \
+                                -category_id $category_id]
+
+            aa_true "Synonym was created" [db_0or1row check {
+                select 1 from category_synonyms
+                where synonym_id = :synonym_id
+                and category_id = :category_id
+                and name = 'foobar'
+            }]
+
+            set query_id [category_synonym::search -search_text foo]
+
+            aa_true "Query was created" [db_0or1row check {
+                select 1 from category_search_results
+                where synonym_id = :synonym_id
+                and query_id = :query_id
+            }]
+
+            category_synonym::edit \
+                -synonym_id $synonym_id \
+                -name barfoo
+            aa_true "Synonym was updated" [db_0or1row check {
+                select 1 from category_synonyms
+                where synonym_id = :synonym_id
+                and category_id = :category_id
+                and name = 'barfoo'
+            }]
+
+            category_synonym::delete $synonym_id
+            aa_false "Synonym was deleted" [db_0or1row check {
+                select 1 from category_synonyms
+                where synonym_id = :synonym_id
+            }]
+
         }
 }
 
