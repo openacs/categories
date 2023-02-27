@@ -25,7 +25,7 @@ namespace eval category_tree {
 	    from category_trees
 	    where tree_id = :tree_id
         }]
-        lassign [get_translation $tree_id $locale] tree(tree_name) tree(description)
+        lassign [category_tree::get_translation $tree_id $locale] tree(tree_name) tree(description)
         return [array get tree]
     }
 
@@ -148,8 +148,8 @@ namespace eval category_tree {
         set creation_user [ad_conn user_id]
         set creation_ip [ad_conn peeraddr]
         db_exec_plsql copy_tree ""
-        flush_cache $dest_tree
-        flush_translation_cache $dest_tree
+        category_tree::flush_cache $dest_tree
+        category_tree::flush_translation_cache $dest_tree
         category::reset_translation_cache
     }
 
@@ -197,7 +197,7 @@ namespace eval category_tree {
             }
         }
 
-        flush_translation_cache $tree_id
+        category_tree::flush_translation_cache $tree_id
         return $tree_id
     }
 
@@ -241,7 +241,7 @@ namespace eval category_tree {
                 db_exec_plsql update_tree_translation ""
             }
         }
-        flush_translation_cache $tree_id
+        category_tree::flush_translation_cache $tree_id
     }
 
     ad_proc -public delete { tree_id } {
@@ -251,8 +251,8 @@ namespace eval category_tree {
         @author Timo Hentschel (timo@timohentschel.de)
     } {
         db_exec_plsql delete_tree ""
-        flush_cache $tree_id
-        flush_translation_cache $tree_id
+        category_tree::flush_cache $tree_id
+        category_tree::flush_translation_cache $tree_id
         category::reset_translation_cache
     }
 
@@ -320,7 +320,7 @@ namespace eval category_tree {
             from category_tree_map
             where object_id in ([ns_dbquotelist $object_id_list])
         }] {
-            lappend result [list $tree_id [get_name $tree_id $locale] $subtree_category_id $assign_single_p $require_category_p $widget]
+            lappend result [list $tree_id [category_tree::get_name $tree_id $locale] $subtree_category_id $assign_single_p $require_category_p $widget]
         }
 
         return $result
@@ -578,7 +578,7 @@ namespace eval category_tree {
         @param locale language in which to get the name. [ad_conn locale] used by default.
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        return [lindex [get_translation $tree_id $locale] 0]
+        return [lindex [category_tree::get_translation $tree_id $locale] 0]
     }
 
     ad_proc -private pageurl { object_id } {
