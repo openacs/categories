@@ -282,6 +282,28 @@ aa_register_case -procs {
 }
 
 aa_register_case -procs {
+    category::reset_translation_cache
+    category_tree::reset_translation_cache
+} -cats {
+    api
+} category_init_procs {
+    Test initialization behavior: this package will build up certain
+    caches at startup.
+} {
+    set one_tree_id [db_string get_tree {
+        select min(tree_id) from category_trees
+    } -default ""]
+    aa_equals "Tree translations have already been loaded at startup" \
+        [expr {$one_tree_id ne ""}] [nsv_exists category_tree_translations $one_tree_id]
+
+    set one_category_id [db_string get_category {
+        select min(category_id) from categories
+    } -default ""]
+    aa_equals "Categroy translations have already been loaded at startup" \
+        [expr {$one_category_id ne ""}] [nsv_exists categories $one_category_id]
+}
+
+aa_register_case -procs {
     category_tree::add
     category_tree::get_name
     category_tree::get_data
@@ -309,23 +331,11 @@ aa_register_case -procs {
     category_tree::exists_p
     package_instantiate_object
     relation::get_object_one
-    category_tree::reset_translation_cache
 } -cats {
     api
 } category_tree_procs {
     Test different category_tree procs.
 } {
-    #
-    # category_tree::reset_translation_cache should load the tree
-    # translation cache at startup. If we have trees, the cache should
-    # already exist.
-    #
-    set one_tree_id [db_string get_tree {
-        select min(tree_id) from category_trees
-    } -default ""]
-    aa_equals "Trees have already been loaded at startup" \
-        [expr {$one_tree_id ne ""}] [nsv_exists category_tree_translations $one_tree_id]
-
     aa_run_with_teardown -rollback -test_code {
         #
         # Create tree
