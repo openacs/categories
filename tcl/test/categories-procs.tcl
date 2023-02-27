@@ -628,6 +628,7 @@ aa_register_case -procs {
     category::get_mapped_categories_multirow
     category::get_objects
     category::get_object_context
+    category_tree::get_trees
 } -cats {
     api smoke
 } category_object_mapping {
@@ -685,6 +686,11 @@ aa_register_case -procs {
         }
 
         aa_section "Map categories"
+
+        aa_equals "category_tree::get_trees returns expected" \
+            [category_tree::get_trees $one_object_id] \
+            ""
+
         set categories [list \
                             $root_category_id \
                             {*}[dict values $children]]
@@ -718,6 +724,10 @@ aa_register_case -procs {
                 $category_id [lindex $mapped_categories $i]
             incr i
         }
+
+        aa_equals "category_tree::get_trees returns expected" \
+            [category_tree::get_trees $one_object_id] \
+            [list $tree_id]
 
         foreach category_id $categories {
             set object_ids [category::get_objects -category_id $category_id]
