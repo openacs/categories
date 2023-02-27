@@ -251,6 +251,7 @@ aa_register_case -procs {
     category_tree::unmap
     category_tree::copy
     category_tree::update
+    category_tree::flush_translation_cache
     category_tree::delete
     category::add
     category::count_children
