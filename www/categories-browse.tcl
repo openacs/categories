@@ -9,9 +9,9 @@ ad_page_contract {
 } {
     tree_ids:integer,multiple
     {category_ids:integer,multiple,optional ""}
-    {page:integer,optional 1}
+    {page:integer,optional,notnull 1}
     {orderby:token,optional object_name}
-    {subtree_p:boolean,optional f}
+    {subtree_p:boolean,optional,notnull f}
     {letter:optional all}
     {join:optional or}
     {package_id:naturalnum,optional ""}
