@@ -62,12 +62,12 @@
   <msg key="lt_Search_for_a_category">Buscar una categoría</msg>
   <msg key="lt_Select_Trees_for_brow">Seleccionar árboles para examinar</msg>
   <msg key="lt_There_are_instances_w">Hay %instances_without_permission% usos mas de este árbol, pero no tiene permiso para verlos.</msg>
-  <msg key="lt_This_is_a_site_wide_c">Este es un árbol de categorías de todo el sitio &#34;site wide&#34;</msg>
+  <msg key="lt_This_is_a_site_wide_c">Este es un árbol de categorías de todo el sitio &#34;site-wide&#34;</msg>
   <msg key="lt_This_tree_is_not_used">Este árbol no está siendo utilizado.</msg>
   <msg key="lt_This_tree_is_still_us">Este árbol está siendo utilizado todavía por algunos módules. Para una lista completa, por favor vaya a </msg>
   <msg key="lt_To_deselect_or_select">Para seleccionar o deseleccionar múltiples categorías utilice la tecla Control del teclado.</msg>
   <msg key="Make_it_Local">Hacerla local.</msg>
-  <msg key="Make_it_Site-Wide">Hacerla &#34;site wide&#34;</msg>
+  <msg key="Make_it_Site-Wide">Hacerla &#34;site-wide&#34;</msg>
   <msg key="Map_subtree">Mapear subárbol</msg>
   <msg key="Map_this_subtree">Mapear este subárbol</msg>
   <msg key="Map_tree">Mapear árbol</msg>
@@ -91,7 +91,7 @@
   <msg key="Search_string">Buscar palabra</msg>
   <msg key="selected">seleccionada</msg>
   <msg key="single">único</msg>
-  <msg key="SiteWide_tree">Árbol &#34;site wide&#34;</msg>
+  <msg key="SiteWide_tree">Árbol &#34;site-wide&#34;</msg>
   <msg key="This_tree_is_local">Este árbol es local</msg>
   <msg key="Tree_copy">Copiar árbol</msg>
   <msg key="Tree_copy_title">Copiar un árbol en &#34;%tree_name%&#34;</msg>
