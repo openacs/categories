@@ -2,6 +2,10 @@
 <property name="context">{/doc/categories/ {Categories}} {Categories}</property>
 <property name="doc(title)">Categories</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>Categories</h2>
 <a href="o">Object Names and IdHandler Service Contract</a>
 <h3>Functionality overview</h3>
@@ -198,8 +202,7 @@ selected categories (if editing an object):</p>
 
 Alternatively, you can include the following in your adp:
 <pre>
-  &lt;include src="/packages/categories/www/include/widget" object_id=\@object_id\@ package_id=\@package_id\@&gt;
-</pre>
+  &lt;include src="/packages/categories/www/include/widget" object_id=\@object_id\@ package_id=\@package_id\@&gt;</pre>
 
 In the processing part of ad_form use:
 <pre>

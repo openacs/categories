@@ -2,6 +2,10 @@
 <property name="context">{/doc/categories/ {Categories}} {IdHandler Service Contract}</property>
 <property name="doc(title)">IdHandler Service Contract</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <h2>IdHandler Service Contract</h2>
 
 Besides displaying the names of objects, some pages also want to

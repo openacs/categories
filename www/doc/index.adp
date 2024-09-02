@@ -2,6 +2,10 @@
 <property name="context">{/doc/categories/ {Categories}} {Categories}</property>
 <property name="doc(title)">Categories</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <div class="article" lang="en">
 <div class="titlepage"><div><div><h1 class="title">
 <a name="categories" id="categories"></a>Categories</h1></div></div></div><div class="toc"><dl>
