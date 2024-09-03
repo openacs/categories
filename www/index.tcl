@@ -23,7 +23,11 @@ set admin_p [permission::permission_p -object_id $package_id -privilege category
 
 template::multirow create trees tree_ids tree_name site_wide_p short_name
 
-db_foreach get_trees "" {
+db_foreach get_trees {
+    select tree_id, site_wide_p,
+           acs_permission.permission_p(tree_id, :user_id, 'category_tree_read') as has_read_p
+    from category_trees
+} {
     if { $has_read_p == "t" || $site_wide_p == "t" } {
 	set tree_name [category_tree::get_name $tree_id $locale]
 	template::multirow append trees $tree_id $tree_name $site_wide_p

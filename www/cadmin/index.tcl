@@ -6,7 +6,7 @@ ad_page_contract {
     @author Timo Hentschel (timo@timohentschel.de)
     @cvs-id $Id$
 } {
-    {locale ""}
+    {locale:word ""}
 } -properties {
     page_title:onevalue
     context_bar:onevalue
@@ -23,33 +23,33 @@ set package_id [ad_conn package_id]
 
 permission::require_permission -object_id $package_id -privilege category_admin
 
-template::multirow create trees_with_write_permission tree_id tree_name site_wide_p description
-template::multirow create trees_with_read_permission tree_id tree_name site_wide_p description
-
-
-db_foreach trees {} {
-    array unset tree_array
-    array set tree_array [category_tree::get_data $tree_id $locale]
+set trees_with_write_permission [list]
+set trees_with_read_permission  [list]
+db_foreach trees {
+    select tree_id, site_wide_p,
+           acs_permission.permission_p(tree_id, :user_id, 'category_tree_write') as has_write_p,
+           acs_permission.permission_p(tree_id, :user_id, 'category_tree_read') as has_read_p
+      from category_trees
+} {
+    set tree [category_tree::get_data $tree_id $locale]
+    dict set tree tree_id     $tree_id
+    dict set tree site_wide_p $site_wide_p
+    dict set tree view_url    [export_vars -no_empty -base tree-view { tree_id locale }]
 
     if {$has_write_p == "t"} {
-	template::multirow append trees_with_write_permission $tree_id $tree_array(tree_name) $site_wide_p $tree_array(description)
+	lappend trees_with_write_permission $tree
     } elseif { $has_read_p == "t" || $site_wide_p == "t" } {
-	template::multirow append trees_with_read_permission $tree_id $tree_name $site_wide_p $tree_array(description)
+	lappend trees_with_read_permission $tree
     }
 }
 
-multirow extend trees_with_read_permission view_url
-multirow foreach trees_with_read_permission {
-    set view_url [export_vars -no_empty -base tree-view { tree_id locale }]
-}
-multirow sort trees_with_read_permission -dictionary tree_name
+::template::util::list_to_multirow \
+    trees_with_write_permission $trees_with_write_permission
+::template::multirow sort trees_with_write_permission -dictionary tree_name
 
-multirow extend trees_with_write_permission view_url
-multirow foreach trees_with_write_permission {
-    set view_url [export_vars -no_empty -base tree-view { tree_id locale }]
-}
-multirow sort trees_with_write_permission -dictionary tree_name
-
+::template::util::list_to_multirow \
+    trees_with_read_permission $trees_with_read_permission
+::template::multirow sort trees_with_read_permission -dictionary tree_name
 
 set elements {
     tree_name {

@@ -87,8 +87,6 @@ select acs_privilege__drop_privilege('category_tree_read');
 select acs_privilege__drop_privilege('category_tree_grant_permissions');
 
 -- from categories-init
-drop table acs_named_objects;
-select acs_object_type__drop_type('acs_named_object', 't');
 select acs_sc_contract__delete(acs_sc_contract__get_id('AcsObject'));
 select acs_sc_msg_type__delete(acs_sc_msg_type__get_id('AcsObject.PageUrl.InputType'));
 select acs_sc_msg_type__delete(acs_sc_msg_type__get_id('AcsObject.PageUrl.OutputType'));

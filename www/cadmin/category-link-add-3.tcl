@@ -8,7 +8,7 @@ ad_page_contract {
     link_category_id:naturalnum,multiple
     category_id:naturalnum,notnull
     tree_id:naturalnum,notnull
-    {locale ""}
+    {locale:word ""}
     object_id:naturalnum,optional
     ctx_id:naturalnum,optional
 }
@@ -17,7 +17,17 @@ set user_id [auth::require_login]
 permission::require_permission -object_id $tree_id -privilege category_tree_write
 
 db_transaction {
-    foreach link_category_id [db_list check_link_target_permissions ""] {
+    foreach link_category_id [db_list check_link_target_permissions [subst {
+        select c.category_id as link_category_id
+        from categories c
+        where c.category_id in ([ns_dbquotelist $link_category_id])
+        and acs_permission.permission_p(c.tree_id,:user_id,'category_tree_write') = 't'
+        and c.category_id <> :category_id
+        and not exists (select 1
+                        from category_links l
+                        where l.from_category_id = :category_id
+                        and l.to_category_id = c.category_id)
+    }]] {
 	category_link::add -from_category_id $category_id -to_category_id $link_category_id
     }
 } on_error {

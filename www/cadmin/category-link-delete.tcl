@@ -8,7 +8,7 @@ ad_page_contract {
     link_id:naturalnum,multiple
     category_id:naturalnum,notnull
     tree_id:naturalnum,notnull
-    {locale ""}
+    {locale:word ""}
     object_id:naturalnum,optional
     ctx_id:naturalnum,optional
 } -properties {
@@ -37,7 +37,18 @@ lappend context_bar \
 
 multirow create category_links linked_category_id linked_tree_id direction
 
-db_foreach check_category_links "" {
+db_foreach check_category_links [subst {
+    select c.category_id as linked_category_id, c.tree_id as linked_tree_id,
+           (case when l.from_category_id = :category_id then 'f' else 'r' end) as direction,
+           acs_permission.permission_p(c.tree_id,:user_id,'category_tree_write') as write_p,
+           l.link_id
+    from category_links l, categories c
+    where l.link_id in ([ns_dbquotelist $link_id])
+    and ((l.from_category_id = :category_id
+	  and l.to_category_id = c.category_id)
+	 or (l.from_category_id = c.category_id
+	     and l.to_category_id = :category_id))
+}] {
     if {$write_p == "t"} {
 	multirow append category_links $linked_category_id $linked_tree_id $direction
 	lappend allowed_link_ids $link_id

@@ -1,3 +1,10 @@
+ad_include_contract {
+    This include produces a Tcl code snippet that serializes a
+    category tree for import.
+} {
+    tree_id:object_type(category_tree)
+}
+
 set default_locale [lang::system::site_wide_locale]
 
 array set tree [category_tree::get_data $tree_id $default_locale]

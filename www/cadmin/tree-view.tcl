@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     tree_id:naturalnum,notnull
-    {locale ""}
+    {locale:word ""}
     object_id:naturalnum,optional
     ctx_id:naturalnum,optional
 } -properties {
@@ -67,7 +67,7 @@ multirow foreach one_tree {
 	set parent_url [export_vars -no_empty -base category-parent-change { category_id tree_id locale object_id ctx_id}]
 	set links_view_url [export_vars -no_empty -base category-links-view { category_id tree_id locale object_id ctx_id}]
 	set synonyms_view_url [export_vars -no_empty -base synonyms-view { category_id tree_id locale object_id ctx_id}]
-	if { [template::util::is_true $deprecated_p] } {
+	if { [string is true -strict $deprecated_p] } {
 	    set phase_in_url [export_vars -no_empty -base category-phase-in { category_id tree_id locale object_id ctx_id}]
 	} else {
 	    set phase_out_url [export_vars -no_empty -base category-phase-out { category_id tree_id locale object_id ctx_id}]
@@ -122,9 +122,7 @@ if { $can_write_p } {
 
     lappend elements delete {
 	sub_class narrow
-	display_template {
-	    <img src="/resources/acs-subsite/Delete16.gif" height="16" width="16" alt="Delete" style="border:0">
-	}
+	display_template {<adp:icon name="trash" title="Delete">}
 	link_url_col delete_url
 	link_html { title "#categories.Delete_category_link_title#" }
     }

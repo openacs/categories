@@ -1,7 +1,11 @@
 
-<property name="context">{/doc/categories {Categories}} {Requirements}</property>
+<property name="context">{/doc/categories/ {Categories}} {Requirements}</property>
 <property name="doc(title)">Requirements</property>
 <master>
+<style>
+div.sect2 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 16px;}
+div.sect3 > div.itemizedlist > ul.itemizedlist > li.listitem {margin-top: 6px;}
+</style>              
 <include src="/packages/acs-core-docs/lib/navheader"
 			leftLink="install" leftLabel="Prev"
 			title=""

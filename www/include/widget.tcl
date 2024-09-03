@@ -1,15 +1,13 @@
-#
-# author: Timo Hentschel (timo@timohentschel.de)
-#
+ad_include_contract {
 
-if {![info exists object_id]} {
-    set object_id 0
-}
-if {![info exists package_id]} {
-    set package_id [ad_conn package_id]
-}
-if {![info exists name]} {
-    set name category_ids
+    Widget
+
+    @author Timo Hentschel (timo@timohentschel.de)
+
+} {
+    {object_id:object_id 0}
+    {package_id:object_id "[ad_conn package_id]"}
+    {name:word category_ids}
 }
 
 template::multirow create trees tree_id tree_name category_id selected_p category_name indent assign_single_p require_category_p

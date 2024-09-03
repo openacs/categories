@@ -18,7 +18,7 @@ ad_proc -public ::category_tree::xml::import_from_file {
         error {Cannot open file for reading}
     }
 
-    return [import -site_wide=$site_wide_p [::tDOM::xmlReadFile $file]]
+    return [import -site_wide=$site_wide_p [::tdom::xmlReadFile $file]]
 }
 
 ad_proc -public ::category_tree::xml::import {
@@ -34,7 +34,7 @@ ad_proc -public ::category_tree::xml::import {
     # recode site_wide_p to DB-style boolean
     if {$site_wide_p} { set site_wide_p t } else { set site_wide_p f }
 
-    set doc [dom parse $xml]
+    set doc [dom parse -- $xml]
     if {[catch {set root [$doc documentElement]} err]} {
         error "Error parsing XML: $err"
     }

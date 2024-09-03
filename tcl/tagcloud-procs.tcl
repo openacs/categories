@@ -104,7 +104,17 @@ ad_proc -private category::tagcloud::get_tags_no_mem {
     # so we should check for the reader's locale and use that
     # or the default_locale, but ...
 
-    set tag_list [db_list_of_lists tagcloud_get_keys {}]
+    set tag_list [db_list_of_lists tagcloud_get_keys {
+        select category_id, count(com.object_id), min(trans.name)
+           from categories
+	   natural left join category_object_map com
+	   natural join category_trees
+           natural join category_translations trans
+        where tree_id = :tree_id
+	  and trans.locale = :default_locale
+          and acs_permission.permission_p(com.object_id, :user_id, 'read')
+        group by category_id
+    }]
 }
 
 

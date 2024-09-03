@@ -6,7 +6,7 @@ ad_page_contract {
 } {
     tree_id:naturalnum,notnull
     object_id:naturalnum,optional
-    {locale ""}
+    {locale:word ""}
 } -properties {
     page_title:onevalue
     context_bar:onevalue
@@ -28,7 +28,7 @@ lappend context_bar [_ categories.Permissions_manage]
 set url_vars [export_vars {tree_id object_id locale}]
 set package_id [ad_conn package_id]
 set admin_p [permission::permission_p -object_id $package_id -privilege category_admin]
-set sw_tree_p [ad_decode $tree(site_wide_p) f 0 1]
+set sw_tree_p [expr {$tree(site_wide_p) ne "f"}]
 
 ad_return_template
 

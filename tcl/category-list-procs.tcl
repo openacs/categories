@@ -268,7 +268,7 @@ ad_proc -public category::list::prepare_display {
     }
     set valid_tree_ids ""
     foreach tree_id $tree_ids {
-	if {[lsearch -integer $exclude_tree_ids $tree_id] == -1} {
+	if {$tree_id ni $exclude_tree_ids} {
 	    lappend valid_tree_ids $tree_id
 	}
     }

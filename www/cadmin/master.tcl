@@ -1,12 +1,16 @@
-#
-# author: Timo Hentschel (timo@timohentschel.de)
-#
+ad_page_contract {
 
-if { ![info exists change_locale] } {
+    @author Timo Hentschel (timo@timohentschel.de)
+
+} {
+    {locale:word "[ad_conn locale]"}
+}
+
+if {![info exists change_locale]} {
     set change_locale t
 }
 
-if {(![info exists locale] || $locale eq "")} {
+if {$locale eq ""} {
     #set locale [parameter::get -parameter DefaultLocale -default en_US]
     set locale [ad_conn locale]
 }
@@ -15,11 +19,14 @@ set languages [lang::system::get_locale_options]
 set vars_to_export_list {tree_id category_id }
 
 set set_id [ad_conn form]
-set varname_list [ad_ns_set_keys -exclude {
-  tree_id category_id locale form:mode form:id 
-  __confirmed_p __refreshing_p formbutton:ok
-  __submit_button_name __submit_button_value
-} $set_id]
+set varname_list [lmap k [dict keys [ns_set array $set_id]] {
+    if {$k in {
+        tree_id category_id locale form:mode form:id 
+        __confirmed_p __refreshing_p formbutton:ok
+        __submit_button_name __submit_button_value
+    }} continue
+    set k
+}]
 
 foreach name $varname_list {
   set $name [ns_set get $set_id $name]

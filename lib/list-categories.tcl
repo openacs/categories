@@ -1,8 +1,13 @@
-if {![info exists cat]} {
-    set cat ""
+ad_include_contract {
+
+    List categories
+
+} {
+    {cat:integer ""}
+    {orderby:word "object_title"}
 }
 
-if { ![info exists orderby] || $orderby eq "" } {
+if { $orderby eq "" } {
     set orderby "object_title"
 }
 set user_id [ad_conn user_id]

@@ -7,7 +7,7 @@ ad_page_contract {
 } {
     category_id:naturalnum,notnull
     tree_id:naturalnum,notnull
-    {locale ""}
+    {locale:word ""}
     object_id:naturalnum,optional
     {page:integer,optional 1}
     {orderby:token,optional object_name}
@@ -15,7 +15,6 @@ ad_page_contract {
     page_title:onevalue
     context_bar:onevalue
     locale:onevalue
-    url_vars:onevalue
     object_count:onevalue
     page_count:onevalue
     page:onevalue
@@ -34,26 +33,37 @@ if {$tree(site_wide_p) == "f"} {
 set tree_name [category_tree::get_name $tree_id $locale]
 set category_name [category::get_name $category_id $locale]
 set page_title "Objects using category \"$category_name\" of tree \"$tree_name\""
-set url_vars [export_vars -no_empty {category_id tree_id locale object_id}]
 
-set context_bar [category::context_bar $tree_id $locale [expr {[info exists object_id] ? $object_id : ""}]]
+set context_bar [category::context_bar $tree_id $locale \
+                     [expr {[info exists object_id] ? $object_id : ""}]]
 lappend context_bar "\"$category_name\" Usage"
 
-template::list::create -name items_list -multirow items \
-    -html {align center} \
+set rows_per_page 20
+
+template::list::create \
+    -name items_list \
+    -multirow items \
+    -key object_id \
+    -page_size $rows_per_page \
+    -page_groupsize 10 \
+    -page_flush_p true \
+    -page_query {
+        select m.object_id
+          from category_object_map m, acs_objects o
+         where acs_permission.permission_p(m.object_id, :user_id, 'read') = 't'
+           and m.category_id = :category_id
+           and o.object_id = m.object_id
+        [template::list::orderby_clause -orderby -name items_list]
+    } \
     -elements {
 	object_name {
 	    label "Object Name"
-	    display_template {
-		<a href="/o/@items.object_id@">@items.object_name@</a>
-	    }
-	    orderby {n.object_name}
+            link_url_col object_url
+	    orderby {o.title}
 	}
 	instance_name {
 	    label "Package"
-	    display_template {
-		<a href="/o/@items.package_id@">@items.instance_name@</a>
-	    }
+            link_url_col package_url
 	    html {align right}
 	}
 	package_type {
@@ -67,30 +77,31 @@ template::list::create -name items_list -multirow items \
     } \
     -filters {tree_id {} category_id {}}
 
-set order_by_clause [template::list::orderby_clause -orderby -name items_list]
-
-set p_name "category-usage"
-request create
-request set_param page -datatype integer -value 1
-
-# execute query to count objects and pages
-paginator create get_category_usages $p_name "" -pagesize 20 -groupsize 10 -contextual -timeout 0
-
-set first_row [paginator get_row $p_name $page]
-set last_row [paginator get_row_last $p_name $page]
-
 # execute query to get the objects on current page
-db_multirow items get_objects_using_category {} {}
+db_multirow -extend {
+    object_url
+    package_url
+} items get_objects_using_category [subst {
+      select o.object_id,
+             o.title as object_name,
+             o.creation_date,
+	     (select pretty_name
+               from apm_package_types
+              where package_key = p.package_key) as package_type,
+             o.package_id,
+             p.instance_name
+        from acs_objects o,
+             apm_packages p
+       where p.package_id = o.package_id
+       [template::list::page_where_clause -name items_list -and]
+       [template::list::orderby_clause -orderby -name items_list]
+}] {
+    set object_url /o/${object_id}
+    set package_url /o/${package_id}
+}
 
-paginator get_display_info $p_name info $page
-set group [paginator get_group $p_name $page]
-paginator get_context $p_name pages [paginator get_pages $p_name $group]
-paginator get_context $p_name groups [paginator get_groups $p_name $group 10]
-
-set object_count [paginator get_row_count $p_name]
-set page_count [paginator get_page_count $p_name]
-
-ad_return_template
+set object_count [template::list::get_rowcount -name items_list]
+set page_count [expr {int($object_count / $rows_per_page) + 1}]
 
 # Local variables:
 #    mode: tcl

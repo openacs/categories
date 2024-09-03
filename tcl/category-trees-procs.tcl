@@ -20,24 +20,43 @@ namespace eval category_tree {
         @return array: tree_name description site_wide_p
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        db_1row get_tree_data "" -column_array tree
-
-        lassign [get_translation $tree_id $locale] tree(tree_name) tree(description)
+        set tree(site_wide_p) [db_string get_site_wide_p {
+	    select site_wide_p
+	    from category_trees
+	    where tree_id = :tree_id
+        }]
+        lassign [category_tree::get_translation $tree_id $locale] tree(tree_name) tree(description)
         return [array get tree]
     }
 
     ad_proc -public get_categories {
         {-tree_id:required}
+        -locale
     } {
-           returns the main categories of a given tree
+        Return root categories of a given tree
+
+        @param locale sort results by name in specified locale. If a
+        translation in this locale is not available, the one in en_US
+        will be used. When missing, will default to locale of the
+        connection or en_US when we are outside a connection context.
+
+        @return list of category ids
     } {
-        set locale [ad_conn locale]
-        set result [list]
-        set categories [db_list get_categories ""]
-        foreach category_id $categories {
-            lappend result $category_id
+        if {![info exists locale]} {
+            set locale [expr {[ns_conn isconnected] ? [ad_conn locale] : "en_US"}]
         }
-        return $result
+        return [db_list get_categories {
+            select c.category_id
+            from categories c
+                 left join category_translations loct
+                    on c.category_id = loct.category_id and loct.locale = :locale,
+                 category_translations ent
+            where c.category_id = ent.category_id
+              and c.parent_id is null
+              and c.tree_id = :tree_id
+              and ent.locale = 'en_US'
+            order by coalesce(loct.name, ent.name)
+        }]
     }
 
     ad_proc -public map {
@@ -60,7 +79,15 @@ namespace eval category_tree {
                 category to objects.
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        db_exec_plsql map_tree ""
+        db_dml map_tree {
+            insert into category_tree_map
+                   (tree_id,  subtree_category_id,  object_id,  assign_single_p,  require_category_p,  widget)
+            select :tree_id, :subtree_category_id, :object_id, :assign_single_p, :require_category_p, :widget
+            from dual
+            where not exists (select 1 from category_tree_map
+                               where object_id = :object_id
+                                 and tree_id = :tree_id)
+        }
     }
 
     ad_proc -public unmap {
@@ -74,7 +101,11 @@ namespace eval category_tree {
         @option object_id object to unmap the category tree from.
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        db_exec_plsql unmap_tree ""
+        db_dml unmap_tree {
+            delete from category_tree_map
+             where object_id = :object_id
+               and tree_id = :tree_id
+        }
     }
 
     ad_proc -public edit_mapping {
@@ -94,7 +125,14 @@ namespace eval category_tree {
                 category to objects.
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        db_dml edit_mapping ""
+        db_dml edit_mapping {
+            update category_tree_map
+	    set assign_single_p = :assign_single_p,
+                require_category_p = :require_category_p,
+                widget = :widget
+	    where tree_id = :tree_id
+	    and object_id = :object_id
+        }
     }
 
     ad_proc -public copy {
@@ -110,8 +148,8 @@ namespace eval category_tree {
         set creation_user [ad_conn user_id]
         set creation_ip [ad_conn peeraddr]
         db_exec_plsql copy_tree ""
-        flush_cache $dest_tree
-        flush_translation_cache $dest_tree
+        category_tree::flush_cache $dest_tree
+        category_tree::flush_translation_cache $dest_tree
         category::reset_translation_cache
     }
 
@@ -159,7 +197,7 @@ namespace eval category_tree {
             }
         }
 
-        flush_translation_cache $tree_id
+        category_tree::flush_translation_cache $tree_id
         return $tree_id
     }
 
@@ -192,13 +230,18 @@ namespace eval category_tree {
             set locale [ad_conn locale]
         }
         db_transaction {
-            if {![db_0or1row check_tree_existence ""]} {
+            if {![db_0or1row check_tree_existence {
+		select 1
+		from category_tree_translations
+		where tree_id = :tree_id
+		and locale = :locale
+            }]} {
                 db_exec_plsql insert_tree_translation ""
             } else {
                 db_exec_plsql update_tree_translation ""
             }
         }
-        flush_translation_cache $tree_id
+        category_tree::flush_translation_cache $tree_id
     }
 
     ad_proc -public delete { tree_id } {
@@ -208,8 +251,8 @@ namespace eval category_tree {
         @author Timo Hentschel (timo@timohentschel.de)
     } {
         db_exec_plsql delete_tree ""
-        flush_cache $tree_id
-        flush_translation_cache $tree_id
+        category_tree::flush_cache $tree_id
+        category_tree::flush_translation_cache $tree_id
         category::reset_translation_cache
     }
 
@@ -222,14 +265,9 @@ namespace eval category_tree {
                     assign_single_p require_category_p
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        set result [list]
-
-        db_foreach get_mapped_trees "" {
-            lappend result [list $tree_id [get_name $tree_id $locale] $subtree_category_id $assign_single_p $require_category_p $widget]
-        }
-
-        return $result
+        return [category_tree::get_mapped_trees_from_object_list $object_id $locale]
     }
+
     ad_proc -public get_trees { object_id } {
         Get the category trees mapped to an object.
 
@@ -237,13 +275,11 @@ namespace eval category_tree {
         @return Tcl list of tree_ids
         @author Peter Kreuzinger (peter.kreuzinger@wu-wien.ac.at)
     } {
-        set result [list]
-
-        db_foreach get_trees "" {
-            lappend result $tree_id
-        }
-
-        return $result
+        return [db_list get_trees {
+	    select distinct tree_id
+	    from category_object_map_tree
+	    where object_id = :object_id
+        }]
     }
 
     ad_proc -public get_id_by_object_title {
@@ -259,7 +295,12 @@ namespace eval category_tree {
         @return the category_tree_id or empty string if no category was found
         @author Malte Sussdorff (malte.sussdorff@cognovis.de)
     } {
-        return [db_string get_tree_id {} -default ""]
+        return [db_string get_tree_id {
+            select object_id
+            from acs_objects
+            where title = :title
+            and object_type = 'category_tree'
+        } -default ""]
     }
 
     ad_proc -public get_mapped_trees_from_object_list { object_id_list {locale ""}} {
@@ -273,8 +314,13 @@ namespace eval category_tree {
     } {
         set result [list]
 
-        db_foreach get_mapped_trees_from_object_list "" {
-            lappend result [list $tree_id [get_name $tree_id $locale] $subtree_category_id $assign_single_p $require_category_p $widget]
+        db_foreach get_mapped_trees_from_object_list [subst {
+            select tree_id, subtree_category_id, assign_single_p,
+                   require_category_p, widget
+            from category_tree_map
+            where object_id in ([ns_dbquotelist $object_id_list])
+        }] {
+            lappend result [list $tree_id [category_tree::get_name $tree_id $locale] $subtree_category_id $assign_single_p $require_category_p $widget]
         }
 
         return $result
@@ -295,10 +341,14 @@ namespace eval category_tree {
         @return Tcl list of lists: category_id category_name deprecated_p level
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        if {[catch {set tree [nsv_get category_trees $tree_id]}]} {
-            return
+        if {[nsv_names category_trees] eq "" ||
+            ![nsv_exists category_trees $tree_id]} {
+            return [list]
         }
-        set result ""
+
+        set tree [nsv_get category_trees $tree_id]
+
+        set result [list]
         if {$subtree_id eq ""} {
             foreach category $tree {
                 lassign $category category_id deprecated_p level
@@ -336,20 +386,38 @@ namespace eval category_tree {
     } {
         set user_id [ad_conn user_id]
 
-        return [db_list_of_lists category_tree_usage ""]
+        return [db_list_of_lists category_tree_usage {
+	    select t.pretty_plural, n.object_id, n.title, p.package_id,
+	           p.instance_name,
+	           acs_permission.permission_p(n.object_id, :user_id, 'read') as read_p
+	    from category_tree_map m, acs_objects n,
+	         apm_packages p, apm_package_types t
+	    where m.tree_id = :tree_id
+	    and n.object_id = m.object_id
+	    and p.package_id = n.package_id
+	    and t.package_key = p.package_key
+        }]
     }
 
     ad_proc -public reset_cache { } {
         Reloads all category tree hierarchies in the cache.
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        catch {nsv_unset category_trees}
+        if {[nsv_names category_trees] ne ""} {
+            nsv_unset category_trees
+        }
+
         set tree_id_old 0
         set cur_level 1
         set stack [list]
         set invalid_p ""
         set tree [list]
-        db_foreach reset_cache "" {
+        db_foreach reset_cache {
+	    select tree_id, category_id, left_ind, right_ind,
+	           case when deprecated_p = 'f' then '' else '1' end as deprecated_p
+	    from categories
+	    order by tree_id, left_ind
+        } {
             if {$tree_id != $tree_id_old && $tree_id_old != 0} {
                 nsv_set category_trees $tree_id_old $tree
                 set cur_level 1
@@ -358,7 +426,7 @@ namespace eval category_tree {
                 set tree [list]
             }
             set tree_id_old $tree_id
-            lappend tree [list $category_id [ad_decode "$invalid_p$deprecated_p" "" f t] $cur_level]
+            lappend tree [list $category_id [expr {"$invalid_p$deprecated_p" eq "" ? f : t}] $cur_level]
             if { $right_ind - $left_ind > 1} {
                 incr cur_level 1
                 set invalid_p "$invalid_p$deprecated_p"
@@ -388,8 +456,14 @@ namespace eval category_tree {
         set stack [list]
         set invalid_p ""
         set tree [list]
-        db_foreach flush_cache "" {
-            lappend tree [list $category_id [ad_decode "$invalid_p$deprecated_p" "" f t] $cur_level]
+        db_foreach flush_cache {
+	    select category_id, left_ind, right_ind,
+	           case when deprecated_p = 'f' then '' else '1' end as deprecated_p
+	    from categories
+	    where tree_id = :tree_id
+	    order by left_ind
+        } {
+            lappend tree [list $category_id [expr {"$invalid_p$deprecated_p" eq "" ? f : t}] $cur_level]
             if { $right_ind - $left_ind > 1} {
                 incr cur_level 1
                 set invalid_p "$invalid_p$deprecated_p"
@@ -415,9 +489,16 @@ namespace eval category_tree {
         Reloads all category tree translations in the cache.
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        catch {nsv_unset category_tree_translations}
+        if {[nsv_names category_tree_translations] ne ""} {
+            nsv_unset category_tree_translations
+        }
+
         set tree_id_old 0
-        db_foreach reset_translation_cache "" {
+        db_foreach reset_translation_cache {
+	    select tree_id, locale, name, description
+	    from category_tree_translations
+	    order by tree_id, locale
+        } {
             if {$tree_id != $tree_id_old && $tree_id_old != 0} {
                 nsv_set category_tree_translations $tree_id_old [array get tree_lang]
                 unset tree_lang
@@ -436,14 +517,16 @@ namespace eval category_tree {
         @param tree_id category tree to be flushed.
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        db_foreach flush_translation_cache "" {
-            set tree_lang($locale) [list $name $description]
+        set translations [list]
+        db_foreach flush_translation_cache {
+	    select locale, name, description
+	    from category_tree_translations
+	    where tree_id = :tree_id
+	    order by locale
+        } {
+            lappend translations $locale [list $name $description]
         }
-        if {[info exists tree_lang]} {
-            nsv_set category_tree_translations $tree_id [array get tree_lang]
-        } else {
-            nsv_set category_tree_translations $tree_id ""
-        }
+        nsv_set category_tree_translations $tree_id $translations
     }
 
     ad_proc -public get_translation {
@@ -458,22 +541,30 @@ namespace eval category_tree {
         @return tcl-list: name description
         @author Timo Hentschel (timo@timohentschel.de)
     } {
+        if {[nsv_names category_tree_translations] eq "" ||
+            ![nsv_exists category_tree_translations $tree_id]} {
+            return [list]
+        }
+
+        set default_locale [parameter::get -parameter DefaultLocale -default en_US]
         if {$locale eq ""} {
-            set locale [ad_conn locale]
+            set locale [expr {[ns_conn isconnected] ? [ad_conn locale] : $default_locale}]
         }
-        if {[catch {array set tree_lang [nsv_get category_tree_translations $tree_id]}]} {
-            return
-        }
-        if {![catch {set names $tree_lang($locale)}]} {
+
+        set tree_lang [nsv_get category_tree_translations $tree_id]
+
+        if {[dict exists $tree_lang $locale]} {
             # exact match: found name for this locale
-            return $names
-        }
-        if {![catch {set names $tree_lang([parameter::get -parameter DefaultLocale -default en_US])}]} {
+            set names [dict get $tree_lang $locale]
+        } elseif {[dict exists $tree_lang $default_locale]} {
             # default locale found
-            return $names
+            set names [dict get $tree_lang $default_locale]
+        } else {
+            # tried default locale, but nothing found
+            set names ""
         }
-        # tried default locale, but nothing found
-        return
+
+        return $names
     }
 
     ad_proc -public get_name {
@@ -487,10 +578,10 @@ namespace eval category_tree {
         @param locale language in which to get the name. [ad_conn locale] used by default.
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        return [lindex [get_translation $tree_id $locale] 0]
+        return [lindex [category_tree::get_translation $tree_id $locale] 0]
     }
 
-    ad_proc pageurl { object_id } {
+    ad_proc -private pageurl { object_id } {
         Returns the page that displays a category tree
         To be used by the AcsObject.PageUrl service contract.
 
@@ -511,7 +602,12 @@ namespace eval category_tree {
         @return the tree id or empty string if no category tree was found
         @author Timo Hentschel (timo@timohentschel.de)
     } {
-        return [db_list get_category_tree_id {}]
+        return [db_list get_category_tree_id {
+            select tree_id
+            from category_tree_translations
+            where name = :name
+            and locale = :locale
+        }]
     }
 }
 

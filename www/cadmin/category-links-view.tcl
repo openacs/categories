@@ -7,7 +7,7 @@ ad_page_contract {
 } {
     category_id:naturalnum,notnull
     tree_id:naturalnum,notnull
-    {locale ""}
+    {locale:word ""}
     object_id:naturalnum,optional
     orderby:token,optional
     ctx_id:naturalnum,optional
@@ -84,18 +84,24 @@ template::list::create \
 	}
 	delete {
 	    sub_class narrow
-	    display_template {
-		<img src="/resources/acs-subsite/Delete16.gif" height="16" width="16" alt="Delete" style="border:0">
-	    }
+	    display_template {<adp:icon name="trash" title="Delete">}
 	    link_url_col delete_url
 	    link_html { title "Delete link" }
 	}
     }
 
-db_multirow category_links get_category_links ""
-
-multirow extend category_links delete_url tree_view_url category_view_url tree_name category_name
-multirow foreach category_links {
+db_multirow -extend {
+    category_links delete_url tree_view_url category_view_url tree_name category_name
+} category_links get_category_links {
+    select c.category_id as linked_category_id, c.tree_id as linked_tree_id, l.link_id,
+           (case when l.from_category_id = :category_id then 'f' else 'r' end) as direction,
+           acs_permission.permission_p(c.tree_id,:user_id,'category_tree_write') as write_p
+    from category_links l, categories c
+    where (l.from_category_id = :category_id
+	   and l.to_category_id = c.category_id)
+    or (l.from_category_id = c.category_id
+	and l.to_category_id = :category_id)
+} {
     set delete_url [export_vars -no_empty -base category-link-delete { link_id category_id tree_id locale object_id ctx_id}]
     set tree_view_url [export_vars -no_empty -base tree-view { {tree_id $linked_tree_id} locale object_id ctx_id}]
     set category_view_url [export_vars -no_empty -base category-links-view { {category_id $linked_category_id} {tree_id $linked_tree_id} locale object_id ctx_id}]

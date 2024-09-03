@@ -1,73 +1,7 @@
---
--- The Categories Package
---
--- @author Timo Hentschel (timo@timohentschel.de)
--- @creation-date 2003-04-16
---
-
-CREATE or REPLACE PACKAGE category AS
-    FUNCTION new ( 
-        category_id         in categories.category_id%TYPE		default null,
-        tree_id		    in categories.tree_id%TYPE			default null,
-        locale		    in category_translations.locale%TYPE,
-	name		    in category_translations.name%TYPE,
-	description	    in category_translations.description%TYPE,
-	parent_id           in categories.parent_id%TYPE		default null,
-        deprecated_p        in categories.deprecated_p%TYPE		default 'f',
-	object_type         in acs_object_types.object_type%TYPE	default 'category',
-	creation_date       in acs_objects.creation_date%TYPE		default sysdate,
-	creation_user       in acs_objects.creation_user%TYPE		default null,
-	creation_ip         in acs_objects.creation_ip%TYPE		default null
-    ) RETURN integer;
-
-    PROCEDURE new_translation ( 
-        category_id         in categories.category_id%TYPE,
-        locale		    in category_translations.locale%TYPE,
-	name		    in category_translations.name%TYPE,
-	description	    in category_translations.description%TYPE,
-	modifying_date	in acs_objects.last_modified%TYPE	default sysdate,
-	modifying_user	in acs_objects.creation_user%TYPE	default null,
-	modifying_ip	in acs_objects.creation_ip%TYPE		default null
-    );
-
-    PROCEDURE del ( 
-	category_id	in categories.category_id%TYPE 
-    );
-   
-    PROCEDURE phase_out (
-        category_id	in categories.category_id%TYPE
-    );
- 
-    PROCEDURE phase_in (
-        category_id	in categories.category_id%TYPE
-    );
- 
-    PROCEDURE edit (
-        category_id	in categories.category_id%TYPE, 
-        locale		in category_translations.locale%TYPE,
-        name		in category_translations.name%TYPE,
-        description	in category_translations.description%TYPE,
-	modifying_date	in acs_objects.last_modified%TYPE	default sysdate,
-	modifying_user	in acs_objects.creation_user%TYPE	default null,
-	modifying_ip	in acs_objects.creation_ip%TYPE		default null
-    );
-
-    PROCEDURE change_parent (
-	category_id	in categories.category_id%TYPE,
-	tree_id		in categories.tree_id%TYPE,
-	parent_id	in categories.category_id%TYPE default null
-    );
-
-    FUNCTION name (
-	category_id	in categories.category_id%TYPE
-    ) return varchar2;
-END;
-/
-show errors
 
 CREATE OR REPLACE PACKAGE BODY CATEGORY AS
 
-    FUNCTION new ( 
+    FUNCTION new (
         category_id         in categories.category_id%TYPE		default null,
         tree_id		    in categories.tree_id%TYPE			default null,
         locale		    in category_translations.locale%TYPE,
@@ -80,12 +14,12 @@ CREATE OR REPLACE PACKAGE BODY CATEGORY AS
 	creation_user       in acs_objects.creation_user%TYPE		default null,
 	creation_ip         in acs_objects.creation_ip%TYPE		default null
     ) RETURN integer
-    IS  
-        v_category_id	integer; 
+    IS
+        v_category_id	integer;
 	v_left_ind	integer;
 	v_right_ind	integer;
     BEGIN
-	v_category_id := acs_object.new ( 
+	v_category_id := acs_object.new (
 		object_id     => category_id,
 		object_type   => 'category',
 		creation_date => creation_date,
@@ -139,7 +73,7 @@ CREATE OR REPLACE PACKAGE BODY CATEGORY AS
     END new;
 
 
-    PROCEDURE new_translation ( 
+    PROCEDURE new_translation (
         category_id         in categories.category_id%TYPE,
         locale		    in category_translations.locale%TYPE,
 	name		    in category_translations.name%TYPE,
@@ -166,25 +100,25 @@ CREATE OR REPLACE PACKAGE BODY CATEGORY AS
     PROCEDURE phase_out (
         category_id	in categories.category_id%TYPE
     ) IS
-    BEGIN 
+    BEGIN
        update categories
        set deprecated_p = 't'
        where category_id = phase_out.category_id;
     END phase_out;
- 
+
 
     PROCEDURE phase_in (
         category_id	in categories.category_id%TYPE
     ) IS
-    BEGIN 
+    BEGIN
        update categories
        set deprecated_p = 'f'
        where category_id = phase_in.category_id;
     END phase_in;
- 
 
-    PROCEDURE del ( 
-	category_id	in categories.category_id%TYPE 
+
+    PROCEDURE del (
+	category_id	in categories.category_id%TYPE
     )
     IS
 	v_tree_id   integer;
@@ -218,14 +152,14 @@ CREATE OR REPLACE PACKAGE BODY CATEGORY AS
 	    left_ind = left_ind - (1 + v_right_ind - v_left_ind)
 	where left_ind > v_left_ind
 	and tree_id = v_tree_id;
-	
+
         -- for debugging reasons
         category_tree.check_nested_ind(v_tree_id);
     END del;
 
 
     PROCEDURE edit (
-        category_id	in categories.category_id%TYPE, 
+        category_id	in categories.category_id%TYPE,
         locale		in category_translations.locale%TYPE,
 	name		in category_translations.name%TYPE,
         description	in category_translations.description%TYPE,

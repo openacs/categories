@@ -1,9 +1,8 @@
-if {![info exists object_id] || $object_id eq ""} {
-    ad_complain "You must specify an object to categorize"
-}
-
-if {![info exists container_id] || $container_id eq ""} {
-    set container_id [ad_conn subsite_id]
+ad_include_contract {
+    Categorize
+} {
+    object_id:integer,notnull
+    {container_id:integer,notnull "[ad_conn subsite_id]"}
 }
 
 set name [db_string title {select title from acs_objects where object_id = :object_id} -default $object_id]

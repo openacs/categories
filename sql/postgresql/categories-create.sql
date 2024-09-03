@@ -209,6 +209,10 @@ create table category_object_map (
 
 create unique index cat_object_map_ix on category_object_map(object_id, category_id);
 
+-- create indices on FK constraints
+create index category_object_map_object_id_idx on category_object_map(object_id);
+create index category_object_map_category_id_idx on category_object_map(category_id);
+
 comment on table category_object_map is '
   Maps categories to objects and thus categorizes and object.
 ';

@@ -25,12 +25,12 @@ ad_proc -public category::ad_form::add_widgets {
     @author Branimir Dolicki (bdolicki@branimir.com)
 } {
     set category_trees [category_tree::get_mapped_trees $container_object_id]
-    
+
     foreach tree $category_trees {
 	lassign $tree tree_id name subtree_id assign_single_p require_category_p widget
-        if {$tree_id in $excluded_trees} { 
+        if {$tree_id in $excluded_trees} {
             continue
-        } 
+        }
 	set options ""
 	if {$assign_single_p == "f"} {
 	    set options ",multiple"
@@ -49,7 +49,7 @@ ad_proc -public category::ad_form::add_widgets {
                        {category_widget $widget} \
                        {help_text $help_text} \
                       ]]
-        
+
     }
 }
 
@@ -70,9 +70,9 @@ ad_proc -public category::ad_form::get_categories {
 	lassign $tree tree_id name subtree_id assign_single_p require_category_p widget
         upvar #[template::adp_level] \
           __category__ad_form__$element_name\_${tree_id} my_category_ids
-        if {[info exists my_category_ids]} { 
+        if {[info exists my_category_ids]} {
             lappend category_ids {*}$my_category_ids
-        } else { 
+        } else {
             ns_log Warning "category::ad_form::get_categories: __category__ad_form__$element_name\_${tree_id} for tree $tree_id not found"
         }
     }
@@ -80,8 +80,8 @@ ad_proc -public category::ad_form::get_categories {
 }
 
 # Antonio Pisano 2014-10-15
-# This proc was added because, when editing an existing object, one should get 
-# its mapped categories and use their values to eventually fill the widget we 
+# This proc was added because, when editing an existing object, one should get
+# its mapped categories and use their values to eventually fill the widget we
 # have created by 'category::ad_form::add_widgets'.
 # Otherwise, we will always see an empty widget when editing, even when mappings exist.
 ad_proc -public category::ad_form::fill_widgets {
@@ -91,7 +91,7 @@ ad_proc -public category::ad_form::fill_widgets {
 } {
 
     Reads mapped categories values from categorized object and sets them
-    into its auto-generated category form widgets. To be used in the 
+    into its auto-generated category form widgets. To be used in the
     -edit_request clause of ad_form.
 
     @author Antonio Pisano (antonio@elettrotecnica.it)

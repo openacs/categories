@@ -135,7 +135,7 @@ execute procedure category_synonym__edit_cat_trans_trg();
 
 -----
 --
--- these function have embedded tabs which make pg or is is the driver(?) barf
+-- these function have embedded tabs which make pg or is the driver(?) barf
 -- fix them to have spaces
 --
 -----

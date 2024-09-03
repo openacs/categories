@@ -7,7 +7,7 @@ ad_page_contract {
 } {
     category_id:naturalnum,notnull
     tree_id:naturalnum,notnull
-    {locale ""}
+    {locale:word ""}
     object_id:naturalnum,optional
     ctx_id:naturalnum,optional
 } -properties {
@@ -34,7 +34,11 @@ lappend context_bar \
 
 template::multirow create trees tree_name tree_id link_add_url
 
-db_foreach get_trees_to_link "" {
+db_foreach get_trees_to_link {
+    select tree_id as link_tree_id
+    from category_trees
+    where acs_permission.permission_p(tree_id,:user_id,'category_tree_write') = 't'
+} {
     set tree_name [category_tree::get_name $link_tree_id $locale]
     template::multirow append trees $tree_name $link_tree_id \
 	[export_vars -no_empty -base category-link-add-2 { link_tree_id category_id tree_id locale object_id ctx_id}]

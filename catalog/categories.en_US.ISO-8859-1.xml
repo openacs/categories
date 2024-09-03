@@ -67,7 +67,7 @@ also be made to the target category.</msg>
   <msg key="lt_Select_Trees_for_brow">Select Trees for browsing</msg>
   <msg key="lt_There_are_instances_w">There are %instances_without_permission% more uses of this tree, but you
   don't have the permission to see them.</msg>
-  <msg key="lt_This_is_a_site_wide_c">This is a site wide category tree</msg>
+  <msg key="lt_This_is_a_site_wide_c">This is a site-wide category tree</msg>
   <msg key="lt_This_tree_is_not_used">This tree is not used.</msg>
   <msg key="lt_This_tree_is_still_us">This tree is still used by some modules. For a complete list, please go</msg>
   <msg key="lt_To_deselect_or_select">To deselect or select multiple categories use the Control-Key on your keyboard.</msg>
@@ -76,7 +76,6 @@ also be made to the target category.</msg>
   <msg key="Map_subtree">Map subtree</msg>
   <msg key="Map_this_subtree">Map this subree</msg>
   <msg key="Map_tree">Map tree</msg>
-  <msg key="Mapiing_parameters_subtree_title"></msg>
   <msg key="Mapping_parameters">Mapping Parameters</msg>
   <msg key="Mapping_parameters_subtree_title">Parameters of mapping to subtree &quot;%tree_name% :: %category_name%&quot;</msg>
   <msg key="Mapping_parameters_tree_title">Parameters of mapping to tree &quot;%tree_name%&quot;</msg>
