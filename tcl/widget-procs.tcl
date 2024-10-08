@@ -297,21 +297,22 @@ ad_proc -public template::data::transform::category {
     foreach tree $trees {
         lassign $tree tree_id subtree_id
         # get categories of every tree requiring a categorization
-        foreach category [category_tree::get_tree -all -subtree_id $subtree_id $tree_id] {
-            set tree_categories([lindex $category 0]) 1
-        }
+        set tree_categories [lmap \
+                                 category \
+                                 [category_tree::get_tree -all -subtree_id $subtree_id $tree_id] \
+                                 {lindex $category 0}]
         set found_p 0
         # check if at least one selected category is among tree categories
         foreach value $values {
-            if {[info exists tree_categories($value)]} {
+            if {$value in $tree_categories} {
                 set found_p 1
+                break
             }
         }
         if {!$found_p} {
             # no categories of this tree selected, so add for error message
             lappend trees_without_category [category_tree::get_name $tree_id]
         }
-        array unset tree_categories
     }
     if {[llength $trees_without_category] > 0} {
         # some trees require category, but none selected

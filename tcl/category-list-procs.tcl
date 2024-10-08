@@ -447,20 +447,18 @@ ad_proc -public category::list::elements {
     @see category::list::prepare_display
     @see category::list::get_pretty_list
 } {
-    array set spec_array $spec
-    if {[info exists spec_array(display_template)]} {
-	set display_template $spec_array(display_template)
-	array unset spec_array display_template
+    if {[dict exists $spec display_template]} {
+	set display_template [dict get $spec display_template]
+	dict unset spec display_template
     } else {
 	set display_template " @$name\.$categories_column;noquote@ "
     }
-    if {[info exists spec_array(label)]} {
-	set label $spec_array(label)
-	array unset spec_array label
+    if {[dict exists $spec label]} {
+	set label [dict get $spec label]
+	dict unset spec label
     } else {
 	set label "Categories"
     }
-    set spec [array get spec_array]
 
     if {$one_category_list_p} {
 	# generate listbuilder input to display one column with pretty list
